@@ -1,5 +1,6 @@
 package com.example.dagna.together;
 
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +22,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        StrictMode.enableDefaults();
     }
 
 
@@ -48,7 +50,7 @@ public class MainActivity extends ActionBarActivity {
 
     public void register(View view){
         try{
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             //String host="jdbc:jtds:sqlserver://http://project-together.cba.pl/project_together_cba_pl";
             //String name="ctb";
             //String password="ifejestfajne";
@@ -59,10 +61,15 @@ public class MainActivity extends ActionBarActivity {
 
             //Connection conn = DriverManager.getConnection(host, name, password);
 
-            String ConnectionURL = "jdbc:jtds:sqlserver://" + server + ";"
-                    + "databaseName=" + database + ";user=" + user
-                    + ";password=" + password + ";";
-            Connection conn = DriverManager.getConnection(ConnectionURL);
+         //   String ConnectionURL = "jdbc:jtds:mysql://" + server + ";"
+         //           + "databaseName=" + database + ";user=" + user
+         //           + ";password=" + password + ";";
+           // Connection conn = DriverManager.getConnection(ConnectionURL);
+
+            Connection conn = DriverManager
+                    .getConnection("jdbc:mysql://mysql.cba.pl/project_together_cba_pl?"
+                            + "user=ctb&password=ifejestfajne");
+
             Statement stmt = conn.createStatement( );
             String SQL = "SELECT * FROM user";
             ResultSet rs = stmt.executeQuery( SQL );
