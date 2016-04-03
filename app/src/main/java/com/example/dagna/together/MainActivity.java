@@ -3,6 +3,7 @@ package com.example.dagna.together;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,42 +49,85 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     public void register(View view){
+
+        new Thread() {
+            @Override
+            public void run() {
+                //your code here
+
+
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            //String host="jdbc:jtds:sqlserver://http://project-together.cba.pl/project_together_cba_pl";
-            //String name="ctb";
-            //String password="ifejestfajne";
-            String database="project_together_cba_pl";
-            String server="mysql.cba.pl";
-            String user="ctb";
-            String password="ifejestfajne";
+            String url = "jdbc:mysql://db4free.net:3306/project_together";
 
-            //Connection conn = DriverManager.getConnection(host, name, password);
+            String user = "together_mgdt";
+            String pwd = "ifejestfajne";
 
-         //   String ConnectionURL = "jdbc:jtds:mysql://" + server + ";"
-         //           + "databaseName=" + database + ";user=" + user
-         //           + ";password=" + password + ";";
-           // Connection conn = DriverManager.getConnection(ConnectionURL);
+            String dsa = "DSA";
 
-            Connection conn = DriverManager
-                    .getConnection("jdbc:mysql://mysql.cba.pl/project_together_cba_pl?"
-                            + "user=ctb&password=ifejestfajne");
+//            String url = "jdbc:mysql://dbsrv.infeo.at:3306/fhv";
+//
+//            String user = "fhv";
+//            String pwd = "datenmanagement";
+            Connection conn = null;
 
-            Statement stmt = conn.createStatement( );
-            String SQL = "SELECT * FROM user";
-            ResultSet rs = stmt.executeQuery( SQL );
+            try{
+            /* Initializing the connection */
+                conn = DriverManager.getConnection(url, user, pwd);
 
-            String login = rs.getString("login");
+                Statement stmt = conn.createStatement();
+                String SQL = "SELECT * FROM user";
+                ResultSet rs = stmt.executeQuery(SQL);
+                String login = null;
+                if(rs.next()){
+                    login = rs.getString("login");
+                }
 
-            EditText user_login   = (EditText)findViewById(R.id.text);
-            user_login.setText("login", TextView.BufferType.EDITABLE);
+                final String login2 = login;
 
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EditText user_login = (EditText) findViewById(R.id.text);
+                        user_login.setText(login2, TextView.BufferType.EDITABLE);
+
+                    }
+                });
+
+
+//                ResultSet resultset = statement.executeQuery(/* MY SQL reqquest */);
+
+//                while(resultset.next()){
+//                    System.out.println(resultset.getString(/* THE COLUMN AND ROW I WANTED IN MY REQUEST */));
+//                }
+
+            }catch(SQLException e){
+                System.out.println("SQL connection error: " + e.getMessage());
+            }finally {
+                if(conn != null){
+                    try{
+                        conn.close();
+                    }catch (SQLException e){
+                        System.out.println("Error while closing the connection: " + e.getMessage());
+                        //s
+                    }
+                }
+            }
+
+//            Statement stmt = conn.createStatement( );
+//            String SQL = "SELECT * FROM user";
+//            ResultSet rs = stmt.executeQuery( SQL );
+//
+//            String login = rs.getString("login");
 
         }
         catch (Exception e){
             System.out.println(e.getMessage());
             System.out.print("Tu jest blad");
         }
+            }
+        }.start();
     }
 }
