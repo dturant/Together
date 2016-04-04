@@ -1,5 +1,6 @@
 package com.example.dagna.together;
 
+import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -49,8 +50,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void goToLogin(View view){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
 
-    public void register(View view){
+    public void goToRegister(View view){
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+    }
+    public void register2(View view){
 
         new Thread() {
             @Override

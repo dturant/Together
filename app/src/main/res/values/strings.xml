@@ -3,4 +3,7 @@
 
     <string name="hello_world">Fliers!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_timeline">TimelineActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
 </resources>
