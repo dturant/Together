@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
             addToPreferences(login.getText().toString());
             Intent intent = new Intent(this, TimelineActivity.class);
             startActivity(intent);
+            //tutaj odpytanie servicu np
         }
         else{
             error.setVisibility(View.VISIBLE);

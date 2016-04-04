@@ -32,6 +32,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".services.DatabaseService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".services.DatabaseIntentService"
+            android:exported="false"/>
     </application>
 
 </manifest>
