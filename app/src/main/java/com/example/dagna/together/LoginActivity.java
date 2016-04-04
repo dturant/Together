@@ -1,7 +1,9 @@
 package com.example.dagna.together;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         else if(login.getText().toString().equals(l) && password.getText().toString().equals(p)){
+            addToPreferences(login.getText().toString());
             Intent intent = new Intent(this, TimelineActivity.class);
             startActivity(intent);
         }
@@ -43,6 +46,13 @@ public class LoginActivity extends AppCompatActivity {
             error.setText("Login failed. Check your login and password.");
         }
 
+    }
+
+    private void addToPreferences(String login){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("login",login);
+        editor.apply();
     }
 
 }

@@ -1,7 +1,10 @@
 package com.example.dagna.together;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +28,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         StrictMode.enableDefaults();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String login = preferences.getString("login", "");
+
+
+        if(login.equals("")){
+            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
 
@@ -50,15 +63,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToLogin(View view){
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
 
-    public void goToRegister(View view){
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
-    }
     public void register2(View view){
 
         new Thread() {

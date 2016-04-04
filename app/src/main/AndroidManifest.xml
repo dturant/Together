@@ -31,6 +31,10 @@
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RegisterOrLoginActivity"
+            android:label="@string/title_activity_register_or_login"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
