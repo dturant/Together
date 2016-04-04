@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.dagna.together.helpers.DatabaseHelper;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -38,6 +40,18 @@ public class TimelineActivity extends AppCompatActivity {
             Intent intent = new Intent(this, RegisterOrLoginActivity.class);
             startActivity(intent);
             finish();
+        }
+        else
+        {
+            TextView a = (TextView)findViewById(R.id.timeline_test);
+            DatabaseHelper db;
+            db = new DatabaseHelper(getApplicationContext());
+            db.setupDatabase();
+            String s = db.getCategory(1);
+            s+= db.getCategory(2);
+            s+=db.getCategory(3);
+            a.setText(s);
+
         }
     }
 

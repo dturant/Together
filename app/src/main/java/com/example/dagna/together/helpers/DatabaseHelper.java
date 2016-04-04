@@ -63,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // User table create statement
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER
             + "(" + KEY_USER_ID + " INTEGER PRIMARY KEY," + KEY_LOGIN + " TEXT,"
-            + KEY_PWD + " TEXT," + KEY_GRADE + " INTEGER" + ")";
+            + KEY_PWD + " TEXT," + KEY_DSCRP + " TEXT," + KEY_CITY + " TEXT,"+ KEY_GRADE + " INTEGER" + ")";
 
     // Event table create statement
     private static final String CREATE_TABLE_EVENT = "CREATE TABLE "
@@ -108,16 +108,63 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /*
  * Creating categories
  */
-    public long createCategories() {
+    public void setupDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
+        onUpgrade(db, 1, 1);
 
         ContentValues values = new ContentValues();
+
         values.put(KEY_CATEGORY_NAME, "Drinking");
+        db.insert(TABLE_CATEGORY, null, values);
 
-        // insert row
-        long category_id = db.insert(TABLE_CATEGORY, null, values);
+        values.put(KEY_CATEGORY_NAME, "Sports");
+        db.insert(TABLE_CATEGORY, null, values);
 
-        return category_id;
+        values.put(KEY_CATEGORY_NAME, "Boardgames");
+        db.insert(TABLE_CATEGORY, null, values);
+
+        values.put(KEY_CATEGORY_NAME, "Concert");
+        db.insert(TABLE_CATEGORY, null, values);
+
+        ContentValues user = new ContentValues();
+        user.put(KEY_LOGIN, "mgapsa");
+        user.put(KEY_PWD, "mgapsa");
+        user.put(KEY_CITY, "New York");
+        db.insert(TABLE_USER, null, user);
+
+        user.put(KEY_LOGIN, "dturant");
+        user.put(KEY_PWD, "dturant");
+        user.put(KEY_CITY, "New York");
+        db.insert(TABLE_USER, null, user);
+
+        user.put(KEY_LOGIN, "mminda");
+        user.put(KEY_PWD, "mminda");
+        user.put(KEY_CITY, "Bratislava");
+        db.insert(TABLE_USER, null, user);
+
+        ContentValues event = new ContentValues();
+        event.put(KEY_EVENT_NAME, "Jones drinking");
+        event.put(KEY_DSCRP, "Beer drinking and shisha");
+        event.put(KEY_CATEGORY_ID, 1);
+        event.put(KEY_USER_ID, 3);
+        event.put(KEY_CITY, "New York");
+        db.insert(TABLE_EVENT, null, event);
+
+        event.put(KEY_EVENT_NAME, "Jones drinkingen");
+        event.put(KEY_DSCRP, "Beer drinking and shishanen");
+        event.put(KEY_CATEGORY_ID, 1);
+        event.put(KEY_USER_ID, 2);
+        event.put(KEY_CITY, "Bratislava");
+        db.insert(TABLE_EVENT, null, event);
+
+        ContentValues userevent = new ContentValues();
+        userevent.put(KEY_USER_ID, 1);
+        userevent.put(KEY_EVENT_ID, 1);
+        db.insert(TABLE_USER_EVENT, null, userevent);
+
+        userevent.put(KEY_USER_ID, 1);
+        userevent.put(KEY_EVENT_ID, 2);
+        db.insert(TABLE_USER_EVENT, null, userevent);
     }
 
     /*

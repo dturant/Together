@@ -12,4 +12,10 @@
     tools:context=".TimelineActivity"
     tools:showIn="@layout/activity_timeline">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeline_test"
+        android:text="City:"/>
+
 </RelativeLayout>
