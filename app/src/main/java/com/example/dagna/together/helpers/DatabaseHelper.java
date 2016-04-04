@@ -190,4 +190,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return c.getString(c.getColumnIndex(KEY_CATEGORY_NAME));
     }
+
+    public Cursor getEventsByCity(String city)
+    {
+        String selectQuery = "Select * FROM " + TABLE_EVENT + " WHERE " + KEY_CITY + " = " + "'" + city + "'";
+        Log.e(LOG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        return c;
+    }
+
+    public String createSelectStatement()
+    {
+        return null;
+    }
+
 }

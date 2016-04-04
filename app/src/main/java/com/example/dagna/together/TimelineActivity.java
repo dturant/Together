@@ -1,12 +1,17 @@
 package com.example.dagna.together;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.dagna.together.helpers.DatabaseHelper;
+import com.example.dagna.together.services.DatabaseIntentService;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,6 +28,40 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class TimelineActivity extends AppCompatActivity {
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+
+                String result = bundle.getString(DatabaseIntentService.RESULT);
+                if(result == DatabaseIntentService.RESULT_FAIL)
+                {
+                    //fail
+                }
+                else {
+                    String s = "";
+                    Cursor c = DatabaseIntentService.getCursor();
+                    if (c.moveToFirst()) {
+                        do {
+                            s+= c.getString(c.getColumnIndex("city"));
+//                            Todo td = new Todo();
+//                            td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+//                            td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
+//                            td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+//
+//                            // adding to todo list
+//                            todos.add(td);
+
+                        } while (c.moveToNext());
+                    }
+                    TextView a = (TextView) findViewById(R.id.timeline_test);
+                    a.setText(s);
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +83,16 @@ public class TimelineActivity extends AppCompatActivity {
         }
         else
         {
-            TextView a = (TextView)findViewById(R.id.timeline_test);
-            DatabaseHelper db;
-            db = new DatabaseHelper(getApplicationContext());
-            db.setupDatabase();
-            String s = db.getCategory(1);
-            s+= db.getCategory(2);
-            s+=db.getCategory(3);
-            a.setText(s);
+            //TODO na razie trzeba setowac DB za kazdym razem zeby dzialalo
+//            DatabaseHelper db;
+//            db = new DatabaseHelper(getApplicationContext());
+//            db.setupDatabase();
+
+            Intent intent = new Intent(this, DatabaseIntentService.class);
+            intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.GET_EVENTS_FROM_USER_CITY);
+            //TODO: po user id
+            intent.putExtra(DatabaseIntentService.CITY, "New York");
+            startService(intent);
 
         }
     }
@@ -76,6 +118,20 @@ public class TimelineActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        registerReceiver(receiver, new IntentFilter(DatabaseIntentService.NOTIFICATION));
     }
 
 
