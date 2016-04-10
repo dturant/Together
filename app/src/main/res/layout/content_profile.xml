@@ -9,13 +9,28 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".TimelineActivity"
-    tools:showIn="@layout/activity_timeline">
+    tools:context="com.example.dagna.together.ProfileActivity"
+    tools:showIn="@layout/activity_profile">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/timeline_test"
-        />
+        android:id="@+id/profile_login"
+        android:text="login: "/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_city"
+        android:text="city: "
+        android:layout_below="@id/profile_login"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_rate"
+        android:text="rate: "
+        android:layout_below="@id/profile_city"/>
+
 
 </RelativeLayout>

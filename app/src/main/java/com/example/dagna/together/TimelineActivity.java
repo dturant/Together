@@ -84,9 +84,9 @@ public class TimelineActivity extends AppCompatActivity {
         else
         {
             //TODO na razie trzeba setowac DB za kazdym razem zeby dzialalo
-//            DatabaseHelper db;
-//            db = new DatabaseHelper(getApplicationContext());
-//            db.setupDatabase();
+            DatabaseHelper db;
+            db = new DatabaseHelper(getApplicationContext());
+            db.setupDatabase();
 
             Intent intent = new Intent(this, DatabaseIntentService.class);
             intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.GET_EVENTS_FROM_USER_CITY);
@@ -114,6 +114,20 @@ public class TimelineActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.logout) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            preferences.edit().remove("login").commit();
+            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
             return true;
         }
 
