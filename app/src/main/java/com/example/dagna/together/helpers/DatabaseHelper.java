@@ -29,10 +29,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     private static final String KEY_CITY = "city";
-    private static final String KEY_USER_ID = "user_id";
-    private static final String KEY_EVENT_ID = "event_id";
-    private static final String KEY_CATEGORY_ID = "category_id";
-    private static final String KEY_DSCRP = "description";
+    public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_EVENT_ID = "event_id";
+    public static final String KEY_CATEGORY_ID = "category_id";
+    public static final String KEY_DSCRP = "description";
 
     // CATEGORY colun names
     private static final String KEY_CATEGORY_NAME = "name";
@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_GRADE = "grade";
 
     // EVENT Table - column names
-    private static final String KEY_EVENT_NAME = "name";
+    public static final String KEY_EVENT_NAME = "name";
     private static final String KEY_STREET_NAME = "street_name";
     private static final String KEY_STREET_NUMBER = "street_number";
     private static final String KEY_ZIPCODE = "zipcode";
@@ -193,7 +193,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getEventsByCity(String city)
     {
-        String selectQuery = "Select * FROM " + TABLE_EVENT + " WHERE " + KEY_CITY + " = " + "'" + city + "'";
+        String selectQuery = "Select "+ KEY_EVENT_ID + " as _id,* FROM " + TABLE_EVENT + " WHERE " + KEY_CITY + " = " + "'" + city + "'";
         Log.e(LOG, selectQuery);
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);

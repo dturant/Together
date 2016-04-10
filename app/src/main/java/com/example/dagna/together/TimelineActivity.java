@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.example.dagna.together.helpers.DatabaseHelper;
@@ -43,25 +46,36 @@ public class TimelineActivity extends AppCompatActivity {
                 else {
                     String s = "";
                     Cursor c = DatabaseIntentService.getCursor();
-                    if (c.moveToFirst()) {
-                        do {
-                            s+= c.getString(c.getColumnIndex("city"));
-//                            Todo td = new Todo();
-//                            td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-//                            td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
-//                            td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+                    updateList(c);
+//                    if (c.moveToFirst()) {
+//                        do {
+//                            s+= c.getString(c.getColumnIndex("city"));
+////                            Todo td = new Todo();
+////                            td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+////                            td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
+////                            td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+////
+////                            // adding to todo list
+////                            todos.add(td);
 //
-//                            // adding to todo list
-//                            todos.add(td);
-
-                        } while (c.moveToNext());
-                    }
-                    TextView a = (TextView) findViewById(R.id.timeline_test);
-                    a.setText(s);
+//                        } while (c.moveToNext());
+//                    }
+//                    TextView a = (TextView) findViewById(R.id.timeline_test);
+//                    a.setText(s);
                 }
             }
         }
     };
+
+    private void updateList(Cursor cursor)
+    {
+        String[] fromColumns = {DatabaseHelper.KEY_EVENT_NAME, DatabaseHelper.KEY_DSCRP};
+        int[] toViews = {R.id.title, R.id.description};
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.content_timeline_list_view, cursor, fromColumns, toViews, 0);
+
+        ListView listView = (ListView) findViewById( R.id.timelineListView );
+        listView.setAdapter(adapter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +107,8 @@ public class TimelineActivity extends AppCompatActivity {
             //TODO: po user id
             intent.putExtra(DatabaseIntentService.CITY, "New York");
             startService(intent);
+
+
 
         }
     }
