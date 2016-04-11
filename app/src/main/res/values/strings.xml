@@ -13,4 +13,7 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_register_or_login">Register or login</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_event">EventActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_search_results">SearchResultsActivity</string>
 </resources>

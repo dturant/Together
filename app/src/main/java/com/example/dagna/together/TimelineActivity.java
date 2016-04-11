@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -73,7 +74,27 @@ public class TimelineActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById( R.id.timelineListView );
         listView.setAdapter(adapter);
+
+        listView.setClickable(true);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView parentView, View childView,
+                                    int position, long id) {
+                displayEvent(position);
+
+            }
+
+            public void onNothingSelected(AdapterView parentView) {
+
+            }
+        });
     }
+
+    private void displayEvent(int eventId)
+    {
+        Intent intent = new Intent(this, EventActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +173,7 @@ public class TimelineActivity extends AppCompatActivity {
         }
 
         if (id == R.id.search) {
-            Intent intent = new Intent(this, ProfileActivity.class);
+            Intent intent = new Intent(this, SearchActivity.class);
             startActivity(intent);
             return true;
         }
