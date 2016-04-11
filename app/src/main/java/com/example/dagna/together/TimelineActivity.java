@@ -9,10 +9,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,7 +69,7 @@ public class TimelineActivity extends AppCompatActivity {
     {
         String[] fromColumns = {DatabaseHelper.KEY_EVENT_NAME, DatabaseHelper.KEY_DSCRP};
         int[] toViews = {R.id.title, R.id.description};
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.content_timeline_list_view, cursor, fromColumns, toViews, 0);
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.content_event_list, cursor, fromColumns, toViews, 0);
 
         ListView listView = (ListView) findViewById( R.id.timelineListView );
         listView.setAdapter(adapter);
@@ -142,6 +140,18 @@ public class TimelineActivity extends AppCompatActivity {
         }
 
         if (id == R.id.profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.add_event) {
+            Intent intent = new Intent(this, AddEventActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.search) {
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
             return true;

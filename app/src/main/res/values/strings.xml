@@ -5,6 +5,10 @@
     <string name="logout">Log out</string>
     <string name="profile">Profile</string>
     <string name="edit">Edit profile</string>
+    <string name="search">Search</string>
+    <string name="add_event">New event</string>
+    <string name="category_prompt">Category</string>
+    <string name="description_hint">Description here</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_register_or_login">Register or login</string>
