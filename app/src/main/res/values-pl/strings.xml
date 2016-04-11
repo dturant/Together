@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Together</string>
+
+    <string name="action_settings">Ustawienia</string>
+    <string name="logout">Wyloguj</string>
+    <string name="profile">Profil</string>
+    <string name="edit">Edytuj</string>
+    <string name="search">Szukaj</string>
+    <string name="add_event">Nowy event</string>
+    <string name="category_prompt">Kategoria</string>
+    <string name="description_hint">Opis</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Rejestracja</string>
+    <string name="title_activity_register_or_login">Rejestracja lub logowanie</string>
+    <string name="title_activity_profile">Profil</string>
+    <string name="title_activity_event">Wydarzenie</string>
+    <string name="title_activity_search">Szukaj</string>
+    <string name="title_activity_search_results">Wyniki</string>
+    <string name="title_activity_add_event">Nowy event</string>
+    <string name="event_name">Nazwa </string>
+    <string name="event_category">Kategoria</string>
+    <string name="event_description">Opis</string>
+    <string name="event_country">Państwo</string>
+    <string name="event_city">Miasto</string>
+    <string name="event_street">Ulica</string>
+    <string name="event_add_button">Dodaj!</string>
+    <string name="login">Login</string>
+    <string name="password">Hasło</string>
+    <string name="login_button">Zaloguj!</string>
+    <string name="profile_city">Z</string>
+    <string name="note">Wynik</string>
+    <string name="password_confirmation">Potwierdzenie hasła</string>
+    <string name="register_button">Rejestracja!</string>
+    <string name="search_button">Szukaj!</string>
+</resources>
