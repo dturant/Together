@@ -16,20 +16,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/profile_login"
-        android:text="login: "/>
+        android:text="@string/login"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/profile_city"
-        android:text="city: "
+        android:text="@string/profile_city"
         android:layout_below="@id/profile_login"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/profile_rate"
-        android:text="rate: "
+        android:text="@string/note"
         android:layout_below="@id/profile_city"/>
 
 

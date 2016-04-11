@@ -12,8 +12,8 @@
     tools:context="com.example.dagna.together.RegisterOrLoginActivity"
     tools:showIn="@layout/activity_register_or_login">
 
-    <Button android:text="Login" android:layout_width="wrap_content"
+    <Button android:text="@string/login_button" android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:id="@+id/login" android:onClick="goToLogin"/>
-    <Button android:text="Register" android:layout_width="wrap_content"
+    <Button android:text="@string/register_button" android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:layout_below="@+id/login" android:onClick="goToRegister" android:id="@+id/register" />
 </RelativeLayout>

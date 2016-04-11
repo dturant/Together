@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/register_loginTextView"
-        android:text="Login:"/>
+        android:text="@string/login"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/register_passwordTextView"
         android:layout_below="@id/register_login"
-        android:text="Password:"/>
+        android:text="@string/password"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/register_passwordConfirmationTextView"
         android:layout_below="@id/register_password"
-        android:text="Password confirmation:"/>
+        android:text="@string/password_confirmation"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/register_cityTextView"
         android:layout_below="@id/register_passwordConfirmation"
-        android:text="City:"/>
+        android:text="@string/event_city"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/register_button"
         android:onClick="register"
         android:id="@+id/register_registerButton"
         android:layout_below="@id/register_city"/>
