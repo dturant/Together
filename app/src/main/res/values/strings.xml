@@ -12,8 +12,16 @@
     <string name="title_activity_login">Login</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_register_or_login">Register or login</string>
-    <string name="title_activity_profile">ProfileActivity</string>
-    <string name="title_activity_event">EventActivity</string>
-    <string name="title_activity_search">SearchActivity</string>
-    <string name="title_activity_search_results">SearchResultsActivity</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_event">Event</string>
+    <string name="title_activity_search">Search</string>
+    <string name="title_activity_search_results">Results</string>
+    <string name="title_activity_add_event">New event</string>
+    <string name="event_name">Name: </string>
+    <string name="event_category">Category: </string>
+    <string name="event_description">Description: </string>
+    <string name="event_country">Country: </string>
+    <string name="event_city">City: </string>
+    <string name="event_street">Street: </string>
+    <string name="event_add_button">Add!</string>
 </resources>

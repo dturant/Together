@@ -46,11 +46,14 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddEventActivity" />
         <activity
-            android:name=".EventActivity"
-            android:label="@string/title_activity_event"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".AddEventActivity"
+            android:label="@string/title_activity_add_event"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+        android:name=".EventActivity"
+        android:label="@string/title_activity_event"
+        android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"

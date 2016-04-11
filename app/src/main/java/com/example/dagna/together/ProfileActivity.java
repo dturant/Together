@@ -27,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String loginFromPref = preferences.getString("login", "");
 
+        //TODO profile ze stringow
         getSupportActionBar().setTitle(loginFromPref+"'s profile");
 
         TextView login = (TextView) findViewById(R.id.profile_login);
