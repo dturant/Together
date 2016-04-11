@@ -6,12 +6,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.dagna.together.onlineDatabase.*;
 
 public class RegisterActivity extends AppCompatActivity {
-
+    EditText Login, Password, City, PasswordConfirmation;
+    TextView Error;
+    String login, password, city, passwordConfirmation, error;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,35 +25,52 @@ public class RegisterActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Login=(EditText) findViewById(R.id.register_login);
+        Password=(EditText) findViewById(R.id.register_password);
+        PasswordConfirmation=(EditText) findViewById(R.id.register_passwordConfirmation);
+        City=(EditText) findViewById(R.id.register_city);
+        Error=(TextView) findViewById(R.id.register_error);
+
 
     }
 
     public void register(View view){
-        String takenLogin="d";
 
-        EditText login = (EditText) findViewById(R.id.register_login);
-        EditText password = (EditText) findViewById(R.id.register_password);
-        EditText passwordConfirmation = (EditText) findViewById(R.id.register_passwordConfirmation);
-        EditText city = (EditText) findViewById(R.id.register_city);
-        TextView error = (TextView) findViewById(R.id.register_error);
+        login=Login.getText().toString();
+        password=Password.getText().toString();
+        passwordConfirmation=PasswordConfirmation.getText().toString();
+        city=City.getText().toString();
 
-        if( login.getText().toString().trim().equals("") || password.getText().toString().trim().equals("")
-             || passwordConfirmation.getText().toString().trim().equals("") || city.getText().toString().trim().equals("")  ){
-            error.setVisibility(View.VISIBLE);
-            error.setText("All fields are required");
+        if( login.trim().equals("") || password.trim().equals("")
+                || passwordConfirmation.trim().equals("") || city.trim().equals("")  ){
+            Error.setVisibility(View.VISIBLE);
+            Error.setText("All fields are required");
         }
 
-        else if(login.getText().toString().equals(takenLogin)){
-            error.setVisibility(View.VISIBLE);
-            error.setText("This login is already taken. Try another one.");
+        else if(!password.equals(passwordConfirmation)){
+            Error.setVisibility(View.VISIBLE);
+            Error.setText("Passwords don't match.");
+            return;
         }
-        else if(!password.getText().toString().equals(passwordConfirmation.getText().toString())){
-            error.setVisibility(View.VISIBLE);
-            error.setText("Passwords don't match.");
-        }
-        else{
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+        else {
+            AddUser addUser = (AddUser) new AddUser(new AddUser.AsyncResponse() {
+
+                @Override
+                public void processFinish(String output) {
+
+                    Log.d("OUTPUT", output);
+                    if (output.equals("error")) {
+                        Log.d("ERROR", "ERROR");
+                        Error.setVisibility(View.VISIBLE);
+                        Error.setText("This login is already taken. Try another one.");
+
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                    }
+                }
+            }).execute(login, password, city);
+
         }
 
 
