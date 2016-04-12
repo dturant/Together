@@ -19,6 +19,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //TODO za kazdym razem dostawac tu id usera po ktorym chcemy klepac
+        //w aleznosci od tgo inne menu dac...
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,16 +55,15 @@ public class ProfileActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
 
-        if (id == R.id.edit) {
-            //Intent intent = new Intent(this, EditProfileActivity.class);
-            //startActivity(intent);
-            return true;
-        }
-
         if (id == R.id.logout) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             preferences.edit().remove("login").commit();
             Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.edit){
+            Intent intent = new Intent(this, EditProfileActivity.class);
             startActivity(intent);
             return true;
         }

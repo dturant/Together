@@ -12,4 +12,53 @@
     tools:context="com.example.dagna.together.EventActivity"
     tools:showIn="@layout/activity_event">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_nameTextView"
+        android:text="@string/event_name"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_categoryTextView"
+        android:text="@string/event_category"
+        android:layout_below="@id/event_nameTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_descriptionTextView"
+        android:text="@string/event_description"
+        android:layout_below="@id/event_categoryTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_countryTextView"
+        android:text="@string/event_country"
+        android:layout_below="@id/event_descriptionTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_cityTextView"
+        android:text="@string/event_city"
+        android:layout_below="@id/add_event_countryTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_streetTextView"
+        android:text="@string/event_street"
+        android:layout_below="@id/event_cityTextView"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="addUserToEvent"
+        android:id="@+id/event_addUserButton"
+        android:text="@string/take_part_in_event_button"
+        android:layout_below="@id/event_streetTextView" />
+
 </RelativeLayout>

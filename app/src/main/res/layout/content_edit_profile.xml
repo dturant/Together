@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.dagna.together.EditProfileActivity"
+    tools:showIn="@layout/activity_edit_profile">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_loginTextView"
+        android:text="@string/login"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_login"
+        android:layout_below="@id/edit_loginTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_cityTextView"
+        android:layout_below="@id/edit_login"
+        android:text="@string/event_city"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_city"
+        android:layout_below="@id/edit_cityTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_descriptionTextView"
+        android:text="@string/user_description"
+        android:layout_below="@id/edit_city"/>
+    <EditText
+        android:id="@+id/edit_user_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/user_description_hint"
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLength="2000"
+        android:maxLines="6"
+        android:layout_below="@id/edit_descriptionTextView"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_button"
+        android:onClick="edit"
+        android:id="@+id/edit_editButton"
+        android:layout_below="@id/edit_user_description"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_error"
+        android:visibility="gone"
+        android:layout_below="@id/edit_editButton"
+        android:textColor="#ff0000"/>
+
+</RelativeLayout>

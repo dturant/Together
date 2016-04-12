@@ -32,4 +32,10 @@
     <string name="password_confirmation">Password confirmation</string>
     <string name="register_button">Register!</string>
     <string name="search_button">Search!</string>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="edit_button">Edit!</string>
+    <string name="user_description">Description</string>
+    <string name="user_description_hint">Write something about you :)</string>
+    <string name="take_part_in_event_button">Take part!</string>
+
 </resources>

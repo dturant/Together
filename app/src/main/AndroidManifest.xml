@@ -49,11 +49,11 @@
         <activity
             android:name=".AddEventActivity"
             android:label="@string/title_activity_add_event"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-        android:name=".EventActivity"
-        android:label="@string/title_activity_event"
-        android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".EventActivity"
+            android:label="@string/title_activity_event"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"
@@ -61,6 +61,10 @@
         <activity
             android:name=".SearchResultsActivity"
             android:label="@string/title_activity_search_results"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
