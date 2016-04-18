@@ -105,10 +105,28 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 */
-    private void displayEvent(int eventId)
+    private void displayEvent(String eventId)
     {
-        Intent intent = new Intent(this, EventActivity.class);
-        startActivity(intent);
+        GetEventById getEventById = (GetEventById) new GetEventById(new GetEventById.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+
+                if (GetEventById.json_string.length() < 30) {
+                    Log.d("fail!!!!", "fail :(");
+
+                } else {
+                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
+                    json_string = GetEventById.json_string;
+                    Intent intent = new Intent(getApplicationContext(), EventActivity.class);
+                    intent.putExtra("json_data", json_string);
+                    startActivity(intent);
+
+                }
+            }
+        }).execute(eventId);
+
+
     }
 
 
@@ -182,7 +200,7 @@ public class TimelineActivity extends AppCompatActivity {
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 public void onItemClick(AdapterView parentView, View childView,
                                                         int position, long id) {
-                                    displayEvent(position);
+                                    displayEvent("1");
 
                                 }
 
