@@ -158,7 +158,7 @@ public class TimelineActivity extends AppCompatActivity {
 
 
 
-                        eventAdapter=new EventAdapter(getApplicationContext(), R.layout.row_layout);
+                        eventAdapter=new EventAdapter(getApplicationContext(), R.layout.content_event_list);
                         listView.setAdapter(eventAdapter);
                         json_string=DisplayEvents.json_string;
                        // json_string=getIntent().getExtras().getString("json_data");
@@ -179,6 +179,18 @@ public class TimelineActivity extends AppCompatActivity {
 
 
                             }
+                            listView.setClickable(true);
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                public void onItemClick(AdapterView parentView, View childView,
+                                                        int position, long id) {
+                                    displayEvent(position);
+
+                                }
+
+                                public void onNothingSelected(AdapterView parentView) {
+
+                                }
+                            });
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

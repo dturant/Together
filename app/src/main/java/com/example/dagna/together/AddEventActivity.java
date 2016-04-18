@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -14,12 +15,22 @@ import java.util.List;
 
 public class AddEventActivity extends AppCompatActivity {
 
+    EditText Name, Description, Country, City, Street;
+    Spinner Category;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Category = (Spinner) findViewById(R.id.add_event_category);
+        Name = (EditText) findViewById(R.id.add_event_name);
+        Country = (EditText) findViewById(R.id.add_event_country);
+        Description = (EditText) findViewById(R.id.add_event_description);
+        City = (EditText) findViewById(R.id.add_event_city);
+        Street = (EditText) findViewById(R.id.add_event_street);
 
         List<String> categories = new ArrayList<String>();
         categories.add("Automobile");
@@ -49,6 +60,13 @@ public class AddEventActivity extends AppCompatActivity {
 
     public void addEvent(View view)
     {
+        String name, city, country, category, street, description;
+        name = Name.getText().toString();
+        city = City.getText().toString();
+        country = Country.getText().toString();
+        street = Country.getText().toString();
+        description = Description.getText().toString();
+        category = Category.getSelectedItem().toString();
         //logika dodawania eventu i cos w intencie przekazac zeby byl prompt added!
         Intent intent = new Intent(this, TimelineActivity.class);
         startActivity(intent);

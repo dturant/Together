@@ -58,20 +58,35 @@
         android:id="@+id/add_event_countryTextView"
         android:text="@string/event_country"
         android:layout_below="@id/add_event_description"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_event_country"
+        android:layout_below="@id/add_event_countryTextView"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/add_event_cityTextView"
         android:text="@string/event_city"
-        android:layout_below="@id/add_event_countryTextView"/>
+        android:layout_below="@id/add_event_country"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_event_city"
+        android:layout_below="@id/add_event_cityTextView"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/add_event_streetTextView"
         android:text="@string/event_street"
-        android:layout_below="@id/add_event_cityTextView"/>
+        android:layout_below="@id/add_event_city"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_event_street"
+        android:layout_below="@id/add_event_streetTextView"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -79,7 +94,7 @@
         android:text="@string/event_add_button"
         android:onClick="addEvent"
         android:id="@+id/add_event_addButton"
-        android:layout_below="@id/add_event_streetTextView"/>
+        android:layout_below="@id/add_event_street"/>
 
     <TextView
         android:layout_width="wrap_content"

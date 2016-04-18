@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/event_cityTextView"
         android:text="@string/event_city"
-        android:layout_below="@id/add_event_countryTextView"/>
+        android:layout_below="@id/event_countryTextView"/>
 
     <TextView
         android:layout_width="wrap_content"
