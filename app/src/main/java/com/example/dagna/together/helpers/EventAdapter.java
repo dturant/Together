@@ -45,10 +45,10 @@ public class EventAdapter extends ArrayAdapter<Events> {
         EventHolder eventHolder;
         if(row==null){
             LayoutInflater layoutInflater = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row=layoutInflater.inflate(R.layout.row_layout,parent,false);
+            row=layoutInflater.inflate(R.layout.content_event_list,parent,false);
             eventHolder= new EventHolder();
-            eventHolder.event_name= (TextView) row.findViewById(R.id.event_name);
-            eventHolder.event_description= (TextView) row.findViewById(R.id.event_description);
+            eventHolder.event_name= (TextView) row.findViewById(R.id.title);
+            eventHolder.event_description= (TextView) row.findViewById(R.id.description);
             row.setTag(eventHolder);
 
         }
