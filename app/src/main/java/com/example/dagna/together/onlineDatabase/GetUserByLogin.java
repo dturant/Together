@@ -42,8 +42,9 @@ String json_url;
 
     @Override
     protected String doInBackground(String... args) {
-        String login;
+        String login, password;
         login=args[0];
+        //password=args[1];
         try {
             URL url = new URL(json_url);
             HttpURLConnection httpURLConnection= (HttpURLConnection)url.openConnection();

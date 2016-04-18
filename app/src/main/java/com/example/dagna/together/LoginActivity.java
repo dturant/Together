@@ -40,72 +40,62 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
-        Log.d("login", "tu jestem");
-        String l = "d";
-        String p = "t";
-        final EditText login = (EditText) findViewById(R.id.login_login);
-        final EditText password = (EditText) findViewById(R.id.login_password);
-        final TextView error = (TextView) findViewById(R.id.login_error);
+        final EditText Login = (EditText) findViewById(R.id.login_login);
+        final EditText Password = (EditText) findViewById(R.id.login_password);
+        final TextView Error = (TextView) findViewById(R.id.login_error);
 
-    /*    if (login.getText().toString().trim().equals("") || password.getText().toString().trim().equals("")) {
-            error.setVisibility(View.VISIBLE);
-            error.setText("All fields are required");
-        } else if (login.getText().toString().equals(l) && password.getText().toString().equals(p)) {
-            addToPreferences(login.getText().toString());
-            Intent intent = new Intent(this, TimelineActivity.class);
-            startActivity(intent);
-            //tutaj odpytanie servicu np
+        final String login, password;
+        login = Login.getText().toString();
+        password = Password.getText().toString();
+
+        if (login.trim().equals("") || password.trim().equals("")) {
+            Error.setVisibility(View.VISIBLE);
+            Error.setText("All fields are required");
         } else {
-            error.setVisibility(View.VISIBLE);
-            error.setText("Login failed. Check your login and password.");
-        } */
+            GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
+
+                @Override
+                public void processFinish(String output) {
+                    Log.d("login", login);
+                    Log.d("process finish!!!!", GetUserByLogin.json_string);
+                    if (GetUserByLogin.json_string.length() < 30) {
+                        Log.d("fail!!!!", "fail :(");
+                        Error.setVisibility(View.VISIBLE);
+                        Error.setText("Login failed. Check your login and password.");
+                    } else {
+                        Log.d("data!!!!!!!", GetUserByLogin.json_string);
+                        json_string = GetUserByLogin.json_string;
+
+                        try {
+                            Log.d("login", login);
+                            jsonObject = new JSONObject(json_string);
+                            jsonArray = jsonObject.getJSONArray("server_response");
+                            JSONObject JO = jsonArray.getJSONObject(0);
+
+                            String db_id, db_description, db_city, db_grade, db_password, db_login;
+
+                            db_id = JO.getString("user_id");
+                            db_password = JO.getString("password");
+                            db_description = JO.getString("description");
+                            db_city = JO.getString("city");
+
+                            if (password.equals(db_password)) {
+                                addToPreferences(login);
+                                Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Error.setVisibility(View.VISIBLE);
+                                Error.setText("Login failed. Check your password.");
+                            }
 
 
-        GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
-
-            @Override
-            public void processFinish(String output) {
-                Log.d("process finish!!!!",GetUserByLogin.json_string);
-                if (GetUserByLogin.json_string == null) {
-                    Log.d("fail!!!!", "fail :(");
-                    //Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("All fields are required");
-                } else {
-                    Log.d("data!!!!!!!", GetUserByLogin.json_string);
-                    json_string = GetUserByLogin.json_string;
-
-                    try {
-                        Log.d("login", login.getText().toString());
-                        jsonObject = new JSONObject(json_string);
-                        jsonArray=jsonObject.getJSONArray("server_response");
-                        JSONObject JO = jsonArray.getJSONObject(0);
-
-                        String db_id, db_description, db_city, db_grade, db_password, db_login;
-
-                        db_id = JO.getString("user_id");
-                        db_password = JO.getString("password");
-                        db_description = JO.getString("description");
-                        db_city = JO.getString("city");
-                      //  db_id = JO.getString("id");
-
-                        if(password.getText().toString().equals(db_password)){
-                            addToPreferences(login.getText().toString());
-                            Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
-                            startActivity(intent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        else{
-                            error.setVisibility(View.VISIBLE);
-                            error.setText("Login failed. Check your login and password.");
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
                 }
-            }
-        }).execute(login.getText().toString());
+            }).execute(login);
+        }
     }
 
 
