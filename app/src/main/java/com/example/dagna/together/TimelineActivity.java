@@ -119,7 +119,7 @@ public class TimelineActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        StrictMode.enableDefaults();
+        //StrictMode.enableDefaults();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String login = preferences.getString("login", "");
