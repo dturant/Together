@@ -21,9 +21,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dagna.together.helpers.DatabaseHelper;
+import com.example.dagna.together.helpers.EventAdapter;
+import com.example.dagna.together.helpers.Events;
 import com.example.dagna.together.services.DatabaseIntentService;
+import com.example.dagna.together.onlineDatabase.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -33,7 +41,13 @@ import java.sql.Statement;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    String json_string;
+    JSONObject jsonObject;
+    JSONArray jsonArray;
+    EventAdapter eventAdapter;
+    ListView listView;
+
+  /*  private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
@@ -90,7 +104,7 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
     }
-
+*/
     private void displayEvent(int eventId)
     {
         Intent intent = new Intent(this, EventActivity.class);
@@ -118,7 +132,7 @@ public class TimelineActivity extends AppCompatActivity {
         }
         else
         {
-            //TODO na razie trzeba setowac DB za kazdym razem zeby dzialalo
+         /*   //TODO na razie trzeba setowac DB za kazdym razem zeby dzialalo
             DatabaseHelper db;
             db = new DatabaseHelper(getApplicationContext());
             db.setupDatabase();
@@ -127,7 +141,50 @@ public class TimelineActivity extends AppCompatActivity {
             intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.GET_EVENTS_FROM_USER_CITY);
             //TODO: po user id
             intent.putExtra(DatabaseIntentService.CITY, "New York");
-            startService(intent);
+            startService(intent); */
+
+            DisplayEvents displayEvents = (DisplayEvents) new DisplayEvents(new DisplayEvents.AsyncResponse() {
+
+                @Override
+                public void processFinish(String output) {
+                    if(DisplayEvents.json_string==null){
+                        Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        //Intent intent = new Intent(getApplicationContext(), DisplayListView.class);
+                        //intent.putExtra("json_data", DisplayEvents.json_string);
+                        //startActivity(intent);
+                        listView = (ListView)findViewById(R.id.timelineListView);
+
+
+
+                        eventAdapter=new EventAdapter(getApplicationContext(), R.layout.row_layout);
+                        listView.setAdapter(eventAdapter);
+                        json_string=DisplayEvents.json_string;
+                       // json_string=getIntent().getExtras().getString("json_data");
+                        try {
+                            jsonObject=new JSONObject(json_string);
+                            jsonArray=jsonObject.getJSONArray("server_response");
+
+                            int count=0;
+                            String name, description;
+
+                            while(count<jsonArray.length()){
+                                JSONObject JO = jsonArray.getJSONObject(count);
+                                name=JO.getString("name");
+                                description=JO.getString("description");
+                                Events events=new Events(name, description);
+                                eventAdapter.add(events);
+                                count++;
+
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).execute();
 
 
 
@@ -187,95 +244,14 @@ public class TimelineActivity extends AppCompatActivity {
     public void onPause()
     {
         super.onPause();
-        unregisterReceiver(receiver);
+        //unregisterReceiver(receiver);
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        registerReceiver(receiver, new IntentFilter(DatabaseIntentService.NOTIFICATION));
+        //registerReceiver(receiver, new IntentFilter(DatabaseIntentService.NOTIFICATION));
     }
 
-
-    public void register2(View view){
-
-        new Thread() {
-            @Override
-            public void run() {
-                //your code here
-
-
-                try{
-                    Class.forName("com.mysql.jdbc.Driver");
-                    String url = "jdbc:mysql://db4free.net:3306/project_together";
-
-                    String user = "together_mgdt";
-                    String pwd = "ifejestfajne";
-
-                    String dsa = "DSA";
-
-//            String url = "jdbc:mysql://dbsrv.infeo.at:3306/fhv";
-//
-//            String user = "fhv";
-//            String pwd = "datenmanagement";
-                    Connection conn = null;
-
-                    try{
-            /* Initializing the connection */
-                        conn = DriverManager.getConnection(url, user, pwd);
-
-                        Statement stmt = conn.createStatement();
-                        String SQL = "SELECT * FROM user";
-                        ResultSet rs = stmt.executeQuery(SQL);
-                        String login = null;
-                        if(rs.next()){
-                            login = rs.getString("login");
-                        }
-
-                        final String login2 = login;
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                EditText user_login = (EditText) findViewById(R.id.text);
-                                user_login.setText(login2, TextView.BufferType.EDITABLE);
-
-                            }
-                        });
-
-
-//                ResultSet resultset = statement.executeQuery(/* MY SQL reqquest */);
-
-//                while(resultset.next()){
-//                    System.out.println(resultset.getString(/* THE COLUMN AND ROW I WANTED IN MY REQUEST */));
-//                }
-
-                    }catch(SQLException e){
-                        System.out.println("SQL connection error: " + e.getMessage());
-                    }finally {
-                        if(conn != null){
-                            try{
-                                conn.close();
-                            }catch (SQLException e){
-                                System.out.println("Error while closing the connection: " + e.getMessage());
-                                //s
-                            }
-                        }
-                    }
-
-//            Statement stmt = conn.createStatement( );
-//            String SQL = "SELECT * FROM user";
-//            ResultSet rs = stmt.executeQuery( SQL );
-//
-//            String login = rs.getString("login");
-
-                }
-                catch (Exception e){
-                    System.out.println(e.getMessage());
-                    System.out.print("Tu jest blad");
-                }
-            }
-        }.start();
-    }
 }
