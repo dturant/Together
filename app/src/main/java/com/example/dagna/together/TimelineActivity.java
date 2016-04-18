@@ -143,6 +143,10 @@ public class TimelineActivity extends AppCompatActivity {
             intent.putExtra(DatabaseIntentService.CITY, "New York");
             startService(intent); */
 
+            listView = (ListView)findViewById(R.id.timelineListView);
+            eventAdapter=new EventAdapter(this, R.layout.content_event_list);
+            listView.setAdapter(eventAdapter);
+
             DisplayEvents displayEvents = (DisplayEvents) new DisplayEvents(new DisplayEvents.AsyncResponse() {
 
                 @Override
@@ -154,12 +158,7 @@ public class TimelineActivity extends AppCompatActivity {
                         //Intent intent = new Intent(getApplicationContext(), DisplayListView.class);
                         //intent.putExtra("json_data", DisplayEvents.json_string);
                         //startActivity(intent);
-                        listView = (ListView)findViewById(R.id.timelineListView);
 
-
-
-                        eventAdapter=new EventAdapter(getApplicationContext(), R.layout.content_event_list);
-                        listView.setAdapter(eventAdapter);
                         json_string=DisplayEvents.json_string;
                        // json_string=getIntent().getExtras().getString("json_data");
                         try {

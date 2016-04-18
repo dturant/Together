@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.dagna.together.R;
+import com.example.dagna.together.domain.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by Dagna on 18/04/2016.
  */
-public class EventAdapter extends ArrayAdapter {
+public class EventAdapter extends ArrayAdapter<Events> {
     List list = new ArrayList();
     public EventAdapter(Context context, int resource) {
         super(context, resource);
@@ -33,8 +34,8 @@ public class EventAdapter extends ArrayAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return list.get(position);
+    public Events getItem(int position) {
+        return (Events)list.get(position);
     }
 
     @Override
