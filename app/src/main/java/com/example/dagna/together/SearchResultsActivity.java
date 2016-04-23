@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
@@ -56,6 +59,23 @@ public class SearchResultsActivity extends AppCompatActivity {
 
 
             }
+
+            listView.setClickable(true);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView parentView, View childView,
+                                        int position, long id) {
+                    TextView c = (TextView) childView.findViewById(R.id.title);
+                    String eventName= c.getText().toString();
+                    Log.d("eventname", eventName);
+                    displayEvent(eventName);
+
+                }
+
+                public void onNothingSelected(AdapterView parentView) {
+
+                }
+            });
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -85,7 +105,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         });
     } */
 
-    private void displayEvent(String eventId)
+    private void displayEvent(String eventName)
     {
         GetEventByName getEventByName = (GetEventByName) new GetEventByName(new GetEventByName.AsyncResponse() {
 
@@ -104,7 +124,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
                 }
             }
-        }).execute(eventId);
+        }).execute(eventName);
 
 
     }
