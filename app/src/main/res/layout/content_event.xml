@@ -53,12 +53,19 @@
         android:text="@string/event_street"
         android:layout_below="@id/event_cityTextView"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_userTextView"
+        android:text="@string/event_user"
+        android:layout_below="@id/event_streetTextView"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="addUserToEvent"
         android:id="@+id/event_addUserButton"
         android:text="@string/take_part_in_event_button"
-        android:layout_below="@id/event_streetTextView" />
+        android:layout_below="@id/event_userTextView" />
 
 </RelativeLayout>

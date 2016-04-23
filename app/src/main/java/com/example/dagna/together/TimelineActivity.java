@@ -1,15 +1,9 @@
 package com.example.dagna.together;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,27 +11,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dagna.together.helpers.DatabaseHelper;
 import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
-import com.example.dagna.together.services.DatabaseIntentService;
 import com.example.dagna.together.onlineDatabase.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -105,26 +89,26 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 */
-    private void displayEvent(String eventId)
+    private void displayEvent(String eventName)
     {
-        GetEventById getEventById = (GetEventById) new GetEventById(new GetEventById.AsyncResponse() {
+        GetEventByName getEventByName = (GetEventByName) new GetEventByName(new GetEventByName.AsyncResponse() {
 
             @Override
             public void processFinish(String output) {
 
-                if (GetEventById.json_string.length() < 30) {
+                if (GetEventByName.json_string.length() < 30) {
                     Log.d("fail!!!!", "fail :(");
 
                 } else {
                     //Log.d("data!!!!!!!", GetUserByLogin.json_string);
-                    json_string = GetEventById.json_string;
+                    json_string = GetEventByName.json_string;
                     Intent intent = new Intent(getApplicationContext(), EventActivity.class);
                     intent.putExtra("json_data", json_string);
                     startActivity(intent);
 
                 }
             }
-        }).execute(eventId);
+        }).execute(eventName);
 
 
     }
@@ -169,6 +153,7 @@ public class TimelineActivity extends AppCompatActivity {
 
                 @Override
                 public void processFinish(String output) {
+                    Log.d("output",output);
                     if(DisplayEvents.json_string==null){
                         Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
                     }
@@ -200,7 +185,10 @@ public class TimelineActivity extends AppCompatActivity {
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 public void onItemClick(AdapterView parentView, View childView,
                                                         int position, long id) {
-                                    displayEvent("1");
+                                    TextView c = (TextView) childView.findViewById(R.id.title);
+                                    String eventName= c.getText().toString();
+                                    Log.d("eventname", eventName);
+                                    displayEvent(eventName);
 
                                 }
 

@@ -17,7 +17,7 @@ public class EventActivity extends AppCompatActivity {
     JSONObject jsonObject;
     JSONArray jsonArray;
 
-    TextView Name;
+    TextView Name, Category, Description, Country, City, Street,User ;
 
     //trzymac tu gdzies id, ma przyjsc w intencie
     @Override
@@ -28,6 +28,13 @@ public class EventActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Name = (TextView)findViewById(R.id.event_nameTextView);
+        Category = (TextView)findViewById(R.id.event_categoryTextView);
+        Description = (TextView)findViewById(R.id.event_descriptionTextView);
+        Country = (TextView)findViewById(R.id.event_countryTextView);
+        City = (TextView)findViewById(R.id.event_cityTextView);
+        Street = (TextView)findViewById(R.id.event_streetTextView);
+        User = (TextView)findViewById(R.id.event_userTextView);
+
 
         json_string=getIntent().getExtras().getString("json_data");
         try {
@@ -36,20 +43,26 @@ public class EventActivity extends AppCompatActivity {
             jsonArray = jsonObject.getJSONArray("server_response");
             JSONObject JO = jsonArray.getJSONObject(0);
 
-            String db_id, db_name, db_description, db_category_id, db_user_id, db_street_name, db_street_number, db_city, db_zipcode, db_country;
+            String db_id, db_name, db_description, db_category, db_user, db_street_name, db_street_number, db_city, db_zipcode, db_country;
 
             db_id = JO.getString("event_id");
             db_name = JO.getString("name");
             db_description = JO.getString("description");
-            db_category_id=JO.getString("category_id");
-            db_user_id = JO.getString("user_id");
+            db_category=JO.getString("category");
+            db_user = JO.getString("user");
             db_street_name=JO.getString("street_name");
             db_street_number=JO.getString("street_number");
             db_city=JO.getString("city");
             db_zipcode=JO.getString("zipcode");
             db_country=JO.getString("country");
 
-            Name.setText(db_name);
+            Name.append(db_name);
+            Category.append(db_category);
+            Description.append(db_description);
+            City.append(db_city);
+            Country.append(db_country);
+            Street.append(db_street_name);
+            User.append(db_user);
 
         } catch (JSONException e) {
             e.printStackTrace();

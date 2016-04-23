@@ -1,26 +1,15 @@
 package com.example.dagna.together;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
-import com.example.dagna.together.helpers.DatabaseHelper;
 import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
-import com.example.dagna.together.onlineDatabase.DisplayEvents;
-import com.example.dagna.together.onlineDatabase.GetEventById;
-import com.example.dagna.together.onlineDatabase.GetParticularEvents;
-import com.example.dagna.together.services.DatabaseIntentService;
+import com.example.dagna.together.onlineDatabase.GetEventByName;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -98,17 +87,17 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void displayEvent(String eventId)
     {
-        GetEventById getEventById = (GetEventById) new GetEventById(new GetEventById.AsyncResponse() {
+        GetEventByName getEventByName = (GetEventByName) new GetEventByName(new GetEventByName.AsyncResponse() {
 
             @Override
             public void processFinish(String output) {
 
-                if (GetEventById.json_string.length() < 30) {
+                if (GetEventByName.json_string.length() < 30) {
                     Log.d("fail!!!!", "fail :(");
 
                 } else {
                     //Log.d("data!!!!!!!", GetUserByLogin.json_string);
-                    json_string = GetEventById.json_string;
+                    json_string = GetEventByName.json_string;
                     Intent intent = new Intent(getApplicationContext(), EventActivity.class);
                     intent.putExtra("json_data", json_string);
                     startActivity(intent);

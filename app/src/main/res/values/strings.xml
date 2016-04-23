@@ -17,12 +17,13 @@
     <string name="title_activity_search">Search</string>
     <string name="title_activity_search_results">Results</string>
     <string name="title_activity_add_event">New event</string>
-    <string name="event_name">Name</string>
-    <string name="event_category">Category</string>
-    <string name="event_description">Description</string>
-    <string name="event_country">Country</string>
-    <string name="event_city">City</string>
-    <string name="event_street">Street</string>
+    <string name="event_name">Name: </string>
+    <string name="event_category">Category: </string>
+    <string name="event_description">Description: </string>
+    <string name="event_country">Country: </string>
+    <string name="event_city">City: </string>
+    <string name="event_street">Street: </string>
+    <string name="event_user">Hosting user: </string>
     <string name="event_add_button">Add!</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
@@ -37,5 +38,6 @@
     <string name="user_description">Description</string>
     <string name="user_description_hint">Write something about you :)</string>
     <string name="take_part_in_event_button">Take part!</string>
+
 
 </resources>
