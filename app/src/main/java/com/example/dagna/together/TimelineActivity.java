@@ -1,7 +1,13 @@
 package com.example.dagna.together;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,16 +18,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dagna.together.helpers.DatabaseHelper;
 import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
 import com.example.dagna.together.onlineDatabase.*;
+import com.example.dagna.together.services.DatabaseIntentService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -30,15 +41,115 @@ public class TimelineActivity extends AppCompatActivity {
     JSONArray jsonArray;
     EventAdapter eventAdapter;
     ListView listView;
+    static ArrayList<Events> eventsList = new ArrayList<>();
 
-  /*  private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static ArrayList<Events> getEventsList()
+    {
+        return eventsList;
+    }
+
+    private void getEventsFromLocalDB()
+    {
+//            //TODO na razie trzeba setowac DB za kazdym razem zeby dzialalo
+//            DatabaseHelper db;
+//            db = new DatabaseHelper(getApplicationContext());
+//            db.setupDatabase();
+
+            Intent intent = new Intent(this, DatabaseIntentService.class);
+            intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.GET_EVENTS_FROM_USER_CITY);
+            //TODO: po miescie usera
+            intent.putExtra(DatabaseIntentService.CITY, "New York");
+            startService(intent);
+    }
+
+    private void saveEventsToLocalDB()
+    {
+        Intent intent = new Intent(this, DatabaseIntentService.class);
+        intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.SAVE_EVENTS_FROM_ONLINE_DB);
+        startService(intent);
+    }
+
+    private void getEventsFromOnlineDB()
+    {
+        eventsList.clear();
+        listView = (ListView)findViewById(R.id.timelineListView);
+        eventAdapter=new EventAdapter(this, R.layout.content_event_list);
+        listView.setAdapter(eventAdapter);
+
+        DisplayEvents displayEvents = (DisplayEvents) new DisplayEvents(new DisplayEvents.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                Log.d("output",output);
+                if(DisplayEvents.json_string==null){
+                    Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    //Intent intent = new Intent(getApplicationContext(), DisplayListView.class);
+                    //intent.putExtra("json_data", DisplayEvents.json_string);
+                    //startActivity(intent);
+
+                    json_string=DisplayEvents.json_string;
+                    // json_string=getIntent().getExtras().getString("json_data");
+                    try {
+                        jsonObject=new JSONObject(json_string);
+                        jsonArray=jsonObject.getJSONArray("server_response");
+
+                        int count=0;
+                        String name, description, city;
+
+                        while(count<jsonArray.length()){
+                            JSONObject JO = jsonArray.getJSONObject(count);
+                            name=JO.getString("name");
+                            description=JO.getString("description");
+                            //city = JO.getString("city");
+                            Events events=new Events(name, description,"New York");
+                            //Log.e("KURWAAAAA", city);
+                            eventAdapter.add(events);
+                            eventsList.add(events);
+                            count++;
+                        }
+                        saveEventsToLocalDB();
+
+                        listView.setClickable(true);
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            public void onItemClick(AdapterView parentView, View childView,
+                                                    int position, long id) {
+                                TextView c = (TextView) childView.findViewById(R.id.title);
+                                String eventName= c.getText().toString();
+                                Log.d("eventname", eventName);
+                                displayEvent(eventName);
+
+                            }
+
+                            public void onNothingSelected(AdapterView parentView) {
+
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).execute();
+    }
+
+  private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
 
                 String result = bundle.getString(DatabaseIntentService.RESULT);
-                if(result == DatabaseIntentService.RESULT_FAIL)
+                if(result.equals( DatabaseIntentService.RESULT_FAIL))
                 {
                     //fail
                 }
@@ -46,21 +157,6 @@ public class TimelineActivity extends AppCompatActivity {
                     String s = "";
                     Cursor c = DatabaseIntentService.getCursor();
                     updateList(c);
-//                    if (c.moveToFirst()) {
-//                        do {
-//                            s+= c.getString(c.getColumnIndex("city"));
-////                            Todo td = new Todo();
-////                            td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-////                            td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
-////                            td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
-////
-////                            // adding to todo list
-////                            todos.add(td);
-//
-//                        } while (c.moveToNext());
-//                    }
-//                    TextView a = (TextView) findViewById(R.id.timeline_test);
-//                    a.setText(s);
                 }
             }
         }
@@ -79,8 +175,16 @@ public class TimelineActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parentView, View childView,
                                     int position, long id) {
-                displayEvent(position);
-
+                if(isNetworkAvailable())
+                {
+                    TextView c = (TextView) childView.findViewById(R.id.title);
+                    String eventName= c.getText().toString();
+                    displayEvent(eventName);
+                }
+                else
+                {
+                    //TODO popup
+                }
             }
 
             public void onNothingSelected(AdapterView parentView) {
@@ -88,7 +192,7 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
     }
-*/
+
     private void displayEvent(String eventName)
     {
         GetEventByName getEventByName = (GetEventByName) new GetEventByName(new GetEventByName.AsyncResponse() {
@@ -121,91 +225,26 @@ public class TimelineActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //StrictMode.enableDefaults();
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String login = preferences.getString("login", "");
-
-
-        if(login.equals("")){
-            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
-        else
-        {
-         /*   //TODO na razie trzeba setowac DB za kazdym razem zeby dzialalo
-            DatabaseHelper db;
-            db = new DatabaseHelper(getApplicationContext());
-            db.setupDatabase();
-
-            Intent intent = new Intent(this, DatabaseIntentService.class);
-            intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.GET_EVENTS_FROM_USER_CITY);
-            //TODO: po user id
-            intent.putExtra(DatabaseIntentService.CITY, "New York");
-            startService(intent); */
-
-            listView = (ListView)findViewById(R.id.timelineListView);
-            eventAdapter=new EventAdapter(this, R.layout.content_event_list);
-            listView.setAdapter(eventAdapter);
-
-            DisplayEvents displayEvents = (DisplayEvents) new DisplayEvents(new DisplayEvents.AsyncResponse() {
-
-                @Override
-                public void processFinish(String output) {
-                    Log.d("output",output);
-                    if(DisplayEvents.json_string==null){
-                        Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        //Intent intent = new Intent(getApplicationContext(), DisplayListView.class);
-                        //intent.putExtra("json_data", DisplayEvents.json_string);
-                        //startActivity(intent);
-
-                        json_string=DisplayEvents.json_string;
-                       // json_string=getIntent().getExtras().getString("json_data");
-                        try {
-                            jsonObject=new JSONObject(json_string);
-                            jsonArray=jsonObject.getJSONArray("server_response");
-
-                            int count=0;
-                            String name, description;
-
-                            while(count<jsonArray.length()){
-                                JSONObject JO = jsonArray.getJSONObject(count);
-                                name=JO.getString("name");
-                                description=JO.getString("description");
-                                Events events=new Events(name, description);
-                                eventAdapter.add(events);
-                                count++;
-
-
-                            }
-                            listView.setClickable(true);
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                public void onItemClick(AdapterView parentView, View childView,
-                                                        int position, long id) {
-                                    TextView c = (TextView) childView.findViewById(R.id.title);
-                                    String eventName= c.getText().toString();
-                                    Log.d("eventname", eventName);
-                                    displayEvent(eventName);
-
-                                }
-
-                                public void onNothingSelected(AdapterView parentView) {
-
-                                }
-                            });
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }).execute();
-
-
-
-        }
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        String login = preferences.getString("login", "");
+//
+//
+//        if(login.equals("")){
+//            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
+//        else
+//        {
+//            if(isNetworkAvailable())
+//            {
+//                getEventsFromOnlineDB();
+//            }
+//            else
+//            {
+//                getEventsFromLocalDB();
+//            }
+//        }
     }
 
 
@@ -261,14 +300,34 @@ public class TimelineActivity extends AppCompatActivity {
     public void onPause()
     {
         super.onPause();
-        //unregisterReceiver(receiver);
+        unregisterReceiver(receiver);
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        //registerReceiver(receiver, new IntentFilter(DatabaseIntentService.NOTIFICATION));
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String login = preferences.getString("login", "");
+
+        registerReceiver(receiver, new IntentFilter(DatabaseIntentService.NOTIFICATION));
+
+        if(login.equals("")){
+            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            if(isNetworkAvailable())
+            {
+                getEventsFromOnlineDB();
+            }
+            else
+            {
+                getEventsFromLocalDB();
+            }
+        }
     }
 
 }

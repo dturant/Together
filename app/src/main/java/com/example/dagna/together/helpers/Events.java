@@ -5,7 +5,13 @@ package com.example.dagna.together.helpers;
  */
 public class Events {
 
-    private String name, description;
+    private String name, description, city;
+
+    public Events(String name, String description, String city){
+        this.setName(name);
+        this.setDescription(description);
+        this.setCity(city);
+    }
 
     public Events(String name, String description){
         this.setName(name);
@@ -17,6 +23,14 @@ public class Events {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getDescription() {

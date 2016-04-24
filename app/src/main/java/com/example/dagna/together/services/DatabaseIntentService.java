@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.dagna.together.TimelineActivity;
 import com.example.dagna.together.helpers.DatabaseHelper;
 
 /**
@@ -26,13 +27,11 @@ public class DatabaseIntentService extends IntentService {
     //values send via intent informing what action to perform
     public static final String ACTION = "action";
     public static final String GET_EVENTS_FROM_USER_CITY = "get events";
-    public static final String CHECK_CREDENTIALS = "check credentials";
-
+    public static final String SAVE_EVENTS_FROM_ONLINE_DB = "save events";
     //Helping data
     public static final String CITY = "city";
 
     private static Cursor cursor;
-    private int lastResult;//???
 
 
     public DatabaseIntentService() {
@@ -56,6 +55,13 @@ public class DatabaseIntentService extends IntentService {
                     publishResults(RESULT_OK);
                     break;
                 }
+                case SAVE_EVENTS_FROM_ONLINE_DB:
+                {
+                    DatabaseHelper db;
+                    db = new DatabaseHelper(getApplicationContext());
+                    db.saveEvents(TimelineActivity.getEventsList());
+                    break;
+                }
                 default:
                 {
                     publishResults(RESULT_FAIL);
@@ -63,8 +69,10 @@ public class DatabaseIntentService extends IntentService {
 
             }
         }
-
-        publishResults(RESULT_FAIL);
+        else
+        {
+            publishResults(RESULT_FAIL);
+        }
 
     }
 
