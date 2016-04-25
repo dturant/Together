@@ -215,6 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void insertEvent(Events event, SQLiteDatabase db)
     {
         ContentValues eventV = new ContentValues();
+        eventV.put(KEY_EVENT_ID, event.getId());
         eventV.put(KEY_EVENT_NAME, event.getName());
         eventV.put(KEY_DSCRP, event.getDescription());
         eventV.put(KEY_CITY, event.getCity());

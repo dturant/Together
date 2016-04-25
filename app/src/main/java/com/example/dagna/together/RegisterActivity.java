@@ -81,46 +81,49 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void register(View view){
 
-        login=Login.getText().toString();
-        password=Password.getText().toString();
-        passwordConfirmation=PasswordConfirmation.getText().toString();
-        city=City.getText().toString();
+        if(isNetworkAvailable())
+        {
+            login=Login.getText().toString();
+            password=Password.getText().toString();
+            passwordConfirmation=PasswordConfirmation.getText().toString();
+            city=City.getText().toString();
 
-        if( login.trim().equals("") || password.trim().equals("")
-                || passwordConfirmation.trim().equals("") || city.trim().equals("")  ){
-            Error.setVisibility(View.VISIBLE);
-            Error.setText("All fields are required");
-        }
+            if( login.trim().equals("") || password.trim().equals("")
+                    || passwordConfirmation.trim().equals("") || city.trim().equals("")  ){
+                Error.setVisibility(View.VISIBLE);
+                Error.setText("All fields are required");
+            }
 
-        else if(!password.equals(passwordConfirmation)){
-            Error.setVisibility(View.VISIBLE);
-            Error.setText("Passwords don't match.");
-            return;
-        }
-        else {
-            AddUser addUser = (AddUser) new AddUser(new AddUser.AsyncResponse() {
+            else if(!password.equals(passwordConfirmation)){
+                Error.setVisibility(View.VISIBLE);
+                Error.setText("Passwords don't match.");
+                return;
+            }
+            else {
+                AddUser addUser = (AddUser) new AddUser(new AddUser.AsyncResponse() {
 
-                @Override
-                public void processFinish(String output) {
+                    @Override
+                    public void processFinish(String output) {
 
-                    Log.d("OUTPUT", output);
-                    if (output.equals("error")) {
-                        Log.d("ERROR", "ERROR");
-                        Error.setVisibility(View.VISIBLE);
-                        Error.setText("This login is already taken. Try another one.");
+                        Log.d("OUTPUT", output);
+                        if (output.equals("error")) {
+                            Log.d("ERROR", "ERROR");
+                            Error.setVisibility(View.VISIBLE);
+                            Error.setText("This login is already taken. Try another one.");
 
-                    } else {
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(intent);
+                        }
                     }
-                }
-            }).execute(login, password, city);
+                }).execute(login, password, city);
 
+            }
         }
-
-
-
-
+        else
+        {
+            createNetErrorDialog();
+        }
     }
 
 }

@@ -100,7 +100,7 @@ public class TimelineActivity extends AppCompatActivity {
             Intent intent = new Intent(this, DatabaseIntentService.class);
             intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.GET_EVENTS_FROM_USER_CITY);
             //TODO: po miescie usera
-            intent.putExtra(DatabaseIntentService.CITY, "New York");
+            intent.putExtra(DatabaseIntentService.CITY, "Dornbirn");
             startService(intent);
     }
 
@@ -146,9 +146,7 @@ public class TimelineActivity extends AppCompatActivity {
                             name=JO.getString("name");
                             description=JO.getString("description");
                             city=JO.getString("city");
-                            //city = JO.getString("city");
-                            Events events=new Events(id,name, description);
-                            //Log.e("KURWAAAAA", city);
+                            Events events=new Events(id,name, description,city);
                             eventAdapter.add(events);
                             eventsList.add(events);
                             count++;
@@ -159,11 +157,16 @@ public class TimelineActivity extends AppCompatActivity {
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             public void onItemClick(AdapterView parentView, View childView,
                                                     int position, long id) {
-
-                                String eventId=eventsList.get(position).getId();
-                                Log.d("eventid", eventId);
-                                displayEvent(eventId);
-
+                                if(isNetworkAvailable())
+                                {
+                                    String eventId=eventsList.get(position).getId();
+                                    Log.d("eventid", eventId);
+                                    displayEvent(eventId);
+                                }
+                                else
+                                {
+                                    createNetErrorDialog();
+                                }
                             }
 
                             public void onNothingSelected(AdapterView parentView) {

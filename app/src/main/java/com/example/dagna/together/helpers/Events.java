@@ -14,6 +14,13 @@ public class Events {
         //this.setCity(city);
     }
 
+    public Events(String id,String name, String description, String city){
+        this.setId(id);
+        this.setName(name);
+        this.setDescription(description);
+        this.setCity(city);
+    }
+
     public Events(String name, String description){
         this.setName(name);
         this.setDescription(description);

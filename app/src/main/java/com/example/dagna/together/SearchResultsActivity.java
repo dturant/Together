@@ -127,10 +127,16 @@ public class SearchResultsActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView parentView, View childView,
                                         int position, long id) {
-                    String eventId=eventsList.get(position).getId();
-                    Log.d("eventid", eventId);
-                    displayEvent(eventId);
-
+                    if(isNetworkAvailable())
+                    {
+                        String eventId=eventsList.get(position).getId();
+                        Log.d("eventid", eventId);
+                        displayEvent(eventId);
+                    }
+                    else
+                    {
+                        createNetErrorDialog();
+                    }
                 }
 
                 public void onNothingSelected(AdapterView parentView) {

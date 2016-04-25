@@ -165,8 +165,6 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Name = (EditText) findViewById(R.id.search_event_name);
-        Country = (EditText) findViewById(R.id.search_event_country);
         City = (EditText) findViewById(R.id.search_event_city);
 
         this.getCategories();
@@ -188,27 +186,32 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void search(View view) {
-        String name, city, country, category;
-        name = Name.getText().toString();
-        country = Country.getText().toString();
-        city = City.getText().toString();
-        category = Category.getSelectedItem().toString();
+        if(isNetworkAvailable())
+        {
+            String city, category;
+            city = City.getText().toString();
+            category = Category.getSelectedItem().toString();
 
-        GetParticularEvents getParticularEvents = (GetParticularEvents) new GetParticularEvents(new GetParticularEvents.AsyncResponse() {
+            GetParticularEvents getParticularEvents = (GetParticularEvents) new GetParticularEvents(new GetParticularEvents.AsyncResponse() {
 
-            @Override
-            public void processFinish(String output) {
-                if(GetParticularEvents.json_string==null){
-                    Toast.makeText(getApplicationContext(),"first get json", Toast.LENGTH_LONG).show();
+                @Override
+                public void processFinish(String output) {
+                    if(GetParticularEvents.json_string==null){
+                        Toast.makeText(getApplicationContext(),"first get json", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        json_string=GetParticularEvents.json_string;
+                        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
+                        intent.putExtra("json_data", json_string);
+                        startActivity(intent);
+                    }
                 }
-                else{
-                    json_string=GetParticularEvents.json_string;
-                    Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
-                    intent.putExtra("json_data", json_string);
-                    startActivity(intent);
-                }
-            }
-        }).execute(city,category);
+            }).execute(city,category);
+        }
+        else
+        {
+            createNetErrorDialog();
+        }
     }
 
     private void goToResult()
