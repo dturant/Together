@@ -32,5 +32,10 @@
         android:text="@string/note"
         android:layout_below="@id/profile_city"/>
 
+    <ListView android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/subscribedEventsListView">
+    </ListView>
+
 
 </RelativeLayout>

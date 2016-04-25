@@ -18,18 +18,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dagna.together.helpers.Events;
 import com.example.dagna.together.onlineDatabase.AddUser;
+import com.example.dagna.together.onlineDatabase.DisplayEvents;
+import com.example.dagna.together.onlineDatabase.GetSubscribedUsers;
 import com.example.dagna.together.onlineDatabase.JoinEvent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EventActivity extends AppCompatActivity {
-    String json_string;
+    String json_string, event_id;
     JSONObject jsonObject;
     JSONArray jsonArray;
 
@@ -55,7 +62,7 @@ public class EventActivity extends AppCompatActivity {
         if(isNetworkAvailable())
         {
             //join event
-            String event_id=getIntent().getExtras().getString("event_id");
+
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             String user_id = preferences.getString("id", "");
             Log.d("event_id", event_id);
@@ -117,7 +124,7 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        event_id=getIntent().getExtras().getString("event_id");
         context = getApplicationContext();
 
         Name = (TextView)findViewById(R.id.event_nameTextView);
@@ -149,6 +156,8 @@ public class EventActivity extends AppCompatActivity {
             db_zipcode=JO.getString("zipcode");
             db_country=JO.getString("country");
 
+            getSupportActionBar().setTitle(db_name);
+
             Name.append(db_name);
             Category.append(db_category);
             Description.append(db_description);
@@ -157,10 +166,73 @@ public class EventActivity extends AppCompatActivity {
             Street.append(db_street_name);
             User.append(db_user);
 
+            getUsers();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void getUsers(){
+        GetSubscribedUsers getSubscribedUsers = (GetSubscribedUsers) new GetSubscribedUsers(new GetSubscribedUsers.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                Log.d("output",output);
+                if(GetSubscribedUsers.json_string==null){
+                    Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    json_string=GetSubscribedUsers.json_string;
+
+                    try {
+                        jsonObject=new JSONObject(json_string);
+                        jsonArray=jsonObject.getJSONArray("server_response");
+                        List<String> idList=new ArrayList<String>();
+                        int count=0;
+                        String id, login;
+
+                        while(count<jsonArray.length()){
+                            JSONObject JO = jsonArray.getJSONObject(count);
+                            id=JO.getString("id");
+                           // login=JO.getString("login");
+
+                            //Events events=new Events(id,name, description,city);
+                            //eventAdapter.add(events);
+                            //eventsList.add(events);
+                            idList.add(id);
+                            count++;
+
+                        }
+                        Log.d("LISTA USEROW",idList.toString() );
+                        //TODO dodac te glupia liste o listview czy cus
+                        //listView.setClickable(true);
+                        //listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        /*    public void onItemClick(AdapterView parentView, View childView,
+                                                    int position, long id) {
+                                if(isNetworkAvailable())
+                                {
+                                    String eventId=eventsList.get(position).getId();
+                                    Log.d("eventid", eventId);
+                                    displayEvent(eventId);
+                                }
+                                else
+                                {
+                                    createNetErrorDialog();
+                                }
+                            }
+
+                            public void onNothingSelected(AdapterView parentView) {
+
+                            }
+                        });*/
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).execute(event_id);
     }
 
     @Override

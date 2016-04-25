@@ -10,20 +10,17 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dagna.together.services.DatabaseService;
-
 public class ProfileActivity extends AppCompatActivity {
 
+    ListView subscribedEventsListView;
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -74,6 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String loginFromPref = preferences.getString("login", "");
 
+        subscribedEventsListView=(ListView)findViewById(R.id.subscribedEventsListView);
         //TODO profile ze stringow
         getSupportActionBar().setTitle(loginFromPref+"'s profile");
 
@@ -82,6 +80,8 @@ public class ProfileActivity extends AppCompatActivity {
         TextView rate = (TextView) findViewById(R.id.profile_rate);
 
         login.append(loginFromPref);
+
+        //load events to listview
     }
 
     @Override
@@ -151,5 +151,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }
