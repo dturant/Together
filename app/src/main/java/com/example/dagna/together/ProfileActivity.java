@@ -90,7 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_profile, menu);
-        menu.add(1,logout_menu_id,1, R.string.logout);
+        menu.add(1, logout_menu_id, 1, R.string.logout);
         return true;
     }
 
@@ -109,7 +109,9 @@ public class ProfileActivity extends AppCompatActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             preferences.edit().remove("login").commit();
             preferences.edit().remove("id").commit();
-            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            Intent intent = new Intent(this, TimelineActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
             startActivity(intent);
             return true;
         }

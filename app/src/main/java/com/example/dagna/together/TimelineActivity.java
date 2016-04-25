@@ -35,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class TimelineActivity extends AppCompatActivity {
@@ -261,30 +262,38 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String login = preferences.getString("login", "");
-
-
-        if(login.equals("")){
+        if (getIntent().getBooleanExtra("EXIT", false)) {
             Intent intent = new Intent(this, RegisterOrLoginActivity.class);
             startActivity(intent);
             finish();
         }
         else
         {
-            if(isNetworkAvailable())
-            {
-                //getEventsFromOnlineDB();
+            setContentView(R.layout.activity_timeline);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String login = preferences.getString("login", "");
+
+
+            if(login.equals("")){
+                Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+                startActivity(intent);
+                finish();
             }
             else
             {
-                Toast.makeText(this, R.string.offline_mode,
-                        Toast.LENGTH_LONG).show();
-                //getEventsFromLocalDB();
+                if(isNetworkAvailable())
+                {
+                    //getEventsFromOnlineDB();
+                }
+                else
+                {
+                    Toast.makeText(this, R.string.offline_mode,
+                            Toast.LENGTH_LONG).show();
+                    //getEventsFromLocalDB();
+                }
             }
         }
     }
@@ -313,7 +322,9 @@ public class TimelineActivity extends AppCompatActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             preferences.edit().remove("login").commit();
             preferences.edit().remove("id").commit();
-            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            Intent intent = new Intent(this, TimelineActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
             startActivity(intent);
             return true;
         }

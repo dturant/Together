@@ -135,7 +135,7 @@ public class EventActivity extends AppCompatActivity {
         Street = (TextView)findViewById(R.id.event_streetTextView);
         User = (TextView)findViewById(R.id.event_userTextView);
 
-
+        //TODO if is internet
         json_string=getIntent().getExtras().getString("json_data");
         try {
             // Log.d("login", login);
@@ -258,8 +258,10 @@ public class EventActivity extends AppCompatActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             preferences.edit().remove("login").commit();
             preferences.edit().remove("id").commit();
-            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent(this, TimelineActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
+            startActivity(intent);;
             return true;
         }
 

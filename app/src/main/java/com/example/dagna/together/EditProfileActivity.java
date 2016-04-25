@@ -97,7 +97,9 @@ public class EditProfileActivity extends AppCompatActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             preferences.edit().remove("login").commit();
             preferences.edit().remove("id").commit();
-            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            Intent intent = new Intent(this, TimelineActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
             startActivity(intent);
             return true;
         }
