@@ -8,101 +8,115 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:windowSoftInputMode="adjustPan"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.dagna.together.AddEventActivity"
     tools:showIn="@layout/activity_add_event">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_nameTextView"
-        android:text="@string/event_name"/>
-    <EditText
+    <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_name"
-        android:layout_below="@id/add_event_nameTextView"/>
+        android:layout_height="match_parent"
+        android:overScrollMode="always">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_categoryTextView"
-        android:text="@string/event_category"
-        android:layout_below="@id/add_event_name"/>
-    <Spinner
-        android:id="@+id/add_event_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/category_prompt"
-        android:layout_below="@id/add_event_categoryTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_nameTextView"
+                android:text="@string/event_name"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_name"
+                android:layout_below="@id/add_event_nameTextView"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_descriptionTextView"
-        android:text="@string/event_description"
-        android:layout_below="@id/add_event_category"/>
-    <EditText
-        android:id="@+id/add_event_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/description_hint"
-        android:inputType="textCapSentences|textMultiLine"
-        android:maxLength="2000"
-        android:maxLines="4"
-        android:layout_below="@id/add_event_descriptionTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_categoryTextView"
+                android:text="@string/event_category"
+                android:layout_below="@id/add_event_name"/>
+            <Spinner
+                android:id="@+id/add_event_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/category_prompt"
+                android:layout_below="@id/add_event_categoryTextView"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_countryTextView"
-        android:text="@string/event_country"
-        android:layout_below="@id/add_event_description"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_country"
-        android:layout_below="@id/add_event_countryTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_descriptionTextView"
+                android:text="@string/event_description"
+                android:layout_below="@id/add_event_category"/>
+            <EditText
+                android:id="@+id/add_event_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/description_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="2000"
+                android:maxLines="4"
+                android:layout_below="@id/add_event_descriptionTextView"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_cityTextView"
-        android:text="@string/event_city"
-        android:layout_below="@id/add_event_country"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_city"
-        android:layout_below="@id/add_event_cityTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_countryTextView"
+                android:text="@string/event_country"
+                android:layout_below="@id/add_event_description"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_country"
+                android:layout_below="@id/add_event_countryTextView"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_streetTextView"
-        android:text="@string/event_street"
-        android:layout_below="@id/add_event_city"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_street"
-        android:layout_below="@id/add_event_streetTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_cityTextView"
+                android:text="@string/event_city"
+                android:layout_below="@id/add_event_country"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_city"
+                android:layout_below="@id/add_event_cityTextView"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/event_add_button"
-        android:onClick="addEvent"
-        android:id="@+id/add_event_addButton"
-        android:layout_below="@id/add_event_street"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_streetTextView"
+                android:text="@string/event_street"
+                android:layout_below="@id/add_event_city"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_street"
+                android:layout_below="@id/add_event_streetTextView"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_event_error"
-        android:visibility="gone"
-        android:layout_below="@id/add_event_addButton"
-        android:textColor="#ff0000"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/event_add_button"
+                android:onClick="addEvent"
+                android:id="@+id/add_event_addButton"
+                android:layout_below="@id/add_event_street"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_event_error"
+                android:visibility="gone"
+                android:layout_below="@id/add_event_addButton"
+                android:textColor="#ff0000"/>
+
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

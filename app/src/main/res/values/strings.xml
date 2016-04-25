@@ -40,6 +40,8 @@
     <string name="take_part_in_event_button">Take part!</string>
     <string name="offline_mode">Offline mode</string>
     <string name="signed">You signed to this event!</string>
+    <string name="notification_title">Check out newest events in your city!</string>
+    <string name="notification_text">Create new and join existing events!</string>
 
 
 </resources>

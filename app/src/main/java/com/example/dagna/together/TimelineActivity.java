@@ -312,6 +312,7 @@ public class TimelineActivity extends AppCompatActivity {
         if (id == R.id.logout) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             preferences.edit().remove("login").commit();
+            preferences.edit().remove("id").commit();
             Intent intent = new Intent(this, RegisterOrLoginActivity.class);
             startActivity(intent);
             return true;

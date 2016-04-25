@@ -114,6 +114,8 @@ public class RegisterActivity extends AppCompatActivity {
                         } else {
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(intent);
+                            RegisterOrLoginActivity.h.sendEmptyMessage(0);
+                            finish();
                         }
                     }
                 }).execute(login, password, city);

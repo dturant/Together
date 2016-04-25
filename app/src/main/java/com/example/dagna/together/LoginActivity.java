@@ -131,6 +131,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                     Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
                                     startActivity(intent);
+                                    RegisterOrLoginActivity.h.sendEmptyMessage(0);
+                                    finish();
                                 } else {
                                     Error.setVisibility(View.VISIBLE);
                                     Error.setText("Login failed. Check your password.");
