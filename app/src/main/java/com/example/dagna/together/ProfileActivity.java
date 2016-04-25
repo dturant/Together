@@ -135,6 +135,19 @@ public class ProfileActivity extends AppCompatActivity {
                 createNetErrorDialog();
             }
         }
+        if(id == R.id.edit)
+        {
+            if(isNetworkAvailable())
+            {
+                Intent intent = new Intent(this, EditProfileActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            else
+            {
+                createNetErrorDialog();
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }

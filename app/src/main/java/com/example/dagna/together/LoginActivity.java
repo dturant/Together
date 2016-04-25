@@ -92,53 +92,60 @@ public class LoginActivity extends AppCompatActivity {
         login = Login.getText().toString();
         password = Password.getText().toString();
 
-        if (login.trim().equals("") || password.trim().equals("")) {
-            Error.setVisibility(View.VISIBLE);
-            Error.setText("All fields are required");
-        } else {
-            GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
+        if(isNetworkAvailable())
+        {
+            if (login.trim().equals("") || password.trim().equals("")) {
+                Error.setVisibility(View.VISIBLE);
+                Error.setText("All fields are required");
+            } else {
+                GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
 
-                @Override
-                public void processFinish(String output) {
-                    Log.d("login", login);
-                    Log.d("process finish!!!!", GetUserByLogin.json_string);
-                    if (GetUserByLogin.json_string.length() < 30) {
-                        Log.d("fail!!!!", "fail :(");
-                        Error.setVisibility(View.VISIBLE);
-                        Error.setText("Login failed. Check your login and password.");
-                    } else {
-                        Log.d("data!!!!!!!", GetUserByLogin.json_string);
-                        json_string = GetUserByLogin.json_string;
+                    @Override
+                    public void processFinish(String output) {
+                        Log.d("login", login);
+                        Log.d("process finish!!!!", GetUserByLogin.json_string);
+                        if (GetUserByLogin.json_string.length() < 30) {
+                            Log.d("fail!!!!", "fail :(");
+                            Error.setVisibility(View.VISIBLE);
+                            Error.setText("Login failed. Check your login and password.");
+                        } else {
+                            Log.d("data!!!!!!!", GetUserByLogin.json_string);
+                            json_string = GetUserByLogin.json_string;
 
-                        try {
-                            Log.d("login", login);
-                            jsonObject = new JSONObject(json_string);
-                            jsonArray = jsonObject.getJSONArray("server_response");
-                            JSONObject JO = jsonArray.getJSONObject(0);
+                            try {
+                                Log.d("login", login);
+                                jsonObject = new JSONObject(json_string);
+                                jsonArray = jsonObject.getJSONArray("server_response");
+                                JSONObject JO = jsonArray.getJSONObject(0);
 
-                            String db_id, db_description, db_city, db_grade, db_password, db_login;
+                                String db_id, db_description, db_city, db_grade, db_password, db_login;
 
-                            db_id = JO.getString("user_id");
-                            db_password = JO.getString("password");
-                            db_description = JO.getString("description");
-                            db_city = JO.getString("city");
+                                db_id = JO.getString("user_id");
+                                db_password = JO.getString("password");
+                                db_description = JO.getString("description");
+                                db_city = JO.getString("city");
 
-                            if (password.equals(db_password)) {
-                                addToPreferences(login);
-                                Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
-                                startActivity(intent);
-                            } else {
-                                Error.setVisibility(View.VISIBLE);
-                                Error.setText("Login failed. Check your password.");
+                                if (password.equals(db_password)) {
+                                    addToPreferences(login);
+                                    Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    Error.setVisibility(View.VISIBLE);
+                                    Error.setText("Login failed. Check your password.");
+                                }
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
                     }
-                }
-            }).execute(login);
+                }).execute(login);
+            }
+        }
+        else
+        {
+            createNetErrorDialog();
         }
     }
 

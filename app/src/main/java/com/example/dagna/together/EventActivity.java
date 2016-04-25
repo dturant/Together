@@ -44,6 +44,18 @@ public class EventActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
+    public void joinEvent(View view)
+    {
+        if(isNetworkAvailable())
+        {
+            //join event
+        }
+        else
+        {
+            createNetErrorDialog();
+        }
+    }
+
     protected void createNetErrorDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

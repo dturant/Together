@@ -139,12 +139,19 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public void edit(View view)
     {
-        String description, city, login;
-        description = Description.getText().toString();
-        city = City.getText().toString();
-        login = Login.getText().toString();
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
+        if(isNetworkAvailable())
+        {
+            String description, city, login;
+            description = Description.getText().toString();
+            city = City.getText().toString();
+            login = Login.getText().toString();
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        }
+        else
+        {
+            createNetErrorDialog();
+        }
     }
 
 
