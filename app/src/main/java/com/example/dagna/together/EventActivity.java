@@ -14,11 +14,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.dagna.together.onlineDatabase.AddUser;
+import com.example.dagna.together.onlineDatabase.JoinEvent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +32,8 @@ public class EventActivity extends AppCompatActivity {
     String json_string;
     JSONObject jsonObject;
     JSONArray jsonArray;
+
+    Context context;
 
     TextView Name, Category, Description, Country, City, Street,User ;
 
@@ -49,6 +55,29 @@ public class EventActivity extends AppCompatActivity {
         if(isNetworkAvailable())
         {
             //join event
+            String event_id=getIntent().getExtras().getString("event_id");
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String user_id = preferences.getString("id", "");
+            Log.d("event_id", event_id);
+            Log.d("user_id", user_id);
+            JoinEvent joinEvent = (JoinEvent) new JoinEvent(new JoinEvent.AsyncResponse() {
+
+                @Override
+                public void processFinish(String output) {
+
+                    Log.d("OUTPUT", output);
+                    if (output.equals("error")) {
+                        Log.d("ERROR", "ERROR");
+                        //Error.setVisibility(View.VISIBLE);
+                        //Error.setText("This login is already taken. Try another one.");
+
+                    } else {
+                        //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        //startActivity(intent);
+                        Toast.makeText(context,R.string.signed, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }).execute(user_id, event_id);
         }
         else
         {
@@ -88,6 +117,8 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        context = getApplicationContext();
 
         Name = (TextView)findViewById(R.id.event_nameTextView);
         Category = (TextView)findViewById(R.id.event_categoryTextView);

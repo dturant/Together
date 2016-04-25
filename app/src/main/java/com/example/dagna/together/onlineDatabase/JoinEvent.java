@@ -24,7 +24,7 @@ import java.net.URLEncoder;
 /**
  * Created by Dagna on 11/04/2016.
  */
-public class JoinEvent extends AsyncTask<Integer, Void, String>
+public class JoinEvent extends AsyncTask<String, Void, String>
 {
     public interface AsyncResponse {
         void processFinish(String output);
@@ -43,8 +43,8 @@ public class JoinEvent extends AsyncTask<Integer, Void, String>
     }
 
     @Override
-    protected String doInBackground(Integer... args) {
-        int user_id, event_id;
+    protected String doInBackground(String... args) {
+        String user_id, event_id;
         user_id=args[0];
         event_id=args[1];
 
@@ -56,8 +56,8 @@ public class JoinEvent extends AsyncTask<Integer, Void, String>
             OutputStream outputStream = httpURLConnection.getOutputStream();
             BufferedWriter bufferWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
 
-            String data_string = URLEncoder.encode("user_id", "UTF-8")+"="+URLEncoder.encode(Integer.toString(user_id), "UTF-8")+"&"+
-                    URLEncoder.encode("event_id", "UTF-8")+"="+URLEncoder.encode(Integer.toString(event_id), "UTF-8");
+            String data_string = URLEncoder.encode("user_id", "UTF-8")+"="+URLEncoder.encode(user_id, "UTF-8")+"&"+
+                    URLEncoder.encode("event_id", "UTF-8")+"="+URLEncoder.encode(event_id, "UTF-8");
 
             bufferWriter.write(data_string);
             bufferWriter.flush();

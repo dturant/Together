@@ -231,8 +231,7 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void displayEvent(String eventId)
+    private void displayEvent(final String eventId)
     {
         GetEventById getEventById = (GetEventById) new GetEventById(new GetEventById.AsyncResponse() {
 
@@ -247,6 +246,8 @@ public class TimelineActivity extends AppCompatActivity {
                     json_string = GetEventById.json_string;
                     Intent intent = new Intent(getApplicationContext(), EventActivity.class);
                     intent.putExtra("json_data", json_string);
+                    intent.putExtra("event_id", eventId);
+                    Log.d("event_id from timeline", eventId);
                     startActivity(intent);
 
                 }

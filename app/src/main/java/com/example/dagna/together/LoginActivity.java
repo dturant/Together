@@ -118,15 +118,17 @@ public class LoginActivity extends AppCompatActivity {
                                 jsonArray = jsonObject.getJSONArray("server_response");
                                 JSONObject JO = jsonArray.getJSONObject(0);
 
-                                String db_id, db_description, db_city, db_grade, db_password, db_login;
+                                String id, db_description, db_city, db_grade, db_password, db_login;
 
-                                db_id = JO.getString("user_id");
+                                id = JO.getString("user_id");
                                 db_password = JO.getString("password");
                                 db_description = JO.getString("description");
                                 db_city = JO.getString("city");
 
                                 if (password.equals(db_password)) {
-                                    addToPreferences(login);
+                                    addLoginToPreferences(login);
+                                    addIdToPreferences(id);
+
                                     Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
                                     startActivity(intent);
                                 } else {
@@ -151,10 +153,17 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    private void addToPreferences(String login){
+    private void addLoginToPreferences(String login){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("login",login);
+        editor.apply();
+    }
+
+    private void addIdToPreferences(String id){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("id",id);
         editor.apply();
     }
 

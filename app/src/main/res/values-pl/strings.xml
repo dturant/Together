@@ -38,5 +38,6 @@
     <string name="user_description">Opis</string>
     <string name="user_description_hint">Napisz coś o sobie :)</string>
     <string name="take_part_in_event_button">Weź udział!</string>
+    <string name="signed">Zapisałeś się do tego wydarzenia!</string>
 
 </resources>
