@@ -18,7 +18,7 @@ import java.net.URLEncoder;
 /**
  * Created by Dagna on 18/04/2016.
  */
-public class GetEventByName extends AsyncTask<String, Void, String>
+public class GetEventById extends AsyncTask<String, Void, String>
 {
     public static String JSON_STRING;
     public static String json_string;
@@ -29,7 +29,7 @@ public class GetEventByName extends AsyncTask<String, Void, String>
 
     public AsyncResponse delegate = null;
 
-    public GetEventByName(AsyncResponse delegate){
+    public GetEventById(AsyncResponse delegate){
         this.delegate = delegate;
     }
 
@@ -42,8 +42,8 @@ public class GetEventByName extends AsyncTask<String, Void, String>
 
     @Override
     protected String doInBackground(String... args) {
-        String name;
-        name=args[0];
+        String id;
+        id=args[0];
         //password=args[1];
         try {
             URL url = new URL(json_url);
@@ -54,7 +54,7 @@ public class GetEventByName extends AsyncTask<String, Void, String>
             OutputStream outputStream = httpURLConnection.getOutputStream();
             BufferedWriter bufferWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
 
-            String data_string = URLEncoder.encode("name", "UTF-8")+"="+URLEncoder.encode(name, "UTF-8");
+            String data_string = URLEncoder.encode("id", "UTF-8")+"="+URLEncoder.encode(id, "UTF-8");
 
             bufferWriter.write(data_string);
             bufferWriter.flush();

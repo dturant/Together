@@ -138,14 +138,16 @@ public class TimelineActivity extends AppCompatActivity {
                         jsonArray=jsonObject.getJSONArray("server_response");
 
                         int count=0;
-                        String name, description, city;
+                        String name, description, city,id;
 
                         while(count<jsonArray.length()){
                             JSONObject JO = jsonArray.getJSONObject(count);
+                            id=JO.getString("id");
                             name=JO.getString("name");
                             description=JO.getString("description");
+                            city=JO.getString("city");
                             //city = JO.getString("city");
-                            Events events=new Events(name, description,"New York");
+                            Events events=new Events(id,name, description);
                             //Log.e("KURWAAAAA", city);
                             eventAdapter.add(events);
                             eventsList.add(events);
@@ -157,10 +159,10 @@ public class TimelineActivity extends AppCompatActivity {
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             public void onItemClick(AdapterView parentView, View childView,
                                                     int position, long id) {
-                                TextView c = (TextView) childView.findViewById(R.id.title);
-                                String eventName= c.getText().toString();
-                                Log.d("eventname", eventName);
-                                displayEvent(eventName);
+
+                                String eventId=eventsList.get(position).getId();
+                                Log.d("eventid", eventId);
+                                displayEvent(eventId);
 
                             }
 
@@ -212,8 +214,8 @@ public class TimelineActivity extends AppCompatActivity {
                 if(isNetworkAvailable())
                 {
                     TextView c = (TextView) childView.findViewById(R.id.title);
-                    String eventName= c.getText().toString();
-                    displayEvent(eventName);
+                    String eventId=eventsList.get(position).getId();
+                    displayEvent(eventId);
                 }
                 else
                 {
@@ -227,26 +229,26 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 
-    private void displayEvent(String eventName)
+    private void displayEvent(String eventId)
     {
-        GetEventByName getEventByName = (GetEventByName) new GetEventByName(new GetEventByName.AsyncResponse() {
+        GetEventById getEventById = (GetEventById) new GetEventById(new GetEventById.AsyncResponse() {
 
             @Override
             public void processFinish(String output) {
 
-                if (GetEventByName.json_string.length() < 30) {
+                if (GetEventById.json_string.length() < 30) {
                     Log.d("fail!!!!", "fail :(");
 
                 } else {
                     //Log.d("data!!!!!!!", GetUserByLogin.json_string);
-                    json_string = GetEventByName.json_string;
+                    json_string = GetEventById.json_string;
                     Intent intent = new Intent(getApplicationContext(), EventActivity.class);
                     intent.putExtra("json_data", json_string);
                     startActivity(intent);
 
                 }
             }
-        }).execute(eventName);
+        }).execute(eventId);
 
 
     }
