@@ -1,13 +1,20 @@
 package com.example.dagna.together;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -32,6 +39,44 @@ public class AddEventActivity extends AppCompatActivity {
     String json_string;
     JSONObject jsonObject;
     JSONArray jsonArray;
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void displayToast()
+    {
+        Toast.makeText(this, R.string.offline_mode,
+                Toast.LENGTH_LONG).show();
+    }
+
+    protected void createNetErrorDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
+                .setTitle("Unable to connect")
+                .setCancelable(false)
+                .setPositiveButton("Settings",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                                startActivity(i);
+                            }
+                        }
+                )
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                displayToast();
+                            }
+                        }
+                );
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     private void fillSpinner(List<String> list){
         Category = (Spinner) findViewById(R.id.add_event_category);
@@ -105,43 +150,89 @@ public class AddEventActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_add_event, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.logout) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            preferences.edit().remove("login").commit();
+            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.search) {
+            if(isNetworkAvailable())
+            {
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            else
+            {
+                createNetErrorDialog();
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void addEvent(View view)
     {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String name, city, country, category, street, description,user;
-        name = Name.getText().toString();
-        city = City.getText().toString();
-        country = Country.getText().toString();
-        street = Country.getText().toString();
-        description = Description.getText().toString();
-        category = Category.getSelectedItem().toString();
-        user=preferences.getString("login", "");
-        //logika dodawania eventu i cos w intencie przekazac zeby byl prompt added!
-        Log.d("category", category);
-        Log.d("user", user);
-        AddEvent addEvent = (AddEvent) new AddEvent(new AddEvent.AsyncResponse() {
+        if(isNetworkAvailable())
+        {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String name, city, country, category, street, description,user;
+            name = Name.getText().toString();
+            city = City.getText().toString();
+            country = Country.getText().toString();
+            street = Country.getText().toString();
+            description = Description.getText().toString();
+            category = Category.getSelectedItem().toString();
+            user=preferences.getString("login", "");
+            //logika dodawania eventu i cos w intencie przekazac zeby byl prompt added!
+            Log.d("category", category);
+            Log.d("user", user);
+            AddEvent addEvent = (AddEvent) new AddEvent(new AddEvent.AsyncResponse() {
 
-            @Override
-            public void processFinish(String output) {
+                @Override
+                public void processFinish(String output) {
 
-                Log.d("OUTPUT", output);
-                if (output.equals("error")) {
-                    Log.d("ERROR", "ERROR");
-                    //Error.setVisibility(View.VISIBLE);
-                    //Error.setText("This login is already taken. Try another one.");
+                    Log.d("OUTPUT", output);
+                    if (output.equals("error")) {
+                        Log.d("ERROR", "ERROR");
+                        //Error.setVisibility(View.VISIBLE);
+                        //Error.setText("This login is already taken. Try another one.");
 
-                } else {
-                    Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
-                    startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);
+                        startActivity(intent);
+                    }
                 }
-            }
-        }).execute(name, category, description, country,city,street,user);
-
-
+            }).execute(name, category, description, country,city,street,user);
+        }
+        else
+        {
+            createNetErrorDialog();
+        }
     }
 
 
