@@ -30,6 +30,7 @@
         android:layout_below="@id/edit_login"
         android:text="@string/event_city"/>
     <EditText
+        android:inputType="textCapSentences"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_city"

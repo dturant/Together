@@ -69,6 +69,7 @@
                 android:text="@string/event_country"
                 android:layout_below="@id/add_event_description"/>
             <EditText
+                android:inputType="textCapSentences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_event_country"
@@ -81,6 +82,7 @@
                 android:text="@string/event_city"
                 android:layout_below="@id/add_event_country"/>
             <EditText
+                android:inputType="textCapSentences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_event_city"
@@ -93,6 +95,7 @@
                 android:text="@string/event_street"
                 android:layout_below="@id/add_event_city"/>
             <EditText
+                android:inputType="textCapSentences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_event_street"

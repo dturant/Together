@@ -12,68 +12,80 @@
     tools:context="com.example.dagna.together.RegisterActivity"
     tools:showIn="@layout/activity_register">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_loginTextView"
-        android:text="@string/login"/>
-    <EditText
+    <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_login"
-        android:layout_below="@id/register_loginTextView"/>
+        android:layout_height="match_parent"
+        android:overScrollMode="always">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_passwordTextView"
-        android:layout_below="@id/register_login"
-        android:text="@string/password"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_password"
-        android:layout_below="@id/register_passwordTextView"
-        android:inputType = "textPassword"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_loginTextView"
+                android:text="@string/login"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_login"
+                android:layout_below="@id/register_loginTextView"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_passwordConfirmationTextView"
-        android:layout_below="@id/register_password"
-        android:text="@string/password_confirmation"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_passwordConfirmation"
-        android:layout_below="@id/register_passwordConfirmationTextView"
-        android:inputType = "textPassword"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_passwordTextView"
+                android:layout_below="@id/register_login"
+                android:text="@string/password"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_password"
+                android:layout_below="@id/register_passwordTextView"
+                android:inputType = "textPassword"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_cityTextView"
-        android:layout_below="@id/register_passwordConfirmation"
-        android:text="@string/event_city"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_city"
-        android:layout_below="@id/register_cityTextView"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_passwordConfirmationTextView"
+                android:layout_below="@id/register_password"
+                android:text="@string/password_confirmation"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_passwordConfirmation"
+                android:layout_below="@id/register_passwordConfirmationTextView"
+                android:inputType = "textPassword"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/register_button"
-        android:onClick="register"
-        android:id="@+id/register_registerButton"
-        android:layout_below="@id/register_city"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_cityTextView"
+                android:layout_below="@id/register_passwordConfirmation"
+                android:text="@string/event_city"/>
+            <EditText
+                android:inputType="textCapSentences"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_city"
+                android:layout_below="@id/register_cityTextView"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_error"
-        android:visibility="gone"
-        android:layout_below="@id/register_registerButton"
-        android:textColor="#ff0000"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_button"
+                android:onClick="register"
+                android:id="@+id/register_registerButton"
+                android:layout_below="@id/register_city"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/register_error"
+                android:visibility="gone"
+                android:layout_below="@id/register_registerButton"
+                android:textColor="#ff0000"/>
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
