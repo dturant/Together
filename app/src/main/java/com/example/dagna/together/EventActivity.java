@@ -19,13 +19,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
+import com.example.dagna.together.helpers.UserAdapter;
+import com.example.dagna.together.helpers.Users;
 import com.example.dagna.together.onlineDatabase.AddUser;
 import com.example.dagna.together.onlineDatabase.DisplayEvents;
 import com.example.dagna.together.onlineDatabase.GetSubscribedUsers;
+import com.example.dagna.together.onlineDatabase.GetUserById;
 import com.example.dagna.together.onlineDatabase.JoinEvent;
 
 import org.json.JSONArray;
@@ -43,6 +48,10 @@ public class EventActivity extends AppCompatActivity {
     Context context;
 
     TextView Name, Category, Description, Country, City, Street,User ;
+
+    ListView listView;
+
+    UserAdapter userAdapter;
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -135,6 +144,7 @@ public class EventActivity extends AppCompatActivity {
         Street = (TextView)findViewById(R.id.event_streetTextView);
         User = (TextView)findViewById(R.id.event_userTextView);
 
+        //listView = (ListView) findViewById(R.id.eventListView);
         //TODO if is internet
         json_string=getIntent().getExtras().getString("json_data");
         try {
@@ -175,11 +185,16 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void getUsers(){
+        listView = (ListView)findViewById(R.id.eventListView);
+        userAdapter=new UserAdapter(this, R.layout.content_user_list);
+        listView.setAdapter(userAdapter);
+       // userAdapter=new UserAdapter(this, R.layout.content_user_list);
+
         GetSubscribedUsers getSubscribedUsers = (GetSubscribedUsers) new GetSubscribedUsers(new GetSubscribedUsers.AsyncResponse() {
 
             @Override
             public void processFinish(String output) {
-                Log.d("output",output);
+                Log.d(" getSubscribedUsers:",output);
                 if(GetSubscribedUsers.json_string==null){
                     Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
                 }
@@ -196,10 +211,12 @@ public class EventActivity extends AppCompatActivity {
                         while(count<jsonArray.length()){
                             JSONObject JO = jsonArray.getJSONObject(count);
                             id=JO.getString("id");
-                           // login=JO.getString("login");
+                           login=JO.getString("login");
 
                             //Events events=new Events(id,name, description,city);
                             //eventAdapter.add(events);
+                            Users users = new Users(id, login);
+                            userAdapter.add(users);
                             //eventsList.add(events);
                             idList.add(id);
                             count++;
@@ -207,15 +224,15 @@ public class EventActivity extends AppCompatActivity {
                         }
                         Log.d("LISTA USEROW",idList.toString() );
                         //TODO dodac te glupia liste o listview czy cus
-                        //listView.setClickable(true);
-                        //listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        /*    public void onItemClick(AdapterView parentView, View childView,
+                        listView.setClickable(true);
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            public void onItemClick(AdapterView parentView, View childView,
                                                     int position, long id) {
                                 if(isNetworkAvailable())
                                 {
-                                    String eventId=eventsList.get(position).getId();
-                                    Log.d("eventid", eventId);
-                                    displayEvent(eventId);
+                                    //String eventId=eventsList.get(position).getId();
+                                   // Log.d("eventid", eventId);
+                                   // displayEvent(eventId);
                                 }
                                 else
                                 {
@@ -226,7 +243,7 @@ public class EventActivity extends AppCompatActivity {
                             public void onNothingSelected(AdapterView parentView) {
 
                             }
-                        });*/
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -234,6 +251,47 @@ public class EventActivity extends AppCompatActivity {
             }
         }).execute(event_id);
     }
+
+   /* private String getUserById(String id){
+         String loginToReturn="";
+        GetUserById getUserById = (GetUserById) new GetUserById(new GetUserById.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                Log.d("output",output);
+                if(DisplayEvents.json_string==null){
+                    Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
+                }
+                else{
+
+                    json_string=DisplayEvents.json_string;
+
+                    try {
+                        jsonObject=new JSONObject(json_string);
+                        jsonArray=jsonObject.getJSONArray("server_response");
+
+                        int count=0;
+                        String login,id;
+
+                        JSONObject JO = jsonArray.getJSONObject(count);
+                        id=JO.getString("id");
+                        login=JO.getString("login");
+
+                        loginToReturn=login;
+                        //Events events=new Events(id,name, description,city);
+                       // eventAdapter.add(events);
+                       //eventsList.add(events);
+
+                        //saveEventsToLocalDB();
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).execute(id);
+    } */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

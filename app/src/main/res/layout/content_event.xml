@@ -68,4 +68,10 @@
         android:text="@string/take_part_in_event_button"
         android:layout_below="@id/event_userTextView" />
 
+    <ListView android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/eventListView"
+        android:layout_below="@id/event_addUserButton">
+    </ListView>
+
 </RelativeLayout>
