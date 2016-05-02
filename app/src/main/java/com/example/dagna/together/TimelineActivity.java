@@ -59,17 +59,6 @@ public class TimelineActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private boolean isLocationAvailable()
-    {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
     public static ArrayList<Events> getEventsList()
     {
         return eventsList;
@@ -418,33 +407,11 @@ public class TimelineActivity extends AppCompatActivity {
         {
             if(isNetworkAvailable())
             {
-                if (isLocationAvailable())
-                {
-                    //get city
-                    getEventsFromOnlineDB("Dornbirn");
-                }
-                else
-                {
-                    displayToast(2);
-                    getEventsFromOnlineDB("Dornbirn");
-                    Log.e(":D:D:D", "DDSDS");
-                }
+                getEventsFromOnlineDB("Dornbirn");
             }
             else
             {
-                if (isLocationAvailable())
-                {
-                    //get city
-                    displayToast(1);
-                    getEventsFromLocalDB("Dornbirn");
-                    Log.e("TUTAJ", "LALALALALA");
-                }
-                else
-                {
-                    displayToast(3);
-                    getEventsFromLocalDB("Dornbirn");
-                    Log.e("TUTAJSON", "LALALA");
-                }
+                getEventsFromLocalDB("Dornbirn");
             }
         }
     }

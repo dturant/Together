@@ -20,12 +20,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -60,6 +64,17 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private boolean isLocationAvailable()
+    {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     private void displayToast(int val)
@@ -130,6 +145,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     */
 
     EditText Name, Country, City;
+    private RadioGroup radioCity;
+    private RadioButton radioLocationButton, radioTextButton;
     Spinner Category;
 
     private void fillSpinner(List<String> list){
@@ -144,6 +161,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         // attaching data adapter to spinner
         Category.setAdapter(dataAdapter);
     }
+
     private void getCategories(){
         final ArrayList<String> categories=new ArrayList<>();
         GetCategories getCategories = (GetCategories) new GetCategories(new GetCategories.AsyncResponse() {
@@ -197,6 +215,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
         this.getCategories();
 
+        addListenerOnButton();
 
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
@@ -206,6 +225,33 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                     .addApi(LocationServices.API)
                     .build();
         }
+    }
+
+    public void addListenerOnButton() {
+
+        radioCity = (RadioGroup) findViewById(R.id.radioCity);
+        radioLocationButton = (RadioButton) findViewById(R.id.radioLocation);
+        radioTextButton = (RadioButton) findViewById(R.id.radioText);
+
+
+        radioCity.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup radioCity, int checkedId) {
+                Log.e("O KURWAAA", "" + checkedId);
+                if(checkedId == R.id.radioLocation)
+                {
+                    City.setEnabled(false);
+                    City.setInputType(InputType.TYPE_NULL);
+                }
+                else
+                {
+                    City.setEnabled(true);
+                    City.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -224,6 +270,36 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
     public void search(View view) {
         //if czy js wlaczony i czy nie jest null
+        if(isNetworkAvailable())
+        {
+            if (isLocationAvailable())
+            {
+                //get city
+                //getEventsFromOnlineDB("Dornbirn");
+            }
+            else
+            {
+                displayToast(2);
+                //getEventsFromOnlineDB("Dornbirn");
+                Log.e(":D:D:D", "DDSDS");
+            }
+        }
+        else
+        {
+            if (isLocationAvailable())
+            {
+                //get city
+                displayToast(1);
+                //getEventsFromLocalDB("Dornbirn");
+                Log.e("TUTAJ", "LALALALALA");
+            }
+            else
+            {
+                displayToast(3);
+                //getEventsFromLocalDB("Dornbirn");
+                Log.e("TUTAJSON", "LALALA");
+            }
+        }
         Location loc = getLastKnownLocation();
         Toast.makeText(this, String.valueOf(loc.getLatitude()) + "/" + String.valueOf(loc.getLongitude()),
                 Toast.LENGTH_LONG).show();
@@ -318,6 +394,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         mGoogleApiClient.disconnect();
         super.onStop();
     }
+
 
 
     @Override

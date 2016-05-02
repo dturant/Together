@@ -45,6 +45,8 @@
     <string name="title_activity_users_profile">UsersProfileActivity</string>
     <string name="rate">rate</string>
     <string name="gps_off">GPS disabled</string>
+    <string name="radio_location">Use my current location</string>
+    <string name="radio_text">Type in city</string>
 
 
 </resources>

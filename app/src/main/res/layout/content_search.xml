@@ -15,8 +15,45 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/search_event_cityTextView"
+        android:text="@string/event_city"/>
+
+    <RadioGroup
+        android:id="@+id/radioCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_event_cityTextView">
+
+        <RadioButton
+            android:id="@+id/radioLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_location"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/radioText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radio_text" />
+
+    </RadioGroup>
+
+    <EditText
+        android:inputType="textCapSentences"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_event_city"
+        android:enabled="false"
+        android:editable="false"
+        android:layout_below="@+id/radioCity"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/search_event_categoryTextView"
-        android:text="@string/event_category"/>
+        android:text="@string/event_category"
+        android:layout_below="@id/search_event_city"/>
     <Spinner
         android:id="@+id/search_event_category"
         android:layout_width="match_parent"
@@ -24,25 +61,12 @@
         android:prompt="@string/category_prompt"
         android:layout_below="@id/search_event_categoryTextView"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/search_event_cityTextView"
-        android:text="@string/event_city"
-        android:layout_below="@id/search_event_category"/>
-    <EditText
-        android:inputType="textCapSentences"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/search_event_city"
-        android:layout_below="@id/search_event_cityTextView"/>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="search"
         android:id="@+id/search_searchButton"
         android:text="@string/search_button"
-        android:layout_below="@id/search_event_city" />
+        android:layout_below="@id/search_event_category" />
 
 </RelativeLayout>
