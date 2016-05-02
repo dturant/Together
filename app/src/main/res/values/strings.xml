@@ -42,6 +42,8 @@
     <string name="signed">You signed to this event!</string>
     <string name="notification_title">Check out newest events in your city!</string>
     <string name="notification_text">Create new and join existing events!</string>
+    <string name="title_activity_users_profile">UsersProfileActivity</string>
+    <string name="rate">rate</string>
 
 
 </resources>

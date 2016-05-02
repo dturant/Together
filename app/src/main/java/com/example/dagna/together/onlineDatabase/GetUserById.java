@@ -37,7 +37,7 @@ public class GetUserById extends AsyncTask<String, Void, String>
 
     @Override
     protected void onPreExecute() {
-        json_url="https://omega.aizio.net:5678/get_user_by_login.php";
+        json_url="https://omega.aizio.net:5678/get_user_by_id.php";
     }
 
     @Override

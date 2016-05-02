@@ -29,6 +29,7 @@ import com.example.dagna.together.helpers.UserAdapter;
 import com.example.dagna.together.helpers.Users;
 import com.example.dagna.together.onlineDatabase.AddUser;
 import com.example.dagna.together.onlineDatabase.DisplayEvents;
+import com.example.dagna.together.onlineDatabase.GetEventById;
 import com.example.dagna.together.onlineDatabase.GetSubscribedUsers;
 import com.example.dagna.together.onlineDatabase.GetUserById;
 import com.example.dagna.together.onlineDatabase.JoinEvent;
@@ -53,11 +54,18 @@ public class EventActivity extends AppCompatActivity {
 
     UserAdapter userAdapter;
 
+    static ArrayList<Users> usersList = new ArrayList<>();
+
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static ArrayList<Users> getUsersList()
+    {
+        return usersList;
     }
 
     private void displayToast()
@@ -185,6 +193,8 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void getUsers(){
+        usersList.clear();
+
         listView = (ListView)findViewById(R.id.eventListView);
         userAdapter=new UserAdapter(this, R.layout.content_user_list);
         listView.setAdapter(userAdapter);
@@ -217,7 +227,7 @@ public class EventActivity extends AppCompatActivity {
                             //eventAdapter.add(events);
                             Users users = new Users(id, login);
                             userAdapter.add(users);
-                            //eventsList.add(events);
+                            usersList.add(users);
                             idList.add(id);
                             count++;
 
@@ -230,9 +240,10 @@ public class EventActivity extends AppCompatActivity {
                                                     int position, long id) {
                                 if(isNetworkAvailable())
                                 {
-                                    //String eventId=eventsList.get(position).getId();
-                                   // Log.d("eventid", eventId);
-                                   // displayEvent(eventId);
+                                    String userId=usersList.get(position).getId();
+                                    Log.d("userid", userId);
+                                    displayUser(userId);
+
                                 }
                                 else
                                 {
@@ -251,6 +262,34 @@ public class EventActivity extends AppCompatActivity {
             }
         }).execute(event_id);
     }
+
+    private void displayUser(final String userId)
+    {
+        Log.d("USERS ID", userId);
+        GetUserById getUserById = (GetUserById) new GetUserById(new GetUserById.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                Log.d("USERS ID OUTPUT", output);
+                if (GetUserById.json_string.length() < 30) {
+                    Log.d("fail!!!!", "fail :(");
+
+                } else {
+                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
+                    json_string = GetUserById.json_string;
+                    Intent intent = new Intent(getApplicationContext(), UsersProfileActivity.class);
+                    intent.putExtra("json_data", json_string);
+                    intent.putExtra("user_id", userId);
+                    Log.d("event_id from timeline", userId);
+                    startActivity(intent);
+
+                }
+            }
+        }).execute(userId);
+
+
+    }
+
 
    /* private String getUserById(String id){
          String loginToReturn="";

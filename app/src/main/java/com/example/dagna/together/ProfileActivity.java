@@ -75,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
         String loginFromPref = preferences.getString("login", "");
 
         //TODO profile ze stringow
-        getSupportActionBar().setTitle(loginFromPref+"'s profile");
+        getSupportActionBar().setTitle("My profile");
 
         TextView login = (TextView) findViewById(R.id.profile_login);
         TextView city = (TextView) findViewById(R.id.profile_city);
