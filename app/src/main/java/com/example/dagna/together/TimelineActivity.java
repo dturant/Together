@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -28,14 +29,17 @@ import android.widget.Toast;
 import com.example.dagna.together.helpers.DatabaseHelper;
 import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
-import com.example.dagna.together.onlineDatabase.*;
+import com.example.dagna.together.onlineDatabase.DisplayEvents;
+import com.example.dagna.together.onlineDatabase.GetEventById;
 import com.example.dagna.together.services.DatabaseIntentService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Time;
 import java.util.ArrayList;
 
 public class TimelineActivity extends AppCompatActivity {
@@ -55,15 +59,42 @@ public class TimelineActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    private boolean isLocationAvailable()
+    {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public static ArrayList<Events> getEventsList()
     {
         return eventsList;
     }
 
-    private void displayToast()
+    private void displayToast(int val)
     {
-        Toast.makeText(this, R.string.offline_mode,
-                Toast.LENGTH_LONG).show();
+        switch(val)
+        {
+            case 1:
+                Toast.makeText(this, R.string.offline_mode,
+                        Toast.LENGTH_LONG).show();
+                break;
+            case 2:
+                Toast.makeText(this, R.string.gps_off,
+                        Toast.LENGTH_LONG).show();
+                break;
+            case 3:
+                String text = getResources().getString(R.string.offline_mode) + "/" + getResources().getString(R.string.gps_off);;
+                Toast.makeText(this, text,
+                        Toast.LENGTH_LONG).show();
+                break;
+            default: break;
+
+        }
     }
 
     protected void createNetErrorDialog() {
@@ -83,7 +114,7 @@ public class TimelineActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                displayToast();
+                                displayToast(1);
                             }
                         }
                 );
@@ -91,7 +122,7 @@ public class TimelineActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void getEventsFromLocalDB()
+    private void getEventsFromLocalDB(String city)
     {
 //            //TODO na razie trzeba setowac DB za kazdym razem zeby dzialalo
 //            DatabaseHelper db;
@@ -100,8 +131,8 @@ public class TimelineActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, DatabaseIntentService.class);
             intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.GET_EVENTS_FROM_USER_CITY);
-            //TODO: po miescie usera
-            intent.putExtra(DatabaseIntentService.CITY, "Dornbirn");
+            //TODO: po miescie usera lub po wpisanym.
+            intent.putExtra(DatabaseIntentService.CITY, city);
             startService(intent);
     }
 
@@ -112,7 +143,7 @@ public class TimelineActivity extends AppCompatActivity {
         startService(intent);
     }
 
-    private void getEventsFromOnlineDB()
+    private void getEventsFromOnlineDB(String city)
     {
         eventsList.clear();
         listView = (ListView)findViewById(R.id.timelineListView);
@@ -258,7 +289,6 @@ public class TimelineActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -276,7 +306,6 @@ public class TimelineActivity extends AppCompatActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             String login = preferences.getString("login", "");
 
-
             if(login.equals("")){
                 Intent intent = new Intent(this, RegisterOrLoginActivity.class);
                 startActivity(intent);
@@ -290,8 +319,8 @@ public class TimelineActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast.makeText(this, R.string.offline_mode,
-                            Toast.LENGTH_LONG).show();
+//                    Toast.makeText(this, R.string.offline_mode,
+//                            Toast.LENGTH_LONG).show();
                     //getEventsFromLocalDB();
                 }
             }
@@ -389,13 +418,34 @@ public class TimelineActivity extends AppCompatActivity {
         {
             if(isNetworkAvailable())
             {
-                getEventsFromOnlineDB();
+                if (isLocationAvailable())
+                {
+                    //get city
+                    getEventsFromOnlineDB("Dornbirn");
+                }
+                else
+                {
+                    displayToast(2);
+                    getEventsFromOnlineDB("Dornbirn");
+                    Log.e(":D:D:D", "DDSDS");
+                }
             }
             else
             {
-                getEventsFromLocalDB();
+                if (isLocationAvailable())
+                {
+                    //get city
+                    displayToast(1);
+                    getEventsFromLocalDB("Dornbirn");
+                    Log.e("TUTAJ", "LALALALALA");
+                }
+                else
+                {
+                    displayToast(3);
+                    getEventsFromLocalDB("Dornbirn");
+                    Log.e("TUTAJSON", "LALALA");
+                }
             }
         }
     }
-
 }

@@ -7,8 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -30,15 +35,21 @@ import com.example.dagna.together.onlineDatabase.DisplayEvents;
 import com.example.dagna.together.onlineDatabase.GetCategories;
 import com.example.dagna.together.onlineDatabase.GetParticularEvents;
 import com.example.dagna.together.services.DatabaseIntentService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener{
     String json_string;
     JSONObject jsonObject;
     JSONArray jsonArray;
@@ -51,10 +62,26 @@ public class SearchActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void displayToast()
+    private void displayToast(int val)
     {
-        Toast.makeText(this, R.string.offline_mode,
-                Toast.LENGTH_LONG).show();
+        switch(val)
+        {
+            case 1:
+                Toast.makeText(this, R.string.offline_mode,
+                        Toast.LENGTH_LONG).show();
+                break;
+            case 2:
+                Toast.makeText(this, R.string.gps_off,
+                        Toast.LENGTH_LONG).show();
+                break;
+            case 3:
+                String text = getResources().getString(R.string.offline_mode) + "/" + getResources().getString(R.string.gps_off);;
+                Toast.makeText(this, text,
+                        Toast.LENGTH_LONG).show();
+                break;
+            default: break;
+
+        }
     }
 
     protected void createNetErrorDialog() {
@@ -74,7 +101,7 @@ public class SearchActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                displayToast();
+                                displayToast(1);
                             }
                         }
                 );
@@ -157,7 +184,8 @@ public class SearchActivity extends AppCompatActivity {
         }).execute();
     }
 
-
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,6 +197,15 @@ public class SearchActivity extends AppCompatActivity {
 
         this.getCategories();
 
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
     }
 
     @Override
@@ -186,32 +223,79 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void search(View view) {
-        if(isNetworkAvailable())
-        {
-            String city, category;
-            city = City.getText().toString();
-            category = Category.getSelectedItem().toString();
+        //if czy js wlaczony i czy nie jest null
+        Location loc = getLastKnownLocation();
+        Toast.makeText(this, String.valueOf(loc.getLatitude()) + "/" + String.valueOf(loc.getLongitude()),
+                Toast.LENGTH_LONG).show();
 
-            GetParticularEvents getParticularEvents = (GetParticularEvents) new GetParticularEvents(new GetParticularEvents.AsyncResponse() {
+        getCityName(loc, new OnGeocoderFinishedListener() {
+            @Override
+            public void onFinished(List<Address> results) {
+                displayCity(results);
+            }
+        });
 
-                @Override
-                public void processFinish(String output) {
-                    if(GetParticularEvents.json_string==null){
-                        Toast.makeText(getApplicationContext(),"first get json", Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        json_string=GetParticularEvents.json_string;
-                        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
-                        intent.putExtra("json_data", json_string);
-                        startActivity(intent);
-                    }
+//        if(isNetworkAvailable())
+//        {
+//            String city, category;
+//            city = City.getText().toString();
+//            category = Category.getSelectedItem().toString();
+//
+//            GetParticularEvents getParticularEvents = (GetParticularEvents) new GetParticularEvents(new GetParticularEvents.AsyncResponse() {
+//
+//                @Override
+//                public void processFinish(String output) {
+//                    if(GetParticularEvents.json_string==null){
+//                        Toast.makeText(getApplicationContext(),"first get json", Toast.LENGTH_LONG).show();
+//                    }
+//                    else{
+//                        json_string=GetParticularEvents.json_string;
+//                        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
+//                        intent.putExtra("json_data", json_string);
+//                        startActivity(intent);
+//                    }
+//                }
+//            }).execute(city,category);
+//        }
+//        else
+//        {
+//            createNetErrorDialog();
+//        }
+    }
+
+    private void displayCity(List<Address> results)
+    {
+        Toast.makeText(this, results.get(0).getLocality().toString(),
+                Toast.LENGTH_LONG).show();
+    }
+
+
+    public abstract class OnGeocoderFinishedListener {
+        public abstract void onFinished(List<Address> results);
+    }
+
+    public void getCityName(final Location location, final OnGeocoderFinishedListener listener) {
+        final Context con = getApplicationContext();
+        new AsyncTask<Void, Integer, List<Address>>() {
+            @Override
+            protected List<Address> doInBackground(Void... arg0) {
+                Geocoder coder = new Geocoder(con, Locale.ENGLISH);
+                List<Address> results = null;
+                try {
+                    results = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                } catch (IOException e) {
+                    // nothing
                 }
-            }).execute(city,category);
-        }
-        else
-        {
-            createNetErrorDialog();
-        }
+                return results;
+            }
+
+            @Override
+            protected void onPostExecute(List<Address> results) {
+                if (results != null && listener != null) {
+                    listener.onFinished(results);
+                }
+            }
+        }.execute();
     }
 
     private void goToResult()
@@ -220,4 +304,63 @@ public class SearchActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        mGoogleApiClient.connect();
+        //Log.e("Connected?", String.valueOf(mGoogleApiClient.isConnected()));
+    }
+
+    @Override
+    protected  void onStop()
+    {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+
+    @Override
+    public void onConnected(Bundle bundle) {
+//        Log.e("ConnectedON?", String.valueOf(mGoogleApiClient.isConnected()));
+//        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+//                mGoogleApiClient);
+//        if (mLastLocation != null) {
+//            Log.e("JEEEEEE", "DDDS");
+//            Toast.makeText(this, String.valueOf(mLastLocation.getLatitude()) + "/" + String.valueOf(mLastLocation.getLongitude()),
+//                    Toast.LENGTH_LONG).show();
+//        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    private Location getLastKnownLocation() {
+        LocationManager mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            Log.d("last known locati", provider);
+
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null) {
+                Log.d("known location: %s", l.toString());
+                bestLocation = l;
+            }
+        }
+        if (bestLocation == null) {
+            return null;
+        }
+        return bestLocation;
+    }
 }

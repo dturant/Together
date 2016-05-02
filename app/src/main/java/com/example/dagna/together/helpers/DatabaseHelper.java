@@ -170,7 +170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
- * get single todo
+ * get single
  */
     public String getCategory(long category_id) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -185,7 +185,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null)
             c.moveToFirst();
 
-//        Todo td = new Todo();
+//
 //        td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 //        td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
 //        td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));

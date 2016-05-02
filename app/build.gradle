@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 'Google Inc.:Google APIs:23'
+    buildToolsVersion '21.1.2'
 
     defaultConfig {
         applicationId "com.example.dagna.together"
@@ -27,4 +27,5 @@ dependencies {
     compile files('libs/mysql-connector-java-5.1.21-bin.jar')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
+    compile 'com.google.android.gms:play-services:8.4.0'
 }
