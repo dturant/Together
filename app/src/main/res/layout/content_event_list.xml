@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:id="@+id/event_image"/>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/title"
@@ -9,7 +15,8 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:textSize="16sp"
-        android:textColor="#ff0000">
+        android:textStyle="bold"
+        android:layout_toRightOf="@+id/event_image">
     </TextView>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +24,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:textSize="16sp" >
+        android:textSize="16sp"
+        android:layout_toRightOf="@+id/event_image"
+        android:layout_below="@+id/title">
     </TextView>
 
-</LinearLayout>
+</RelativeLayout>

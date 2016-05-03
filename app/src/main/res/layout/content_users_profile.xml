@@ -1,41 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
+    android:windowSoftInputMode="adjustPan"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.dagna.together.UsersProfileActivity"
     tools:showIn="@layout/activity_users_profile">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/users_profile_login" />
+    <ImageView
+        android:background="@mipmap/background"
+        android:alpha="0.3"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/users_profile_city"
-        android:layout_below="@id/users_profile_login"/>
+        android:id="@+id/layout_information"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/users_profile_note"
-        android:text="0"
-        android:layout_below="@id/users_profile_city"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/personal_information"
+            android:text="@string/personal_information"
+            android:textSize="20dp"
+            android:paddingBottom="20dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/users_profile_city"
+            android:text="@string/users_profile_city"
+            android:layout_below="@id/personal_information"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/users_profile_note_text"
+            android:text="@string/users_profile_note"
+            android:layout_below="@id/users_profile_city" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/users_profile_note"
+            android:text="0"
+            android:layout_below="@id/users_profile_city"
+            android:layout_toRightOf="@+id/users_profile_note_text"/>
+
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/users_profile_rate"
         android:text="@string/rate"
-        android:layout_below="@id/users_profile_note"/>
+        android:textSize="20dp"
+        android:layout_below="@+id/users_profile_note"
+        android:paddingTop="50dp"
+        android:paddingBottom="20dp"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -58,5 +88,6 @@
             android:onClick="minus"/>
 
         </LinearLayout>
-
 </RelativeLayout>
+
+</FrameLayout>

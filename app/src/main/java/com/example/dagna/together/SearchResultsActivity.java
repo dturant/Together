@@ -107,7 +107,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             jsonArray=jsonObject.getJSONArray("server_response");
 
             int count=0;
-            String name, description,id, city;
+            String name, description,id, city,category_id;
 
             while(count<jsonArray.length()){
                 JSONObject JO = jsonArray.getJSONObject(count);
@@ -115,7 +115,23 @@ public class SearchResultsActivity extends AppCompatActivity {
                 description=JO.getString("description");
                 id=JO.getString("event_id");
                 city=JO.getString("city");
-                Events events=new Events(id,name, description);
+                category_id=JO.getString("category_id");
+                Integer image;
+                Log.d("category_id", category_id);
+                if(category_id.equals("2"))
+                {
+                    image=R.drawable.blue_stone;
+                }
+                else if(category_id.equals("3")){
+                    image=R.drawable.green_stone;
+                }
+                else if(category_id.equals("4")){
+                    image=R.drawable.yellow_stone;
+                }
+                else{
+                    image=R.drawable.red_stone;
+                }
+                Events events=new Events(id,name, description,image);
                 eventAdapter.add(events);
                 eventsList.add(events);
                 count++;

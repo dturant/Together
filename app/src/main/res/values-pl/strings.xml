@@ -48,6 +48,12 @@
     <string name="search_users">Szukaj użytkowników:</string>
     <string name="search_user_loginTextView">Login</string>
     <string name="search_user_error">Taki użytkownik nie istnieje, spróbuj ponownie!</string>
+    <string name="personal_information">Informacje o użytkowniku:</string>
+    <string name="users_profile_city">Miasto: </string>
+    <string name="users_profile_note">Ocena: </string>
+    <string name="have_account">Masz już konto? Zaloguj się! </string>
+    <string name="dont_have_account">Nie masz jeszcze konta? Zarejestruj się! </string>
+
 
 
 </resources>

@@ -31,7 +31,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_event_name"
-                android:layout_below="@id/add_event_nameTextView"/>
+                android:layout_below="@id/add_event_nameTextView"
+                android:inputType="textCapSentences"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -54,7 +55,7 @@
                 android:layout_below="@id/add_event_category"/>
             <EditText
                 android:id="@+id/add_event_description"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/description_hint"
                 android:inputType="textCapSentences|textMultiLine"
@@ -73,14 +74,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_event_country"
-                android:layout_below="@id/add_event_countryTextView"/>
+                android:layout_below="@id/add_event_countryTextView"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_event_cityTextView"
                 android:text="@string/event_city"
-                android:layout_below="@id/add_event_country"/>
+                android:layout_below="@id/add_event_country"
+                />
             <EditText
                 android:inputType="textCapSentences"
                 android:layout_width="match_parent"
@@ -107,7 +110,8 @@
                 android:text="@string/event_add_button"
                 android:onClick="addEvent"
                 android:id="@+id/add_event_addButton"
-                android:layout_below="@id/add_event_street"/>
+                android:layout_below="@id/add_event_street"
+                android:layout_alignParentRight="true"/>
 
             <TextView
                 android:layout_width="wrap_content"

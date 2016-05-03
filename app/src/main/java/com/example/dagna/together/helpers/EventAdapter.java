@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dagna.together.R;
@@ -49,6 +50,7 @@ public class EventAdapter extends ArrayAdapter<Events> {
             eventHolder= new EventHolder();
             eventHolder.event_name= (TextView) row.findViewById(R.id.title);
             eventHolder.event_description= (TextView) row.findViewById(R.id.description);
+            eventHolder.image=(ImageView) row.findViewById(R.id.event_image);
             row.setTag(eventHolder);
 
         }
@@ -59,6 +61,7 @@ public class EventAdapter extends ArrayAdapter<Events> {
         Events events = (Events)this.getItem(position);
         eventHolder.event_name.setText(events.getName());
         eventHolder.event_description.setText(events.getDescription());
+        eventHolder.image.setImageResource(events.getImageId());
 
         return row;
     }
@@ -66,5 +69,6 @@ public class EventAdapter extends ArrayAdapter<Events> {
 
     static class EventHolder{
         TextView event_name, event_description;
+        ImageView image;
     }
 }

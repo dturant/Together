@@ -12,15 +12,11 @@
     tools:context=".TimelineActivity"
     tools:showIn="@layout/activity_timeline">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timeline_test"
-        />
 
-    <ListView android:layout_width="fill_parent"
+    <ListView
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/timelineListView">
-    </ListView>
+        android:id="@+id/timelineListView"/>
+
 
 </RelativeLayout>

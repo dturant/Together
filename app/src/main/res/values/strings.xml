@@ -52,6 +52,12 @@
     <string name="search_users">Search for users:</string>
     <string name="search_user_loginTextView">Login</string>
     <string name="search_user_error">Such a user doesn\'t exist, try again!</string>
+    <string name="personal_information">Personal information:</string>
+    <string name="users_profile_city">City: </string>
+    <string name="users_profile_note">Rating: </string>
+    <string name="have_account">Already have an account? Login! </string>
+    <string name="dont_have_account">No account yet? Register! </string>
+
 
 
 </resources>

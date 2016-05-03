@@ -6,24 +6,28 @@ package com.example.dagna.together.helpers;
 public class Events {
 
     private String name, description, city,id;
+    private Integer imageId;
 
-    public Events(String id,String name, String description){
+    public Events(String id,String name, String description, Integer imageId){
        this.setId(id);
         this.setName(name);
         this.setDescription(description);
+        this.setImageId(imageId);
         //this.setCity(city);
     }
 
-    public Events(String id,String name, String description, String city){
+    public Events(String id,String name, String description, String city, Integer imageId){
         this.setId(id);
         this.setName(name);
         this.setDescription(description);
         this.setCity(city);
+        this.setImageId(imageId);
     }
 
-    public Events(String name, String description){
+    public Events(String name, String description, Integer imageId){
         this.setName(name);
         this.setDescription(description);
+        this.setImageId(imageId);
     }
     public String getName() {
         return name;
@@ -55,5 +59,13 @@ public class Events {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Integer getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Integer imageId) {
+        this.imageId = imageId;
     }
 }

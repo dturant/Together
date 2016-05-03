@@ -198,7 +198,7 @@ public class TimelineActivity extends AppCompatActivity {
                         jsonArray=jsonObject.getJSONArray("server_response");
 
                         int count=0;
-                        String name, description, city,id;
+                        String name, description, city,id,category_id;
 
                         while(count<jsonArray.length()){
                             JSONObject JO = jsonArray.getJSONObject(count);
@@ -206,7 +206,23 @@ public class TimelineActivity extends AppCompatActivity {
                             name=JO.getString("name");
                             description=JO.getString("description");
                             city=JO.getString("city");
-                            Events events=new Events(id,name, description,city);
+                            category_id=JO.getString("category_id");
+                            Integer image;
+                            Log.d("category_id", category_id);
+                            if(category_id.equals("2"))
+                            {
+                                image=R.drawable.blue_stone;
+                            }
+                            else if(category_id.equals("3")){
+                                image=R.drawable.green_stone;
+                            }
+                            else if(category_id.equals("4")){
+                                image=R.drawable.yellow_stone;
+                            }
+                            else{
+                                image=R.drawable.red_stone;
+                            }
+                            Events events=new Events(id,name, description,city,image);
                             eventAdapter.add(events);
                             eventsList.add(events);
                             count++;
