@@ -15,8 +15,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/search_events"
+        android:text="@string/search_events"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/search_event_cityTextView"
-        android:text="@string/event_city"/>
+        android:text="@string/event_city"
+        android:layout_below="@+id/search_events"/>
 
     <RadioGroup
         android:id="@+id/radioCity"
@@ -68,5 +75,53 @@
         android:id="@+id/search_searchButton"
         android:text="@string/search_button"
         android:layout_below="@id/search_event_category" />
+
+    <!--horizontal line here -->
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="5dip"
+        android:background="#3F51B5"
+        android:layout_below="@id/search_searchButton"
+        android:id="@+id/line"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_users"
+        android:text="@string/search_users"
+        android:layout_below="@+id/line"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_user_loginTextView"
+        android:text="@string/search_user_loginTextView"
+        android:layout_below="@+id/search_users"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_user_login"
+        android:layout_below="@+id/search_user_loginTextView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="searchUsers"
+        android:id="@+id/search_searchButton2"
+        android:text="@string/search_button"
+        android:layout_below="@id/search_user_login" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_user_error"
+        android:text="@string/search_user_error"
+        android:textColor="#ff0000"
+        android:visibility="gone"
+        android:layout_below="@+id/search_searchButton2"/>
 
 </RelativeLayout>

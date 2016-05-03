@@ -31,6 +31,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dagna.together.helpers.EventAdapter;
@@ -38,6 +39,8 @@ import com.example.dagna.together.helpers.Events;
 import com.example.dagna.together.onlineDatabase.DisplayEvents;
 import com.example.dagna.together.onlineDatabase.GetCategories;
 import com.example.dagna.together.onlineDatabase.GetParticularEvents;
+import com.example.dagna.together.onlineDatabase.GetUserById;
+import com.example.dagna.together.onlineDatabase.GetUserByLogin;
 import com.example.dagna.together.services.DatabaseIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -58,6 +61,14 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     JSONObject jsonObject;
     JSONArray jsonArray;
     List<String> resultCategories;
+
+    EditText Name, Country, City, Login;
+    TextView Error;
+    private RadioGroup radioCity;
+    private RadioButton radioLocationButton, radioTextButton;
+    Spinner Category;
+
+
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -144,10 +155,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     };
     */
 
-    EditText Name, Country, City;
-    private RadioGroup radioCity;
-    private RadioButton radioLocationButton, radioTextButton;
-    Spinner Category;
+
 
     private void fillSpinner(List<String> list){
         Category = (Spinner) findViewById(R.id.search_event_category);
@@ -212,6 +220,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         setSupportActionBar(toolbar);
 
         City = (EditText) findViewById(R.id.search_event_city);
+        Login=(EditText) findViewById(R.id.search_user_login);
+        Error = (TextView) findViewById(R.id.search_user_error);
 
         this.getCategories();
 
@@ -439,5 +449,33 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             return null;
         }
         return bestLocation;
+    }
+
+    public void searchUsers(View view){
+        String login = Login.getText().toString();
+
+        GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                Log.d("USERS ID OUTPUT", output);
+                if (GetUserByLogin.json_string.length() < 30) {
+                    Log.d("fail!!!!", "fail :(");
+                    //dodac text view
+                    Error.setVisibility(View.VISIBLE);
+
+
+                } else {
+                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
+                    json_string = GetUserByLogin.json_string;
+                    Intent intent = new Intent(getApplicationContext(), UsersProfileActivity.class);
+                    intent.putExtra("json_data", json_string);
+                    //intent.putExtra("user_id", userId);
+                    //Log.d("event_id from timeline", userId);
+                    startActivity(intent);
+
+                }
+            }
+        }).execute(login);
     }
 }

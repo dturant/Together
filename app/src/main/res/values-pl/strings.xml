@@ -44,5 +44,10 @@
     <string name="radio_location">Użyj mojej obecnej lokalizacji</string>
     <string name="radio_text">Wpisz miasto</string>
     <string name="event_userSigned">Jesteś już zapisany do tego wydarzenia!</string>
+    <string name="search_events">Szukaj wydarzań:</string>
+    <string name="search_users">Szukaj użytkowników:</string>
+    <string name="search_user_loginTextView">Login</string>
+    <string name="search_user_error">Taki użytkownik nie istnieje, spróbuj ponownie!</string>
+
 
 </resources>

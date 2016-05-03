@@ -48,6 +48,10 @@
     <string name="radio_location">Use my current location</string>
     <string name="radio_text">Type in city</string>
     <string name="event_userSigned">You are already signed to this event!</string>
+    <string name="search_events">Search for events:</string>
+    <string name="search_users">Search for users:</string>
+    <string name="search_user_loginTextView">Login</string>
+    <string name="search_user_error">Such a user doesn\'t exist, try again!</string>
 
 
 </resources>
