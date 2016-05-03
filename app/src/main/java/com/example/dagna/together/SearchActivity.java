@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
+import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.onlineDatabase.DisplayEvents;
 import com.example.dagna.together.onlineDatabase.GetCategories;
 import com.example.dagna.together.onlineDatabase.GetParticularEvents;
@@ -68,94 +69,85 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private RadioButton radioLocationButton, radioTextButton;
     Spinner Category;
 
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
+        City = (EditText) findViewById(R.id.search_event_city);
+        Login=(EditText) findViewById(R.id.search_user_login);
+        Error = (TextView) findViewById(R.id.search_user_error);
 
-    private boolean isLocationAvailable()
-    {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        this.getCategories();
 
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            return true;
-        }else{
-            return false;
+        addListenerOnButton();
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
         }
     }
 
-    private void displayToast(int val)
+    @Override
+    public void onPause()
     {
-        switch(val)
-        {
-            case 1:
-                Toast.makeText(this, R.string.offline_mode,
-                        Toast.LENGTH_LONG).show();
-                break;
-            case 2:
-                Toast.makeText(this, R.string.gps_off,
-                        Toast.LENGTH_LONG).show();
-                break;
-            case 3:
-                String text = getResources().getString(R.string.offline_mode) + "/" + getResources().getString(R.string.gps_off);;
-                Toast.makeText(this, text,
-                        Toast.LENGTH_LONG).show();
-                break;
-            default: break;
-
-        }
+        super.onPause();
+        //  unregisterReceiver(receiver);
     }
 
-    protected void createNetErrorDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
-                .setTitle("Unable to connect")
-                .setCancelable(false)
-                .setPositiveButton("Settings",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                startActivity(i);
-                            }
-                        }
-                )
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                displayToast(1);
-                            }
-                        }
-                );
-        AlertDialog alert = builder.create();
-        alert.show();
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        //  registerReceiver(receiver, new IntentFilter(DatabaseIntentService.NOTIFICATION));
     }
 
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        mGoogleApiClient.connect();
+        //Log.e("Connected?", String.valueOf(mGoogleApiClient.isConnected()));
+    }
 
-    /*private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
+    @Override
+    protected  void onStop()
+    {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
 
-                String result = bundle.getString(DatabaseIntentService.RESULT);
-                if(result == DatabaseIntentService.RESULT_FAIL)
-                {
-                    //fail
-                }
-                else {
-                    goToResult();
+    public void addListenerOnButton() {
+
+        radioCity = (RadioGroup) findViewById(R.id.radioCity);
+        radioLocationButton = (RadioButton) findViewById(R.id.radioLocation);
+        radioTextButton = (RadioButton) findViewById(R.id.radioText);
+
+
+        radioCity.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioCity, int checkedId) {
+                Log.e("O KURWAAA", "" + checkedId);
+                if (checkedId == R.id.radioLocation) {
+                    City.setEnabled(false);
+                    City.setInputType(InputType.TYPE_NULL);
+                } else {
+                    City.setEnabled(true);
+                    City.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
                 }
             }
-        }
-    };
-    */
+        });
 
-
+    }
 
     private void fillSpinner(List<String> list){
         Category = (Spinner) findViewById(R.id.search_event_category);
@@ -210,245 +202,66 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         }).execute();
     }
 
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        City = (EditText) findViewById(R.id.search_event_city);
-        Login=(EditText) findViewById(R.id.search_user_login);
-        Error = (TextView) findViewById(R.id.search_user_error);
-
-        this.getCategories();
-
-        addListenerOnButton();
-
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-    }
-
-    public void addListenerOnButton() {
-
-        radioCity = (RadioGroup) findViewById(R.id.radioCity);
-        radioLocationButton = (RadioButton) findViewById(R.id.radioLocation);
-        radioTextButton = (RadioButton) findViewById(R.id.radioText);
-
-
-        radioCity.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup radioCity, int checkedId) {
-                Log.e("O KURWAAA", "" + checkedId);
-                if(checkedId == R.id.radioLocation)
-                {
-                    City.setEnabled(false);
-                    City.setInputType(InputType.TYPE_NULL);
-                }
-                else
-                {
-                    City.setEnabled(true);
-                    City.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
-                }
-            }
-        });
-
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-      //  unregisterReceiver(receiver);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-      //  registerReceiver(receiver, new IntentFilter(DatabaseIntentService.NOTIFICATION));
-    }
-
     public void search(View view) {
         //if czy js wlaczony i czy nie jest null
-        if(isNetworkAvailable())
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
         {
-            if (isLocationAvailable())
+            if (radioCity.getCheckedRadioButtonId() == R.id.radioLocation && GeneralHelpers.isLocationAvailable((LocationManager) getSystemService(LOCATION_SERVICE)))
             {
-                //get city
-                //getEventsFromOnlineDB("Dornbirn");
+                Location loc = getLastKnownLocation();
+                Toast.makeText(this, String.valueOf(loc.getLatitude()) + "/" + String.valueOf(loc.getLongitude()),
+                        Toast.LENGTH_LONG).show();
+
+                getCityName(loc, new OnGeocoderFinishedListener() {
+                    @Override
+                    public void onFinished(List<Address> results) {
+                        if (results.get(0) != null) {
+                            String city = results.get(0).getLocality().toString();
+                            searchEvents(city);
+                        } else {
+                            //maybe do sth?
+                        }
+
+//                        displayCity(results);
+                    }
+                });
+            }
+            else if (radioCity.getCheckedRadioButtonId() == R.id.radioLocation)
+            {
+                GeneralHelpers.createGpsErrorDialog(this);
             }
             else
             {
-                displayToast(2);
-                //getEventsFromOnlineDB("Dornbirn");
-                Log.e(":D:D:D", "DDSDS");
+                String city = City.getText().toString();
+                searchEvents(city);
             }
         }
         else
         {
-            if (isLocationAvailable())
-            {
-                //get city
-                displayToast(1);
-                //getEventsFromLocalDB("Dornbirn");
-                Log.e("TUTAJ", "LALALALALA");
-            }
-            else
-            {
-                displayToast(3);
-                //getEventsFromLocalDB("Dornbirn");
-                Log.e("TUTAJSON", "LALALA");
-            }
+            GeneralHelpers.createNetErrorDialog(this);
         }
-        Location loc = getLastKnownLocation();
-        Toast.makeText(this, String.valueOf(loc.getLatitude()) + "/" + String.valueOf(loc.getLongitude()),
-                Toast.LENGTH_LONG).show();
+    }
 
-        getCityName(loc, new OnGeocoderFinishedListener() {
+    public void searchEvents(String city){
+        String category;
+        category = Category.getSelectedItem().toString();
+
+        GetParticularEvents getParticularEvents = (GetParticularEvents) new GetParticularEvents(new GetParticularEvents.AsyncResponse() {
+
             @Override
-            public void onFinished(List<Address> results) {
-                displayCity(results);
-            }
-        });
-
-//        if(isNetworkAvailable())
-//        {
-//            String city, category;
-//            city = City.getText().toString();
-//            category = Category.getSelectedItem().toString();
-//
-//            GetParticularEvents getParticularEvents = (GetParticularEvents) new GetParticularEvents(new GetParticularEvents.AsyncResponse() {
-//
-//                @Override
-//                public void processFinish(String output) {
-//                    if(GetParticularEvents.json_string==null){
-//                        Toast.makeText(getApplicationContext(),"first get json", Toast.LENGTH_LONG).show();
-//                    }
-//                    else{
-//                        json_string=GetParticularEvents.json_string;
-//                        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
-//                        intent.putExtra("json_data", json_string);
-//                        startActivity(intent);
-//                    }
-//                }
-//            }).execute(city,category);
-//        }
-//        else
-//        {
-//            createNetErrorDialog();
-//        }
-    }
-
-    private void displayCity(List<Address> results)
-    {
-        Toast.makeText(this, results.get(0).getLocality().toString(),
-                Toast.LENGTH_LONG).show();
-    }
-
-
-    public abstract class OnGeocoderFinishedListener {
-        public abstract void onFinished(List<Address> results);
-    }
-
-    public void getCityName(final Location location, final OnGeocoderFinishedListener listener) {
-        final Context con = getApplicationContext();
-        new AsyncTask<Void, Integer, List<Address>>() {
-            @Override
-            protected List<Address> doInBackground(Void... arg0) {
-                Geocoder coder = new Geocoder(con, Locale.ENGLISH);
-                List<Address> results = null;
-                try {
-                    results = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                } catch (IOException e) {
-                    // nothing
+            public void processFinish(String output) {
+                if(GetParticularEvents.json_string==null){
+                    Toast.makeText(getApplicationContext(),"first get json", Toast.LENGTH_LONG).show();
                 }
-                return results;
-            }
-
-            @Override
-            protected void onPostExecute(List<Address> results) {
-                if (results != null && listener != null) {
-                    listener.onFinished(results);
+                else{
+                    json_string=GetParticularEvents.json_string;
+                    Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
+                    intent.putExtra("json_data", json_string);
+                    startActivity(intent);
                 }
             }
-        }.execute();
-    }
+        }).execute(city,category);
 
-    private void goToResult()
-    {
-        Intent intent = new Intent(this, SearchResultsActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-        mGoogleApiClient.connect();
-        //Log.e("Connected?", String.valueOf(mGoogleApiClient.isConnected()));
-    }
-
-    @Override
-    protected  void onStop()
-    {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
-
-
-    @Override
-    public void onConnected(Bundle bundle) {
-//        Log.e("ConnectedON?", String.valueOf(mGoogleApiClient.isConnected()));
-//        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-//                mGoogleApiClient);
-//        if (mLastLocation != null) {
-//            Log.e("JEEEEEE", "DDDS");
-//            Toast.makeText(this, String.valueOf(mLastLocation.getLatitude()) + "/" + String.valueOf(mLastLocation.getLongitude()),
-//                    Toast.LENGTH_LONG).show();
-//        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
-    private Location getLastKnownLocation() {
-        LocationManager mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = mLocationManager.getProviders(true);
-        Location bestLocation = null;
-        for (String provider : providers) {
-            Location l = mLocationManager.getLastKnownLocation(provider);
-            Log.d("last known locati", provider);
-
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null) {
-                Log.d("known location: %s", l.toString());
-                bestLocation = l;
-            }
-        }
-        if (bestLocation == null) {
-            return null;
-        }
-        return bestLocation;
     }
 
     public void searchUsers(View view){
@@ -478,4 +291,192 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             }
         }).execute(login);
     }
+
+    private Location getLastKnownLocation() {
+        LocationManager mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            Log.d("last known locati", provider);
+
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null) {
+                Log.d("known location: %s", l.toString());
+                bestLocation = l;
+            }
+        }
+        if (bestLocation == null) {
+            return null;
+        }
+        return bestLocation;
+    }
+
+    public abstract class OnGeocoderFinishedListener {
+        public abstract void onFinished(List<Address> results);
+    }
+
+    public void getCityName(final Location location, final OnGeocoderFinishedListener listener) {
+        final Context con = getApplicationContext();
+        new AsyncTask<Void, Integer, List<Address>>() {
+            @Override
+            protected List<Address> doInBackground(Void... arg0) {
+                Geocoder coder = new Geocoder(con, Locale.ENGLISH);
+                List<Address> results = null;
+                try {
+                    results = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                } catch (IOException e) {
+                    // nothing
+                }
+                return results;
+            }
+
+            @Override
+            protected void onPostExecute(List<Address> results) {
+                if (results != null && listener != null) {
+                    listener.onFinished(results);
+                }
+            }
+        }.execute();
+    }
+
+    private void displayCity(List<Address> results)
+    {
+        Toast.makeText(this, results.get(0).getLocality().toString(),
+                Toast.LENGTH_LONG).show();
+    }
+
+    private void goToResult()
+    {
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+
+    //Helpers
+//    public boolean isNetworkAvailable() {
+//        ConnectivityManager connectivityManager
+//                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+//        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+//    }
+//
+//    public boolean isLocationAvailable()
+//    {
+//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//
+//        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+//            return true;
+//        }else{
+//            return false;
+//        }
+//    }
+//
+//    public void displayToast(int val)
+//    {
+//        switch(val)
+//        {
+//            case 1:
+//                Toast.makeText(this, R.string.offline_mode,
+//                        Toast.LENGTH_LONG).show();
+//                break;
+//            case 2:
+//                Toast.makeText(this, R.string.gps_off,
+//                        Toast.LENGTH_LONG).show();
+//                break;
+//            case 3:
+//                String text = getResources().getString(R.string.offline_mode) + "/" + getResources().getString(R.string.gps_off);;
+//                Toast.makeText(this, text,
+//                        Toast.LENGTH_LONG).show();
+//                break;
+//            default: break;
+//
+//        }
+//    }
+//
+//    public void createNetErrorDialog() {
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
+//                .setTitle("Unable to connect")
+//                .setCancelable(false)
+//                .setPositiveButton("Settings",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+//                                startActivity(i);
+//                            }
+//                        }
+//                )
+//                .setNegativeButton("Cancel",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                displayToast(1);
+//                            }
+//                        }
+//                );
+//        AlertDialog alert = builder.create();
+//        alert.show();
+//    }
+//
+//    public void createGpsErrorDialog() {
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setMessage("You need a location enabled to perform this action. Please turn on location in Settings.")
+//                .setTitle("Unable to localize")
+//                .setCancelable(false)
+//                .setPositiveButton("Settings",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+//                                startActivity(i);
+//                            }
+//                        }
+//                )
+//                .setNegativeButton("Cancel",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                displayToast(2);
+//                            }
+//                        }
+//                );
+//        AlertDialog alert = builder.create();
+//        alert.show();
+//    }
+
+
+    /*private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+
+                String result = bundle.getString(DatabaseIntentService.RESULT);
+                if(result == DatabaseIntentService.RESULT_FAIL)
+                {
+                    //fail
+                }
+                else {
+                    goToResult();
+                }
+            }
+        }
+    };
+    */
 }
