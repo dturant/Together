@@ -36,14 +36,14 @@ public class UsersProfileActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        user_id=getIntent().getExtras().getString("user_id");
+        //user_id=getIntent().getExtras().getString("user_id");
         context = getApplicationContext();
 
         Login = (TextView)findViewById(R.id.users_profile_login);
         City = (TextView)findViewById(R.id.users_profile_city);
         Note = (TextView)findViewById(R.id.users_profile_note);
 
-        note = Integer.parseInt(Note.getText().toString());
+
 
         json_string=getIntent().getExtras().getString("json_data");
 
@@ -54,16 +54,20 @@ public class UsersProfileActivity extends AppCompatActivity {
             jsonArray = jsonObject.getJSONArray("server_response");
             JSONObject JO = jsonArray.getJSONObject(0);
 
-            String db_login, db_city, db_note;
+            String db_login, db_city, db_note, db_id;
 
             db_login = JO.getString("login");
             db_city = JO.getString("city");
             db_note=JO.getString("grade");
 
+            user_id=JO.getString("user_id");
+
             getSupportActionBar().setTitle(db_login + "'s profile");
 
             City.append(db_city);
             Note.setText(db_note);
+
+            note = Integer.parseInt(Note.getText().toString());
 
 
         } catch (JSONException e) {
