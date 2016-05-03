@@ -51,6 +51,45 @@ public class TimelineActivity extends AppCompatActivity {
     ListView listView;
     static ArrayList<Events> eventsList = new ArrayList<>();
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            setContentView(R.layout.activity_timeline);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String login = preferences.getString("login", "");
+
+            if(login.equals("")){
+                Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else
+            {
+                if(isNetworkAvailable())
+                {
+                    //getEventsFromOnlineDB();
+                }
+                else
+                {
+//                    Toast.makeText(this, R.string.offline_mode,
+//                            Toast.LENGTH_LONG).show();
+                    //getEventsFromLocalDB();
+                }
+            }
+        }
+    }
+
+
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -278,43 +317,6 @@ public class TimelineActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getIntent().getBooleanExtra("EXIT", false)) {
-            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
-        else
-        {
-            setContentView(R.layout.activity_timeline);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String login = preferences.getString("login", "");
-
-            if(login.equals("")){
-                Intent intent = new Intent(this, RegisterOrLoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            else
-            {
-                if(isNetworkAvailable())
-                {
-                    //getEventsFromOnlineDB();
-                }
-                else
-                {
-//                    Toast.makeText(this, R.string.offline_mode,
-//                            Toast.LENGTH_LONG).show();
-                    //getEventsFromLocalDB();
-                }
-            }
-        }
-    }
 
 
     @Override

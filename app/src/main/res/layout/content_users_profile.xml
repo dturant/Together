@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/users_profile_note"
-        android:text="@string/note"
+        android:text="0"
         android:layout_below="@id/users_profile_city"/>
 
     <TextView
@@ -36,5 +36,27 @@
         android:id="@+id/users_profile_rate"
         android:text="@string/rate"
         android:layout_below="@id/users_profile_note"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/users_profile_rate">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/users_profilele_plus"
+            android:text="+"
+            android:onClick="plus"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/users_profilele_minus"
+            android:text="-"
+            android:onClick="minus"/>
+
+        </LinearLayout>
 
 </RelativeLayout>
