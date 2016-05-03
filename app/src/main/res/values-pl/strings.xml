@@ -40,5 +40,9 @@
     <string name="take_part_in_event_button">Weź udział!</string>
     <string name="signed">Zapisałeś się do tego wydarzenia!</string>
     <string name="rate">oceń</string>
+    <string name="gps_off">GPS wyłączony</string>
+    <string name="radio_location">Użyj mojej obecnej lokalizacji</string>
+    <string name="radio_text">Wpisz miasto</string>
+    <string name="event_userSigned">Jesteś już zapisany do tego wydarzenia!</string>
 
 </resources>

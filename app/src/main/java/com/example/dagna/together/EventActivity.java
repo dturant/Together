@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventActivity extends AppCompatActivity {
-    String json_string, event_id;
+    String json_string, event_id, user_id;
     JSONObject jsonObject;
     JSONArray jsonArray;
 
@@ -50,11 +51,79 @@ public class EventActivity extends AppCompatActivity {
 
     TextView Name, Category, Description, Country, City, Street,User ;
 
+    Button Join, UserSigned;
+
     ListView listView;
 
     UserAdapter userAdapter;
 
     static ArrayList<Users> usersList = new ArrayList<>();
+
+    //trzymac tu gdzies id, ma przyjsc w intencie
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_event);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        event_id=getIntent().getExtras().getString("event_id");
+        context = getApplicationContext();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        user_id = preferences.getString("id", "");
+
+        Name = (TextView)findViewById(R.id.event_nameTextView);
+        Category = (TextView)findViewById(R.id.event_categoryTextView);
+        Description = (TextView)findViewById(R.id.event_descriptionTextView);
+        Country = (TextView)findViewById(R.id.event_countryTextView);
+        City = (TextView)findViewById(R.id.event_cityTextView);
+        Street = (TextView)findViewById(R.id.event_streetTextView);
+        User = (TextView)findViewById(R.id.event_userTextView);
+        Join = (Button) findViewById(R.id.event_addUserButton);
+        UserSigned=(Button) findViewById(R.id.event_userSigned);
+
+        //listView = (ListView) findViewById(R.id.eventListView);
+        //TODO if is internet
+        json_string=getIntent().getExtras().getString("json_data");
+        try {
+            // Log.d("login", login);
+            jsonObject = new JSONObject(json_string);
+            jsonArray = jsonObject.getJSONArray("server_response");
+            JSONObject JO = jsonArray.getJSONObject(0);
+
+            String db_id, db_name, db_description, db_category, db_user, db_street_name, db_street_number, db_city, db_zipcode, db_country;
+
+            db_id = JO.getString("event_id");
+            db_name = JO.getString("name");
+            db_description = JO.getString("description");
+            db_category=JO.getString("category");
+            db_user = JO.getString("user");
+            db_street_name=JO.getString("street_name");
+            db_street_number=JO.getString("street_number");
+            db_city=JO.getString("city");
+            db_zipcode=JO.getString("zipcode");
+            db_country=JO.getString("country");
+
+            getSupportActionBar().setTitle(db_name);
+
+            Name.append(db_name);
+            Category.append(db_category);
+            Description.append(db_description);
+            City.append(db_city);
+            Country.append(db_country);
+            Street.append(db_street_name);
+            User.append(db_user);
+
+            getUsers();
+
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -80,8 +149,7 @@ public class EventActivity extends AppCompatActivity {
         {
             //join event
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String user_id = preferences.getString("id", "");
+
             Log.d("event_id", event_id);
             Log.d("user_id", user_id);
             JoinEvent joinEvent = (JoinEvent) new JoinEvent(new JoinEvent.AsyncResponse() {
@@ -98,6 +166,8 @@ public class EventActivity extends AppCompatActivity {
                     } else {
                         //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         //startActivity(intent);
+                        getUsers();
+
                         Toast.makeText(context,R.string.signed, Toast.LENGTH_LONG).show();
                     }
                 }
@@ -134,66 +204,10 @@ public class EventActivity extends AppCompatActivity {
         alert.show();
     }
 
-    //trzymac tu gdzies id, ma przyjsc w intencie
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        event_id=getIntent().getExtras().getString("event_id");
-        context = getApplicationContext();
 
-        Name = (TextView)findViewById(R.id.event_nameTextView);
-        Category = (TextView)findViewById(R.id.event_categoryTextView);
-        Description = (TextView)findViewById(R.id.event_descriptionTextView);
-        Country = (TextView)findViewById(R.id.event_countryTextView);
-        City = (TextView)findViewById(R.id.event_cityTextView);
-        Street = (TextView)findViewById(R.id.event_streetTextView);
-        User = (TextView)findViewById(R.id.event_userTextView);
-
-        //listView = (ListView) findViewById(R.id.eventListView);
-        //TODO if is internet
-        json_string=getIntent().getExtras().getString("json_data");
-        try {
-            // Log.d("login", login);
-            jsonObject = new JSONObject(json_string);
-            jsonArray = jsonObject.getJSONArray("server_response");
-            JSONObject JO = jsonArray.getJSONObject(0);
-
-            String db_id, db_name, db_description, db_category, db_user, db_street_name, db_street_number, db_city, db_zipcode, db_country;
-
-            db_id = JO.getString("event_id");
-            db_name = JO.getString("name");
-            db_description = JO.getString("description");
-            db_category=JO.getString("category");
-            db_user = JO.getString("user");
-            db_street_name=JO.getString("street_name");
-            db_street_number=JO.getString("street_number");
-            db_city=JO.getString("city");
-            db_zipcode=JO.getString("zipcode");
-            db_country=JO.getString("country");
-
-            getSupportActionBar().setTitle(db_name);
-
-            Name.append(db_name);
-            Category.append(db_category);
-            Description.append(db_description);
-            City.append(db_city);
-            Country.append(db_country);
-            Street.append(db_street_name);
-            User.append(db_user);
-
-            getUsers();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     private void getUsers(){
-        usersList.clear();
+       usersList.clear();
 
         listView = (ListView)findViewById(R.id.eventListView);
         userAdapter=new UserAdapter(this, R.layout.content_user_list);
@@ -258,9 +272,22 @@ public class EventActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
+                    Join.setVisibility(View.VISIBLE);
+                    UserSigned.setVisibility(View.GONE);
+                    Log.d("userslist", Integer.toString(usersList.size()));
+                    for(Users user : usersList){
+                        Log.d("ids", user.getId() + " " + user_id);
+                        if(user.getId().equals(user_id)){
+                            Join.setVisibility(View.INVISIBLE);
+                            UserSigned.setVisibility(View.VISIBLE);
+                        }
+                    }
                 }
             }
         }).execute(event_id);
+
+
     }
 
     private void displayUser(final String userId)
@@ -290,47 +317,6 @@ public class EventActivity extends AppCompatActivity {
 
     }
 
-
-   /* private String getUserById(String id){
-         String loginToReturn="";
-        GetUserById getUserById = (GetUserById) new GetUserById(new GetUserById.AsyncResponse() {
-
-            @Override
-            public void processFinish(String output) {
-                Log.d("output",output);
-                if(DisplayEvents.json_string==null){
-                    Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
-                }
-                else{
-
-                    json_string=DisplayEvents.json_string;
-
-                    try {
-                        jsonObject=new JSONObject(json_string);
-                        jsonArray=jsonObject.getJSONArray("server_response");
-
-                        int count=0;
-                        String login,id;
-
-                        JSONObject JO = jsonArray.getJSONObject(count);
-                        id=JO.getString("id");
-                        login=JO.getString("login");
-
-                        loginToReturn=login;
-                        //Events events=new Events(id,name, description,city);
-                       // eventAdapter.add(events);
-                       //eventsList.add(events);
-
-                        //saveEventsToLocalDB();
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).execute(id);
-    } */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
