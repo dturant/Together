@@ -1,29 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    >
 
-    android:windowSoftInputMode="adjustPan"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.dagna.together.UsersProfileActivity"
-    tools:showIn="@layout/activity_users_profile">
-
-    <ImageView
-        android:background="@mipmap/background"
-        android:alpha="0.3"
+    <RelativeLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/layout_information"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/main_image"
+            android:id="@+id/main_image"
+            android:adjustViewBounds="true" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:paddingLeft="30dp"
+            android:fontFamily="sans-serif"
+            android:id="@+id/users_profile_login"
+            android:textSize="40dp"
+            android:layout_below="@id/main_image"
+            android:background="#303F9F"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/users_profile_rate"
+            android:text="@string/rate"
+            android:textSize="20dp"
+            android:layout_below="@+id/users_profile_login"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:background="#3F51B5"
+            android:textColor="#fff"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/users_profile_note"
+            android:textColor="#fff"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="20dp"
+            android:paddingLeft="20dp"
+            android:background="#3F51B5"
+            android:layout_below="@+id/users_profile_login"
+            android:layout_toRightOf="@+id/users_profile_rate"
+
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,63 +68,43 @@
             android:id="@+id/personal_information"
             android:text="@string/personal_information"
             android:textSize="20dp"
-            android:paddingBottom="20dp"/>
-
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:layout_below="@id/users_profile_rate"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/users_profile_city"
             android:text="@string/users_profile_city"
+            android:paddingLeft="20dp"
             android:layout_below="@id/personal_information"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/users_profile_note_text"
-            android:text="@string/users_profile_note"
-            android:layout_below="@id/users_profile_city" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/users_profile_note"
-            android:text="0"
-            android:layout_below="@id/users_profile_city"
-            android:layout_toRightOf="@+id/users_profile_note_text"/>
+    </RelativeLayout>
 
-
-
-    <TextView
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/minus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/users_profile_rate"
-        android:text="@string/rate"
-        android:textSize="20dp"
-        android:layout_below="@+id/users_profile_note"
-        android:paddingTop="50dp"
-        android:paddingBottom="20dp"/>
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:onClick="minus"
+        android:src="@drawable/ic_minus"
+        android:elevation="0dp"
+        app:layout_anchor="@id/main_image"
+        app:layout_anchorGravity="bottom|right|end"/>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/users_profile_rate">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/users_profilele_plus"
-            android:text="+"
-            android:onClick="plus"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="90dp"
+        android:clickable="true"
+        android:onClick="plus"
+        android:src="@drawable/ic_plus"
+        app:layout_anchor="@id/main_image"
+        app:layout_anchorGravity="bottom|right|end"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/users_profilele_minus"
-            android:text="-"
-            android:onClick="minus"/>
-
-        </LinearLayout>
-</RelativeLayout>
-
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
