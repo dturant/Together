@@ -18,50 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.onlineDatabase.*;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText Login, Password, City, PasswordConfirmation;
     TextView Error;
     String login, password, city, passwordConfirmation, error;
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    private void displayToast()
-    {
-        Toast.makeText(this, R.string.offline_mode,
-                Toast.LENGTH_LONG).show();
-    }
-
-    protected void createNetErrorDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
-                .setTitle("Unable to connect")
-                .setCancelable(false)
-                .setPositiveButton("Settings",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                startActivity(i);
-                            }
-                        }
-                )
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                displayToast();
-                            }
-                        }
-                );
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void register(View view){
 
-        if(isNetworkAvailable())
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
         {
             login=Login.getText().toString();
             password=Password.getText().toString();
@@ -129,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else
         {
-            createNetErrorDialog();
+            GeneralHelpers.createNetErrorDialog(this);
         }
     }
 

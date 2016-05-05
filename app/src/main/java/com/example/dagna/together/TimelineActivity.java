@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.dagna.together.helpers.DatabaseHelper;
 import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
+import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.onlineDatabase.DisplayEvents;
 import com.example.dagna.together.onlineDatabase.GetEventById;
 import com.example.dagna.together.services.DatabaseIntentService;
@@ -50,6 +51,12 @@ public class TimelineActivity extends AppCompatActivity {
     EventAdapter eventAdapter;
     ListView listView;
     static ArrayList<Events> eventsList = new ArrayList<>();
+
+    public static ArrayList<Events> getEventsList()
+    {
+        return eventsList;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,82 +80,127 @@ public class TimelineActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.logout) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            preferences.edit().remove("login").commit();
+            preferences.edit().remove("id").commit();
+            Intent intent = new Intent(this, TimelineActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.add_event) {
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+            {
+                Intent intent = new Intent(this, AddEventActivity.class);
+                startActivity(intent);
+                return true;
+            }
             else
             {
-                if(isNetworkAvailable())
-                {
-                    //getEventsFromOnlineDB();
-                }
-                else
-                {
-//                    Toast.makeText(this, R.string.offline_mode,
-//                            Toast.LENGTH_LONG).show();
-                    //getEventsFromLocalDB();
-                }
+                GeneralHelpers.createNetErrorDialog(this);
+            }
+        }
+
+        if (id == R.id.search) {
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+            {
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            else
+            {
+                GeneralHelpers.createNetErrorDialog(this);
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String login = preferences.getString("login", "");
+
+        registerReceiver(receiver, new IntentFilter(DatabaseIntentService.NOTIFICATION));
+
+        if(login.equals("")){
+            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else
+        {
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+            {
+                getEventsFromOnlineDB("Dornbirn");
+            }
+            else
+            {
+                getEventsFromLocalDB("Dornbirn");
             }
         }
     }
 
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
 
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public static ArrayList<Events> getEventsList()
-    {
-        return eventsList;
-    }
-
-    private void displayToast(int val)
-    {
-        switch(val)
-        {
-            case 1:
-                Toast.makeText(this, R.string.offline_mode,
-                        Toast.LENGTH_LONG).show();
-                break;
-            case 2:
-                Toast.makeText(this, R.string.gps_off,
-                        Toast.LENGTH_LONG).show();
-                break;
-            case 3:
-                String text = getResources().getString(R.string.offline_mode) + "/" + getResources().getString(R.string.gps_off);;
-                Toast.makeText(this, text,
-                        Toast.LENGTH_LONG).show();
-                break;
-            default: break;
-
+                String result = bundle.getString(DatabaseIntentService.RESULT);
+                if(result.equals( DatabaseIntentService.RESULT_FAIL))
+                {
+                    //fail
+                }
+                else {
+                    String s = "";
+                    Cursor c = DatabaseIntentService.getCursor();
+                    updateList(c);
+                }
+            }
         }
-    }
-
-    protected void createNetErrorDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
-                .setTitle("Unable to connect")
-                .setCancelable(false)
-                .setPositiveButton("Settings",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                startActivity(i);
-                            }
-                        }
-                )
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                displayToast(1);
-                            }
-                        }
-                );
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
+    };
 
     private void getEventsFromLocalDB(String city)
     {
@@ -177,6 +229,7 @@ public class TimelineActivity extends AppCompatActivity {
         listView = (ListView)findViewById(R.id.timelineListView);
         eventAdapter=new EventAdapter(this, R.layout.content_event_list);
         listView.setAdapter(eventAdapter);
+        final Context context = this;
 
         DisplayEvents displayEvents = (DisplayEvents) new DisplayEvents(new DisplayEvents.AsyncResponse() {
 
@@ -233,7 +286,7 @@ public class TimelineActivity extends AppCompatActivity {
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             public void onItemClick(AdapterView parentView, View childView,
                                                     int position, long id) {
-                                if(isNetworkAvailable())
+                                if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
                                 {
                                     String eventId=eventsList.get(position).getId();
                                     Log.d("eventid", eventId);
@@ -241,7 +294,7 @@ public class TimelineActivity extends AppCompatActivity {
                                 }
                                 else
                                 {
-                                    createNetErrorDialog();
+                                    GeneralHelpers.createNetErrorDialog(context);
                                 }
                             }
 
@@ -257,26 +310,6 @@ public class TimelineActivity extends AppCompatActivity {
         }).execute();
     }
 
-  private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-
-                String result = bundle.getString(DatabaseIntentService.RESULT);
-                if(result.equals( DatabaseIntentService.RESULT_FAIL))
-                {
-                    //fail
-                }
-                else {
-                    String s = "";
-                    Cursor c = DatabaseIntentService.getCursor();
-                    updateList(c);
-                }
-            }
-        }
-    };
-
     private void updateList(Cursor cursor)
     {
         String[] fromColumns = {DatabaseHelper.KEY_EVENT_NAME, DatabaseHelper.KEY_DSCRP};
@@ -285,20 +318,18 @@ public class TimelineActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById( R.id.timelineListView );
         listView.setAdapter(adapter);
+        final Context context = this;
 
         listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parentView, View childView,
                                     int position, long id) {
-                if(isNetworkAvailable())
-                {
+                if (GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))) {
                     TextView c = (TextView) childView.findViewById(R.id.title);
-                    String eventId=eventsList.get(position).getId();
+                    String eventId = eventsList.get(position).getId();
                     displayEvent(eventId);
-                }
-                else
-                {
-                    //TODO popup
+                } else {
+                    GeneralHelpers.createNetErrorDialog(context);
                 }
             }
 
@@ -307,6 +338,7 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
     }
+
     private void displayEvent(final String eventId)
     {
         GetEventById getEventById = (GetEventById) new GetEventById(new GetEventById.AsyncResponse() {
@@ -331,106 +363,5 @@ public class TimelineActivity extends AppCompatActivity {
         }).execute(eventId);
 
 
-    }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        if (id == R.id.logout) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            preferences.edit().remove("login").commit();
-            preferences.edit().remove("id").commit();
-            Intent intent = new Intent(this, TimelineActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("EXIT", true);
-            startActivity(intent);
-            return true;
-        }
-
-        if (id == R.id.profile) {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        if (id == R.id.add_event) {
-            if(isNetworkAvailable())
-            {
-                Intent intent = new Intent(this, AddEventActivity.class);
-                startActivity(intent);
-                return true;
-            }
-            else
-            {
-                createNetErrorDialog();
-            }
-        }
-
-        if (id == R.id.search) {
-            if(isNetworkAvailable())
-            {
-                Intent intent = new Intent(this, SearchActivity.class);
-                startActivity(intent);
-                return true;
-            }
-            else
-            {
-                createNetErrorDialog();
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        unregisterReceiver(receiver);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String login = preferences.getString("login", "");
-
-        registerReceiver(receiver, new IntentFilter(DatabaseIntentService.NOTIFICATION));
-
-        if(login.equals("")){
-            Intent intent = new Intent(this, RegisterOrLoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
-        else
-        {
-            if(isNetworkAvailable())
-            {
-                getEventsFromOnlineDB("Dornbirn");
-            }
-            else
-            {
-                getEventsFromLocalDB("Dornbirn");
-            }
-        }
     }
 }

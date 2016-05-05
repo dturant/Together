@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.onlineDatabase.AddEvent;
 import com.example.dagna.together.onlineDatabase.AddUser;
 import com.example.dagna.together.onlineDatabase.GetCategories;
@@ -39,96 +40,6 @@ public class AddEventActivity extends AppCompatActivity {
     String json_string;
     JSONObject jsonObject;
     JSONArray jsonArray;
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    private void displayToast()
-    {
-        Toast.makeText(this, R.string.offline_mode,
-                Toast.LENGTH_LONG).show();
-    }
-
-    protected void createNetErrorDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
-                .setTitle("Unable to connect")
-                .setCancelable(false)
-                .setPositiveButton("Settings",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                startActivity(i);
-                            }
-                        }
-                )
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                displayToast();
-                            }
-                        }
-                );
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private void fillSpinner(List<String> list){
-        Category = (Spinner) findViewById(R.id.add_event_category);
-
-        List<String> categories = list;
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // attaching data adapter to spinner
-        Category.setAdapter(dataAdapter);
-    }
-    private void getCategories(){
-        final ArrayList<String> categories=new ArrayList<>();
-        GetCategories getCategories = (GetCategories) new GetCategories(new GetCategories.AsyncResponse() {
-
-            @Override
-            public void processFinish(String output) {
-                if(GetCategories.json_string==null){
-                    Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    json_string=GetCategories.json_string;
-
-                    try {
-                        jsonObject=new JSONObject(json_string);
-                        jsonArray=jsonObject.getJSONArray("server_response");
-
-                        int count=0;
-                        String name, description;
-
-                        while(count<jsonArray.length()){
-                            JSONObject JO = jsonArray.getJSONObject(count);
-                            name=JO.getString("name");
-                            categories.add(name);
-
-                            count++;
-
-                        }
-
-                        fillSpinner(categories);
-
-                        Log.d("categories innnnn", categories.toString());
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).execute();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,7 +94,7 @@ public class AddEventActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.search) {
-            if(isNetworkAvailable())
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
             {
                 Intent intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
@@ -191,7 +102,7 @@ public class AddEventActivity extends AppCompatActivity {
             }
             else
             {
-                createNetErrorDialog();
+                GeneralHelpers.createNetErrorDialog(this);
             }
         }
 
@@ -200,7 +111,7 @@ public class AddEventActivity extends AppCompatActivity {
 
     public void addEvent(View view)
     {
-        if(isNetworkAvailable())
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
         {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             String name, city, country, category, street, description,user;
@@ -234,10 +145,62 @@ public class AddEventActivity extends AppCompatActivity {
         }
         else
         {
-            createNetErrorDialog();
+            GeneralHelpers.createNetErrorDialog(this);
         }
     }
 
+    private void fillSpinner(List<String> list){
+        Category = (Spinner) findViewById(R.id.add_event_category);
+
+        List<String> categories = list;
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // attaching data adapter to spinner
+        Category.setAdapter(dataAdapter);
+    }
+
+    private void getCategories(){
+        final ArrayList<String> categories=new ArrayList<>();
+        GetCategories getCategories = (GetCategories) new GetCategories(new GetCategories.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                if(GetCategories.json_string==null){
+                    Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    json_string=GetCategories.json_string;
+
+                    try {
+                        jsonObject=new JSONObject(json_string);
+                        jsonArray=jsonObject.getJSONArray("server_response");
+
+                        int count=0;
+                        String name, description;
+
+                        while(count<jsonArray.length()){
+                            JSONObject JO = jsonArray.getJSONObject(count);
+                            name=JO.getString("name");
+                            categories.add(name);
+
+                            count++;
+
+                        }
+
+                        fillSpinner(categories);
+
+                        Log.d("categories innnnn", categories.toString());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).execute();
+    }
 
 
 }

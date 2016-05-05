@@ -2,6 +2,7 @@ package com.example.dagna.together;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.onlineDatabase.AddUser;
 import com.example.dagna.together.onlineDatabase.UpdateUser;
 
@@ -78,16 +80,30 @@ public class UsersProfileActivity extends AppCompatActivity {
     }
 
     public void plus(View view){
-        note++;
-        Log.d("note", Integer.toString(note));
-        Note.setText(Integer.toString(note));
-        updateUser(user_id, Integer.toString(note));
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+        {
+            note++;
+            Log.d("note", Integer.toString(note));
+            Note.setText(Integer.toString(note));
+            updateUser(user_id, Integer.toString(note));
+        }
+        else
+        {
+            GeneralHelpers.createNetErrorDialog(this);
+        }
     }
 
     public void minus(View view){
-        note--;
-        Note.setText(Integer.toString(note));
-        updateUser(user_id,Integer.toString(note));
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+        {
+            note--;
+            Note.setText(Integer.toString(note));
+            updateUser(user_id,Integer.toString(note));
+        }
+        else
+        {
+            GeneralHelpers.createNetErrorDialog(this);
+        }
     }
 
     private void updateUser(String id, String grade){

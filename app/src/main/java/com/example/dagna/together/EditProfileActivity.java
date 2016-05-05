@@ -20,47 +20,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.dagna.together.helpers.GeneralHelpers;
+
 public class EditProfileActivity extends AppCompatActivity {
 
     EditText Description, City, Login;
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    private void displayToast()
-    {
-        Toast.makeText(this, R.string.offline_mode,
-                Toast.LENGTH_LONG).show();
-    }
-
-    protected void createNetErrorDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
-                .setTitle("Unable to connect")
-                .setCancelable(false)
-                .setPositiveButton("Settings",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                startActivity(i);
-                            }
-                        }
-                )
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                displayToast();
-                            }
-                        }
-                );
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +75,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         if (id == R.id.add_event) {
-            if(isNetworkAvailable())
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
             {
                 Intent intent = new Intent(this, AddEventActivity.class);
                 startActivity(intent);
@@ -119,12 +83,12 @@ public class EditProfileActivity extends AppCompatActivity {
             }
             else
             {
-                createNetErrorDialog();
+                GeneralHelpers.createNetErrorDialog(this);
             }
         }
 
         if (id == R.id.search) {
-            if(isNetworkAvailable())
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
             {
                 Intent intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
@@ -132,7 +96,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
             else
             {
-                createNetErrorDialog();
+                GeneralHelpers.createNetErrorDialog(this);
             }
         }
 
@@ -142,7 +106,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public void edit(View view)
     {
-        if(isNetworkAvailable())
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
         {
             String description, city, login;
             description = Description.getText().toString();
@@ -153,7 +117,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         else
         {
-            createNetErrorDialog();
+            GeneralHelpers.createNetErrorDialog(this);
         }
     }
 

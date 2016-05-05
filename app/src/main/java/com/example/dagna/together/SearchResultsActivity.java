@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
+import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.onlineDatabase.GetEventById;
 
 import org.json.JSONArray;
@@ -48,44 +49,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         return eventsList;
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    private void displayToast()
-    {
-        Toast.makeText(this, R.string.offline_mode,
-                Toast.LENGTH_LONG).show();
-    }
-
-    protected void createNetErrorDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
-                .setTitle("Unable to connect")
-                .setCancelable(false)
-                .setPositiveButton("Settings",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                startActivity(i);
-                            }
-                        }
-                )
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                displayToast();
-                            }
-                        }
-                );
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +64,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         eventAdapter=new EventAdapter(this, R.layout.content_search_results);
         listView.setAdapter(eventAdapter);
         json_string=getIntent().getExtras().getString("json_data");
+        final Context context = this;
 
         try {
             jsonObject=new JSONObject(json_string);
@@ -143,7 +107,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView parentView, View childView,
                                         int position, long id) {
-                    if(isNetworkAvailable())
+                    if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
                     {
                         String eventId=eventsList.get(position).getId();
                         Log.d("eventid", eventId);
@@ -151,7 +115,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        createNetErrorDialog();
+                         GeneralHelpers.createNetErrorDialog(context);
                     }
                 }
 
@@ -203,7 +167,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         }
 
         if (id == R.id.add_event) {
-            if(isNetworkAvailable())
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
             {
                 Intent intent = new Intent(this, AddEventActivity.class);
                 startActivity(intent);
@@ -211,12 +175,12 @@ public class SearchResultsActivity extends AppCompatActivity {
             }
             else
             {
-                createNetErrorDialog();
+                GeneralHelpers.createNetErrorDialog(this);
             }
         }
 
         if (id == R.id.search) {
-            if(isNetworkAvailable())
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
             {
                 Intent intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
@@ -224,7 +188,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             }
             else
             {
-                createNetErrorDialog();
+                GeneralHelpers.createNetErrorDialog(this);
             }
         }
 

@@ -20,47 +20,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.services.DatabaseService;
 
 public class ProfileActivity extends AppCompatActivity {
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    private void displayToast()
-    {
-        Toast.makeText(this, R.string.offline_mode,
-                Toast.LENGTH_LONG).show();
-    }
-
-    protected void createNetErrorDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
-                .setTitle("Unable to connect")
-                .setCancelable(false)
-                .setPositiveButton("Settings",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                startActivity(i);
-                            }
-                        }
-                )
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                displayToast();
-                            }
-                        }
-                );
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
 //            return true;
 //        }
         if (id == R.id.add_event) {
-            if(isNetworkAvailable())
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
             {
                 Intent intent = new Intent(this, AddEventActivity.class);
                 startActivity(intent);
@@ -132,11 +95,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
             else
             {
-                createNetErrorDialog();
+                GeneralHelpers.createNetErrorDialog(this);
             }
         }
         if (id == R.id.search) {
-            if(isNetworkAvailable())
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
             {
                 Intent intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
@@ -144,12 +107,12 @@ public class ProfileActivity extends AppCompatActivity {
             }
             else
             {
-                createNetErrorDialog();
+                GeneralHelpers.createNetErrorDialog(this);
             }
         }
         if(id == R.id.edit)
         {
-            if(isNetworkAvailable())
+            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
             {
                 Intent intent = new Intent(this, EditProfileActivity.class);
                 startActivity(intent);
@@ -157,7 +120,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
             else
             {
-                createNetErrorDialog();
+                GeneralHelpers.createNetErrorDialog(this);
             }
         }
 
