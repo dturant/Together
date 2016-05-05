@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_USER_EVENT = "user_event";
 
 
-    private static final String KEY_CITY = "city";
+    public static final String KEY_CITY = "city";
     public static final String KEY_USER_ID = "user_id";
     public static final String KEY_EVENT_ID = "event_id";
     public static final String KEY_CATEGORY_ID = "category_id";
@@ -50,6 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_STREET_NUMBER = "street_number";
     private static final String KEY_ZIPCODE = "zipcode";
     private static final String KEY_COUNTRY = "country";
+    public static final String KEY_IMAGE = "image";
 
 
     // USER_EVENTS Table - column names
@@ -73,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_EVENT_NAME + " TEXT," + KEY_DSCRP + " TEXT,"
             + KEY_CATEGORY_ID + " INTEGER, " + KEY_USER_ID + " INTEGER,"
             + KEY_STREET_NAME + " TEXT," + KEY_STREET_NUMBER + " INTEGER," + KEY_CITY + " TEXT,"
-            + KEY_ZIPCODE + " TEXT," + KEY_COUNTRY + " TEXT" + ")";
+            + KEY_ZIPCODE + " TEXT," + KEY_IMAGE + " INTEGER," + KEY_COUNTRY + " TEXT" + ")";
 
     // User_event table create statement
     private static final String CREATE_TABLE_USER_EVENT = "CREATE TABLE " + TABLE_USER_EVENT
@@ -195,7 +196,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getEventsByCity(String city)
     {
-        String selectQuery = "Select "+ KEY_EVENT_ID + " as _id,* FROM " + TABLE_EVENT + " WHERE " + KEY_CITY + " = " + "'" + city + "'";
+        //String selectQuery = "Select "+ KEY_EVENT_ID + " as _id,* FROM " + TABLE_EVENT + " WHERE " + KEY_CITY + " = " + "'" + city + "'";
+        String selectQuery = "Select "+ KEY_EVENT_ID + " as _id,* FROM " + TABLE_EVENT;
         Log.e(LOG, selectQuery);
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -219,6 +221,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         eventV.put(KEY_EVENT_NAME, event.getName());
         eventV.put(KEY_DSCRP, event.getDescription());
         eventV.put(KEY_CITY, event.getCity());
+        eventV.put(KEY_IMAGE, event.getImageId());
         db.insert(TABLE_EVENT, null, eventV);
     }
 

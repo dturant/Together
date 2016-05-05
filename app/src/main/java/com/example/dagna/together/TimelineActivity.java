@@ -204,14 +204,12 @@ public class TimelineActivity extends AppCompatActivity {
 
     private void getEventsFromLocalDB(String city)
     {
-//            //TODO na razie trzeba setowac DB za kazdym razem zeby dzialalo
 //            DatabaseHelper db;
 //            db = new DatabaseHelper(getApplicationContext());
 //            db.setupDatabase();
 
             Intent intent = new Intent(this, DatabaseIntentService.class);
             intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.GET_EVENTS_FROM_USER_CITY);
-            //TODO: po miescie usera lub po wpisanym.
             intent.putExtra(DatabaseIntentService.CITY, city);
             startService(intent);
     }
@@ -312,12 +310,44 @@ public class TimelineActivity extends AppCompatActivity {
 
     private void updateList(Cursor cursor)
     {
-        String[] fromColumns = {DatabaseHelper.KEY_EVENT_NAME, DatabaseHelper.KEY_DSCRP};
-        int[] toViews = {R.id.title, R.id.description};
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.content_event_list, cursor, fromColumns, toViews, 0);
+        eventsList.clear();
+        listView = (ListView)findViewById(R.id.timelineListView);
+        eventAdapter=new EventAdapter(this, R.layout.content_event_list);
+        listView.setAdapter(eventAdapter);
 
-        ListView listView = (ListView) findViewById( R.id.timelineListView );
-        listView.setAdapter(adapter);
+//        String[] fromColumns = {DatabaseHelper.KEY_EVENT_NAME, DatabaseHelper.KEY_DSCRP};
+//        int[] toViews = {R.id.title, R.id.description};
+//        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.content_event_list, cursor, fromColumns, toViews, 0);
+//        ListView listView = (ListView) findViewById( R.id.timelineListView );
+//        listView.setAdapter(adapter);
+
+        String name, description, city,id,category_id;
+
+        while (cursor.moveToNext()) {
+            id=cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_EVENT_ID));
+            name=cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_EVENT_NAME));
+            description=cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DSCRP));
+            city=cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_CITY));
+            category_id=cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_CATEGORY_ID));
+            Integer image=cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_IMAGE));
+//            if(category_id.equals("2"))
+//            {
+//                image=R.drawable.blue_stone;
+//            }
+//            else if(category_id.equals("3")){
+//                image=R.drawable.green_stone;
+//            }
+//            else if(category_id.equals("4")){
+//                image=R.drawable.yellow_stone;
+//            }
+//            else{
+//                image=R.drawable.red_stone;
+//            }
+            Events events=new Events(id,name, description,city,image);
+            eventAdapter.add(events);
+            eventsList.add(events);
+        }
+
         final Context context = this;
 
         listView.setClickable(true);
