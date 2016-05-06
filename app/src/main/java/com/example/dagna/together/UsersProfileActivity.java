@@ -43,7 +43,7 @@ public class UsersProfileActivity extends AppCompatActivity {
         //user_id=getIntent().getExtras().getString("user_id");
         context = getApplicationContext();
 
-       // Login = (TextView)findViewById(R.id.users_profile_login);
+       Login = (TextView)findViewById(R.id.users_profile_login);
         City = (TextView)findViewById(R.id.users_profile_city);
         Note = (TextView)findViewById(R.id.users_profile_note);
 
@@ -70,7 +70,7 @@ public class UsersProfileActivity extends AppCompatActivity {
 
             City.append(db_city);
             Note.setText(db_note);
-
+            Login.setText(db_login);
             note = Integer.parseInt(Note.getText().toString());
 
 

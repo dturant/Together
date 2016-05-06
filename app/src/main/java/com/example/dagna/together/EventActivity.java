@@ -41,6 +41,7 @@ import com.example.dagna.together.onlineDatabase.GetEventById;
 import com.example.dagna.together.onlineDatabase.GetSubscribedUsers;
 import com.example.dagna.together.onlineDatabase.GetUserById;
 import com.example.dagna.together.onlineDatabase.JoinEvent;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +62,8 @@ public class EventActivity extends AppCompatActivity {
     private ViewPagerAdapter viewPagerAdapter;
 
     static ArrayList<Users> usersList = new ArrayList<>();
+
+    public static boolean userSigned=false;
 
     public static ArrayList<Users> getUsersList()
     {
@@ -157,6 +160,58 @@ public class EventActivity extends AppCompatActivity {
     }
 
 
+    private void updateUsers(){
+        usersList.clear();
+        final Context context = this;
+
+        GetSubscribedUsers getSubscribedUsers = (GetSubscribedUsers) new GetSubscribedUsers(new GetSubscribedUsers.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                Log.d(" getSubscribedUsers:",output);
+                if(GetSubscribedUsers.json_string==null){
+                    Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    json_string=GetSubscribedUsers.json_string;
+
+                    try {
+                        jsonObject=new JSONObject(json_string);
+                        jsonArray=jsonObject.getJSONArray("server_response");
+                        List<String> idList=new ArrayList<String>();
+                        int count=0;
+                        String id, login;
+
+                        while(count<jsonArray.length()){
+                            JSONObject JO = jsonArray.getJSONObject(count);
+                            id=JO.getString("id");
+                            login=JO.getString("login");
+
+                            //Events events=new Events(id,name, description,city);
+                            //eventAdapter.add(events);
+                            Users users = new Users(id, login);
+//                            userAdapter.add(users);
+                            usersList.add(users);
+                            idList.add(id);
+                            count++;
+
+                        }
+                        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), event_id, context, json_string_event, (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE));
+                        viewPager.setAdapter(viewPagerAdapter);
+
+
+
+                        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+                        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).execute(event_id);
+    }
     private void getUsers(){
        usersList.clear();
         final Context context = this;
@@ -247,7 +302,9 @@ public class EventActivity extends AppCompatActivity {
                         //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         //startActivity(intent);
                         //getUsers();
-
+                        InformationTabFragment.changeButton(true);
+                        updateUsers();
+                       // ParticipantsTabFragment.updateList(true);
                         Toast.makeText(context, R.string.signed, Toast.LENGTH_LONG).show();
                     }
                 }

@@ -28,7 +28,7 @@ import org.json.JSONObject;
  */
 public class InformationTabFragment extends Fragment {
     TextView Name, Category, Description, Country, City, Street,User ;
-    Button Join, UserSigned;
+    static Button Join, UserSigned;
     ListView listView;
     JSONObject jsonObject;
     JSONArray jsonArray;
@@ -101,6 +101,7 @@ public class InformationTabFragment extends Fragment {
                 if(EventActivity.usersList.get(i).getId().equals(user_id)){
                     Join.setVisibility(View.INVISIBLE);
                     UserSigned.setVisibility(View.VISIBLE);
+                    UserSigned.setEnabled(false);
                 }
             }
 
@@ -108,4 +109,14 @@ public class InformationTabFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    public static void changeButton(boolean isSigned){
+        if(isSigned){
+            Join.setVisibility(View.INVISIBLE);
+            UserSigned.setVisibility(View.VISIBLE);
+            UserSigned.setEnabled(false);
+        }
+    }
+
+
 }

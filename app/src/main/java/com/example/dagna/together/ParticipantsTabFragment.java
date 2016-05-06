@@ -2,8 +2,10 @@ package com.example.dagna.together;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,23 +27,24 @@ public class ParticipantsTabFragment extends Fragment {
     public static Context context;
     public static String json_string;
     public static ConnectivityManager connMan;
+    String currentUser;
 
     ListView listView;
-    UserAdapter userAdapter;
+   static UserAdapter userAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.participants, container, false);
-
+        listView = (ListView) view.findViewById(R.id.eventListView);
+        userAdapter = new UserAdapter(context, R.layout.content_user_list);
+        listView.setAdapter(userAdapter);
         displayUsers(view);
 
         return view;
     }
 
     private void displayUsers(View view) {
-        listView = (ListView) view.findViewById(R.id.eventListView);
-        userAdapter = new UserAdapter(context, R.layout.content_user_list);
-        listView.setAdapter(userAdapter);
+
         //userAdapter=new UserAdapter(context, R.layout.content_user_list);
 
         Log.e("SPIERDOLOEN", "GOWNO");
@@ -84,16 +87,28 @@ public class ParticipantsTabFragment extends Fragment {
                 } else {
                     //Log.d("data!!!!!!!", GetUserByLogin.json_string);
                     json_string = GetUserById.json_string;
-                    Intent intent = new Intent(context, UsersProfileActivity.class);
-                    intent.putExtra("json_data", json_string);
-                    intent.putExtra("user_id", userId);
-                    Log.d("event_id from timeline", userId);
-                    startActivity(intent);
+
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                    currentUser = preferences.getString("id", "");
+
+                    if(!currentUser.equals(userId)) {Intent intent = new Intent(context, UsersProfileActivity.class);
+
+                        intent.putExtra("json_data", json_string);
+                        intent.putExtra("user_id", userId);
+                        Log.d("event_id from timeline", userId);
+                        startActivity(intent);
+                    }
+                    else{
+                        Intent intent = new Intent(context, ProfileActivity.class);
+                        intent.putExtra("json_data", json_string);
+                        intent.putExtra("user_id", userId);
+                        Log.d("event_id from timeline", userId);
+                        startActivity(intent);
+                    }
 
                 }
             }
         }).execute(userId);
-
 
     }
 }

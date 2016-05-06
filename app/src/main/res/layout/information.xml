@@ -2,72 +2,97 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
+
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/event_nameTextView"
-        android:text="@string/event_name"/>
+        android:text="@string/event_name"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/event_categoryTextView"
         android:text="@string/event_category"
-        android:layout_below="@id/event_nameTextView"/>
+        android:layout_below="@id/event_nameTextView"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/event_descriptionTextView"
         android:text="@string/event_description"
-        android:layout_below="@id/event_categoryTextView"/>
+        android:layout_below="@id/event_categoryTextView"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/event_countryTextView"
         android:text="@string/event_country"
-        android:layout_below="@id/event_descriptionTextView"/>
+        android:layout_below="@id/event_descriptionTextView"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/event_cityTextView"
         android:text="@string/event_city"
-        android:layout_below="@id/event_countryTextView"/>
+        android:layout_below="@id/event_countryTextView"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/event_streetTextView"
         android:text="@string/event_street"
-        android:layout_below="@id/event_cityTextView"/>
+        android:layout_below="@id/event_cityTextView"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/event_userTextView"
         android:text="@string/event_user"
-        android:layout_below="@id/event_streetTextView"/>
+        android:layout_below="@id/event_streetTextView"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="joinEvent"
         android:id="@+id/event_addUserButton"
         android:text="@string/take_part_in_event_button"
         android:layout_below="@id/event_userTextView"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/event_userSigned"
         android:text="@string/event_userSigned"
         android:layout_below="@id/event_userTextView"
         android:visibility="gone"
-        android:enabled="false"/>
+        android:enabled="false"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
 
 </RelativeLayout>

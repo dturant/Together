@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,6 +16,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -69,6 +71,9 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private RadioButton radioLocationButton, radioTextButton;
     Spinner Category;
 
+    public static Context context;
+    String currentUser;
+
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
 
@@ -78,6 +83,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.activity_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        context = this.getApplicationContext();
 
         City = (EditText) findViewById(R.id.search_event_city);
         Login=(EditText) findViewById(R.id.search_user_login);
@@ -265,7 +272,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     public void searchUsers(View view){
-        String login = Login.getText().toString();
+        final String login = Login.getText().toString();
 
         GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
 
@@ -281,11 +288,25 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                 } else {
                     //Log.d("data!!!!!!!", GetUserByLogin.json_string);
                     json_string = GetUserByLogin.json_string;
-                    Intent intent = new Intent(getApplicationContext(), UsersProfileActivity.class);
-                    intent.putExtra("json_data", json_string);
-                    //intent.putExtra("user_id", userId);
-                    //Log.d("event_id from timeline", userId);
-                    startActivity(intent);
+
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                    currentUser = preferences.getString("login", "");
+
+                    if(!currentUser.equals(login)) {
+
+                        Intent intent = new Intent(getApplicationContext(), UsersProfileActivity.class);
+                        intent.putExtra("json_data", json_string);
+                        //intent.putExtra("user_id", userId);
+                        //Log.d("event_id from timeline", userId);
+                        startActivity(intent);
+                    }
+                    else{
+                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        intent.putExtra("json_data", json_string);
+                        //intent.putExtra("user_id", userId);
+                        //Log.d("event_id from timeline", userId);
+                        startActivity(intent);
+                    }
 
                 }
             }
