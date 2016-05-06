@@ -50,19 +50,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventActivity extends AppCompatActivity {
-    String json_string, event_id, user_id;
+    String json_string, event_id, user_id, json_string_event;
     JSONObject jsonObject;
     JSONArray jsonArray;
 
     Context context;
-
-    TextView Name, Category, Description, Country, City, Street,User ;
-
-    Button Join, UserSigned;
-
-    ListView listView;
-
-    UserAdapter userAdapter;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -79,6 +71,10 @@ public class EventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        user_id = preferences.getString("id", "");
+
         setContentView(R.layout.activity_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,84 +82,13 @@ public class EventActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(viewPagerAdapter);
 
-        final TabLayout.Tab information = tabLayout.newTab();
-        final TabLayout.Tab participants = tabLayout.newTab();
-
-        information.setText("Information");
-        participants.setText("Participants");
-
-        tabLayout.addTab(information, 0);
-        tabLayout.addTab(participants, 1);
-
-        tabLayout.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
-        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.indicator));
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-
-
-
+        //Get neede values to display events
+        json_string_event=getIntent().getExtras().getString("json_data");
         event_id=getIntent().getExtras().getString("event_id");
-        context = getApplicationContext();
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        user_id = preferences.getString("id", "");
-
-        Name = (TextView)findViewById(R.id.event_nameTextView);
-        Category = (TextView)findViewById(R.id.event_categoryTextView);
-        Description = (TextView)findViewById(R.id.event_descriptionTextView);
-        Country = (TextView)findViewById(R.id.event_countryTextView);
-        City = (TextView)findViewById(R.id.event_cityTextView);
-        Street = (TextView)findViewById(R.id.event_streetTextView);
-        User = (TextView)findViewById(R.id.event_userTextView);
-        Join = (Button) findViewById(R.id.event_addUserButton);
-        UserSigned=(Button) findViewById(R.id.event_userSigned);
-
-        //listView = (ListView) findViewById(R.id.eventListView);
-        //TODO if is internet
-        json_string=getIntent().getExtras().getString("json_data");
-        try {
-            // Log.d("login", login);
-            jsonObject = new JSONObject(json_string);
-            jsonArray = jsonObject.getJSONArray("server_response");
-            JSONObject JO = jsonArray.getJSONObject(0);
-
-            String db_id, db_name, db_description, db_category, db_user, db_street_name, db_street_number, db_city, db_zipcode, db_country;
-
-            db_id = JO.getString("event_id");
-            db_name = JO.getString("name");
-            db_description = JO.getString("description");
-            db_category=JO.getString("category");
-            db_user = JO.getString("user");
-            db_street_name=JO.getString("street_name");
-            db_street_number=JO.getString("street_number");
-            db_city=JO.getString("city");
-            db_zipcode=JO.getString("zipcode");
-            db_country=JO.getString("country");
-
-            getSupportActionBar().setTitle(db_name);
-
-            Name.append(db_name);
-            Category.append(db_category);
-            Description.append(db_description);
-            City.append(db_city);
-            Country.append(db_country);
-            Street.append(db_street_name);
-            User.append(db_user);
-
-            //getUsers();
-
-
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        context = this;
+        getUsers();
+        //done
     }
 
     @Override
@@ -230,50 +155,11 @@ public class EventActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-/*
-    public void joinEvent(View view)
-    {
-        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
-        {
-            //join event
 
-
-            Log.d("event_id", event_id);
-            Log.d("user_id", user_id);
-            JoinEvent joinEvent = (JoinEvent) new JoinEvent(new JoinEvent.AsyncResponse() {
-
-                @Override
-                public void processFinish(String output) {
-
-                    Log.d("OUTPUT", output);
-                    if (output.equals("error")) {
-                        Log.d("ERROR", "ERROR");
-                        //Error.setVisibility(View.VISIBLE);
-                        //Error.setText("This login is already taken. Try another one.");
-
-                    } else {
-                        //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        //startActivity(intent);
-                        getUsers();
-
-                        Toast.makeText(context,R.string.signed, Toast.LENGTH_LONG).show();
-                    }
-                }
-            }).execute(user_id, event_id);
-        }
-        else
-        {
-            GeneralHelpers.createNetErrorDialog(this);
-        }
-    }
 
     private void getUsers(){
        usersList.clear();
         final Context context = this;
-        listView = (ListView)findViewById(R.id.eventListView);
-        userAdapter=new UserAdapter(this, R.layout.content_user_list);
-        listView.setAdapter(userAdapter);
-       // userAdapter=new UserAdapter(this, R.layout.content_user_list);
 
         GetSubscribedUsers getSubscribedUsers = (GetSubscribedUsers) new GetSubscribedUsers(new GetSubscribedUsers.AsyncResponse() {
 
@@ -301,49 +187,37 @@ public class EventActivity extends AppCompatActivity {
                             //Events events=new Events(id,name, description,city);
                             //eventAdapter.add(events);
                             Users users = new Users(id, login);
-                            userAdapter.add(users);
+//                            userAdapter.add(users);
                             usersList.add(users);
                             idList.add(id);
                             count++;
 
                         }
+                        //list got so display
+                        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), event_id, context, json_string_event, (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE));
+                        viewPager.setAdapter(viewPagerAdapter);
 
-                        Log.d("LISTA USEROW",idList.toString() );
-                        //TODO dodac te glupia liste o listview czy cus
-                        listView.setClickable(true);
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            public void onItemClick(AdapterView parentView, View childView,
-                                                    int position, long id) {
-                                if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
-                                {
-                                    String userId=usersList.get(position).getId();
-                                    Log.d("userid", userId);
-                                    displayUser(userId);
+                        final TabLayout.Tab information = tabLayout.newTab();
+                        final TabLayout.Tab participants = tabLayout.newTab();
 
-                                }
-                                else
-                                {
-                                    GeneralHelpers.createNetErrorDialog(context);
-                                }
-                            }
+                        information.setText("Information");
+                        participants.setText("Participants");
 
-                            public void onNothingSelected(AdapterView parentView) {
+                        tabLayout.addTab(information, 0);
+                        tabLayout.addTab(participants, 1);
 
-                            }
-                        });
+                        tabLayout.setTabTextColors(ContextCompat.getColorStateList(context, R.color.tab_selector));
+                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(context, R.color.indicator));
+
+                        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+                        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+
+                        //
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
-
-                    Join.setVisibility(View.VISIBLE);
-                    UserSigned.setVisibility(View.GONE);
-                    Log.d("userslist", Integer.toString(usersList.size()));
-                    for(Users user : usersList){
-                        Log.d("ids", user.getId() + " " + user_id);
-                        if(user.getId().equals(user_id)){
-                            Join.setVisibility(View.INVISIBLE);
-                            UserSigned.setVisibility(View.VISIBLE);
-                        }
                     }
                 }
             }
@@ -352,30 +226,36 @@ public class EventActivity extends AppCompatActivity {
 
     }
 
-    private void displayUser(final String userId)
+    public void joinEvent(View view)
     {
-        Log.d("USERS ID", userId);
-        GetUserById getUserById = (GetUserById) new GetUserById(new GetUserById.AsyncResponse() {
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+        {
+            Log.d("event_id", event_id);
+            Log.d("user_id", user_id);
+            JoinEvent joinEvent = (JoinEvent) new JoinEvent(new JoinEvent.AsyncResponse() {
 
-            @Override
-            public void processFinish(String output) {
-                Log.d("USERS ID OUTPUT", output);
-                if (GetUserById.json_string.length() < 30) {
-                    Log.d("fail!!!!", "fail :(");
+                @Override
+                public void processFinish(String output) {
 
-                } else {
-                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
-                    json_string = GetUserById.json_string;
-                    Intent intent = new Intent(getApplicationContext(), UsersProfileActivity.class);
-                    intent.putExtra("json_data", json_string);
-                    intent.putExtra("user_id", userId);
-                    Log.d("event_id from timeline", userId);
-                    startActivity(intent);
+                    Log.d("OUTPUT", output);
+                    if (output.equals("error")) {
+                        Log.d("ERROR", "ERROR");
+                        //Error.setVisibility(View.VISIBLE);
+                        //Error.setText("This login is already taken. Try another one.");
 
+                    } else {
+                        //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        //startActivity(intent);
+                        //getUsers();
+
+                        Toast.makeText(context, R.string.signed, Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        }).execute(userId);
-
-
-    } */
+            }).execute(user_id, event_id);
+        }
+        else
+        {
+            GeneralHelpers.createNetErrorDialog(context);
+        }
+    }
 }
