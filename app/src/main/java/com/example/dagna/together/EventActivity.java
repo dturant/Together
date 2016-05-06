@@ -12,6 +12,10 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,11 +28,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.example.dagna.together.helpers.EventAdapter;
 import com.example.dagna.together.helpers.Events;
 import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.helpers.UserAdapter;
 import com.example.dagna.together.helpers.Users;
+import com.example.dagna.together.helpers.ViewPagerAdapter;
 import com.example.dagna.together.onlineDatabase.AddUser;
 import com.example.dagna.together.onlineDatabase.DisplayEvents;
 import com.example.dagna.together.onlineDatabase.GetEventById;
@@ -58,6 +64,10 @@ public class EventActivity extends AppCompatActivity {
 
     UserAdapter userAdapter;
 
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ViewPagerAdapter viewPagerAdapter;
+
     static ArrayList<Users> usersList = new ArrayList<>();
 
     public static ArrayList<Users> getUsersList()
@@ -72,6 +82,31 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(viewPagerAdapter);
+
+        final TabLayout.Tab information = tabLayout.newTab();
+        final TabLayout.Tab participants = tabLayout.newTab();
+
+        information.setText("Information");
+        participants.setText("Participants");
+
+        tabLayout.addTab(information, 0);
+        tabLayout.addTab(participants, 1);
+
+        tabLayout.setTabTextColors(ContextCompat.getColorStateList(this, R.color.tab_selector));
+        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.indicator));
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+
+
+
         event_id=getIntent().getExtras().getString("event_id");
         context = getApplicationContext();
 
@@ -120,7 +155,7 @@ public class EventActivity extends AppCompatActivity {
             Street.append(db_street_name);
             User.append(db_user);
 
-            getUsers();
+            //getUsers();
 
 
 
@@ -195,7 +230,7 @@ public class EventActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+/*
     public void joinEvent(View view)
     {
         if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
@@ -342,5 +377,5 @@ public class EventActivity extends AppCompatActivity {
         }).execute(userId);
 
 
-    }
+    } */
 }

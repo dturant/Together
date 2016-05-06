@@ -4,84 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#dfdfdf"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.dagna.together.EventActivity"
     tools:showIn="@layout/activity_event">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/event_nameTextView"
-        android:text="@string/event_name"/>
+        android:background="@color/colorPrimary"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_categoryTextView"
-        android:text="@string/event_category"
-        android:layout_below="@id/event_nameTextView"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_descriptionTextView"
-        android:text="@string/event_description"
-        android:layout_below="@id/event_categoryTextView"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_countryTextView"
-        android:text="@string/event_country"
-        android:layout_below="@id/event_descriptionTextView"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_cityTextView"
-        android:text="@string/event_city"
-        android:layout_below="@id/event_countryTextView"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_streetTextView"
-        android:text="@string/event_street"
-        android:layout_below="@id/event_cityTextView"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_userTextView"
-        android:text="@string/event_user"
-        android:layout_below="@id/event_streetTextView"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="joinEvent"
-        android:id="@+id/event_addUserButton"
-        android:text="@string/take_part_in_event_button"
-        android:layout_below="@id/event_userTextView"
-        android:visibility="visible"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_userSigned"
-        android:text="@string/event_userSigned"
-        android:layout_below="@id/event_userTextView"
-        android:visibility="gone"
-        android:enabled="false"/>
-
-    <ListView android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/eventListView"
-        android:layout_below="@id/event_addUserButton">
-    </ListView>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tabs"
+        />
 
 </RelativeLayout>
