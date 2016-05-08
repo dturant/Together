@@ -39,13 +39,6 @@ public class MapActivity extends Activity {
         setContentView(R.layout.activity_map);
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
-//        Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG)
-//                .title("Hamburg"));
-//        Marker kiel = map.addMarker(new MarkerOptions()
-//                .position(KIEL)
-//                .title("Kiel")
-//                .snippet("Kiel is cool")
-//                );
 
         String address = getIntent().getExtras().getString("address");
         final String name = getIntent().getExtras().getString("name");

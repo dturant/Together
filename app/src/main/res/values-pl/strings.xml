@@ -38,7 +38,11 @@
     <string name="user_description">Opis</string>
     <string name="user_description_hint">Napisz coś o sobie :)</string>
     <string name="take_part_in_event_button">Weź udział!</string>
+    <string name="offline_mode">Tryb offline</string>
     <string name="signed">Zapisałeś się do tego wydarzenia!</string>
+    <string name="notification_title">Sprawdź najnowsze wydarzenia z Twojego miasta!</string>
+    <string name="notification_text">Dołącz do istniejących eventów, albo stwórz nowe!</string>
+    <string name="title_activity_users_profile">Profil użytkownika</string>
     <string name="rate">Ocena:</string>
     <string name="gps_off">GPS wyłączony</string>
     <string name="radio_location">Użyj mojej obecnej lokalizacji</string>
@@ -55,8 +59,14 @@
     <string name="dont_have_account">Nie masz jeszcze konta? Zarejestruj się! </string>
     <string name="or">lub </string>
     <string name="show_on_map">Pokaż na mapie </string>
-
-
-
-
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_test">test</string>
+    <string name="gps_message">Musisz mieć włączoną lokalizację żeby kontynuować</string>
+    <string name="gps_error_title">Brak sygnału GPS</string>
+    <string name="settings">Utawienia</string>
+    <string name="cancel">Anuluj</string>
+    <string name="net_message">Musisz mieć dostęp do internetu żeby kontynuować</string>
+    <string name="net_error_title">Brak Internetu</string>
+    <string name="information">informacje</string>
+    <string name="participants">uczestnicy</string>
 </resources>

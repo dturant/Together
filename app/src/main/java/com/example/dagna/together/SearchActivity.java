@@ -123,7 +123,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     {
         super.onStart();
         mGoogleApiClient.connect();
-        //Log.e("Connected?", String.valueOf(mGoogleApiClient.isConnected()));
     }
 
     @Override
@@ -143,7 +142,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         radioCity.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioCity, int checkedId) {
-                Log.e("O KURWAAA", "" + checkedId);
                 if (checkedId == R.id.radioLocation) {
                     City.setEnabled(false);
                     City.setInputType(InputType.TYPE_NULL);
@@ -215,7 +213,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         {
             if (radioCity.getCheckedRadioButtonId() == R.id.radioLocation && GeneralHelpers.isLocationAvailable((LocationManager) getSystemService(LOCATION_SERVICE)))
             {
-                Log.e("O KURWA LOKACJA", "JA JEBIE");
                 Location loc = getLastKnownLocation();
                 Toast.makeText(this, String.valueOf(loc.getLatitude()) + "/" + String.valueOf(loc.getLongitude()),
                         Toast.LENGTH_LONG).show();
@@ -223,16 +220,11 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                 getCityName(loc, new OnGeocoderFinishedListener() {
                     @Override
                     public void onFinished(List<Address> results) {
-                        Log.e("O KURAAAAAA", "O JA JEBIE");
                         if (results.get(0) != null) {
                             String city = results.get(0).getLocality().toString();
                             searchEvents(city);
                         } else {
-                            //maybe do sth?
-                            Log.e("NIE MA CHUJA", "DSADSA");
                         }
-
-//                        displayCity(results);
                     }
                 });
             }
@@ -344,7 +336,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
     public void getCityName(final Location location, final OnGeocoderFinishedListener listener) {
         final Context con = getApplicationContext();
-        Log.e("PIES TO JEBAL", "LALA");
         new AsyncTask<Void, Integer, List<Address>>() {
             @Override
             protected List<Address> doInBackground(Void... arg0) {
@@ -353,8 +344,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                 try {
                     results = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 } catch (IOException e) {
-                    // nothing
-                    Log.e("PRZEJEBANE",e.toString());
                 }
                 return results;
             }
@@ -393,116 +382,4 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
-
-
-    //Helpers
-//    public boolean isNetworkAvailable() {
-//        ConnectivityManager connectivityManager
-//                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-//        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-//    }
-//
-//    public boolean isLocationAvailable()
-//    {
-//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-//
-//        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-//            return true;
-//        }else{
-//            return false;
-//        }
-//    }
-//
-//    public void displayToast(int val)
-//    {
-//        switch(val)
-//        {
-//            case 1:
-//                Toast.makeText(this, R.string.offline_mode,
-//                        Toast.LENGTH_LONG).show();
-//                break;
-//            case 2:
-//                Toast.makeText(this, R.string.gps_off,
-//                        Toast.LENGTH_LONG).show();
-//                break;
-//            case 3:
-//                String text = getResources().getString(R.string.offline_mode) + "/" + getResources().getString(R.string.gps_off);;
-//                Toast.makeText(this, text,
-//                        Toast.LENGTH_LONG).show();
-//                break;
-//            default: break;
-//
-//        }
-//    }
-//
-//    public void createNetErrorDialog() {
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
-//                .setTitle("Unable to connect")
-//                .setCancelable(false)
-//                .setPositiveButton("Settings",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-//                                startActivity(i);
-//                            }
-//                        }
-//                )
-//                .setNegativeButton("Cancel",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                displayToast(1);
-//                            }
-//                        }
-//                );
-//        AlertDialog alert = builder.create();
-//        alert.show();
-//    }
-//
-//    public void createGpsErrorDialog() {
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setMessage("You need a location enabled to perform this action. Please turn on location in Settings.")
-//                .setTitle("Unable to localize")
-//                .setCancelable(false)
-//                .setPositiveButton("Settings",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                                startActivity(i);
-//                            }
-//                        }
-//                )
-//                .setNegativeButton("Cancel",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                displayToast(2);
-//                            }
-//                        }
-//                );
-//        AlertDialog alert = builder.create();
-//        alert.show();
-//    }
-
-
-    /*private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-
-                String result = bundle.getString(DatabaseIntentService.RESULT);
-                if(result == DatabaseIntentService.RESULT_FAIL)
-                {
-                    //fail
-                }
-                else {
-                    goToResult();
-                }
-            }
-        }
-    };
-    */
 }

@@ -60,10 +60,10 @@ public class GeneralHelpers {
     public static void createNetErrorDialog(final Context context) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("You need a network connection to perform this action. Please turn on mobile network or Wi-Fi in Settings.")
-                .setTitle("Unable to connect")
+        builder.setMessage(R.string.net_message)
+                .setTitle(R.string.net_error_title)
                 .setCancelable(false)
-                .setPositiveButton("Settings",
+                .setPositiveButton(R.string.settings,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
@@ -71,7 +71,7 @@ public class GeneralHelpers {
                             }
                         }
                 )
-                .setNegativeButton("Cancel",
+                .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 displayToast(context, 1);
@@ -85,10 +85,10 @@ public class GeneralHelpers {
     public static void createGpsErrorDialog(final Context context) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("You need a location enabled to perform this action. Please turn on location in Settings.")
-                .setTitle("Unable to localize")
+        builder.setMessage(R.string.gps_message)
+                .setTitle(R.string.gps_error_title)
                 .setCancelable(false)
-                .setPositiveButton("Settings",
+                .setPositiveButton(R.string.settings,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -96,7 +96,7 @@ public class GeneralHelpers {
                             }
                         }
                 )
-                .setNegativeButton("Cancel",
+                .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 displayToast(context, 2);

@@ -82,26 +82,21 @@ public class InformationTabFragment extends Fragment {
             db_country=JO.getString("country");
 
             //getSupportActionBar().setTitle(db_name);
-
-            Name.append(db_name);
-            Category.append(db_category);
-            Description.append(db_description);
-            City.append(db_city);
-            Country.append(db_country);
-            Street.append(db_street_name);
-            User.append(db_user);
+            Name.append(" " + db_name);
+            Category.append(" " + db_category);
+            Description.append(" " + db_description);
+            City.append(" " + db_city);
+            Country.append(" " + db_country);
+            Street.append(" " + db_street_name);
+            User.append(" " + db_user);
 
             Join.setVisibility(View.VISIBLE);
-           // UserSigned.setVisibility(View.GONE);
-            Log.d("spierdolone", "GOWNO");
 
             Log.d("userslist", Integer.toString(EventActivity.usersList.size()));
             for(int i = 0; i < EventActivity.usersList.size(); i++){
                 Log.d("ids", EventActivity.usersList.get(i).getId() + " " + user_id);
                 if(EventActivity.usersList.get(i).getId().equals(user_id)){
                     Join.setVisibility(View.INVISIBLE);
-                    //UserSigned.setVisibility(View.VISIBLE);
-                    //UserSigned.setEnabled(false);
                 }
             }
 
@@ -113,8 +108,6 @@ public class InformationTabFragment extends Fragment {
     public static void changeButton(boolean isSigned){
         if(isSigned){
             Join.setVisibility(View.INVISIBLE);
-            //UserSigned.setVisibility(View.VISIBLE);
-            //UserSigned.setEnabled(false);
         }
     }
 

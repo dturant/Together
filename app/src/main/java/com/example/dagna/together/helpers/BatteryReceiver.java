@@ -32,18 +32,17 @@ public class BatteryReceiver extends BroadcastReceiver{
         mBuilder.setAutoCancel(true);
 
         Intent resultIntent = new Intent(context, TimelineActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(TimelineActivity.class);
-
-// Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(resultPendingIntent);
-
-        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-// notificationID allows you to update the notification later on.
-        mNotificationManager.notify(111, mBuilder.build());
-
+        TaskStackBuilder stackBuilder = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            stackBuilder = TaskStackBuilder.create(context);
+            stackBuilder.addParentStack(TimelineActivity.class);
+            // Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(resultPendingIntent);
+            NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            // notificationID allows you to update the notification later on.
+            mNotificationManager.notify(111, mBuilder.build());
+        }
     }
 }

@@ -99,9 +99,9 @@ public class TimelineActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         if (id == R.id.logout) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -232,10 +232,6 @@ public class TimelineActivity extends AppCompatActivity {
 
     private void getEventsFromLocalDB(String city)
     {
-//            DatabaseHelper db;
-//            db = new DatabaseHelper(getApplicationContext());
-//            db.setupDatabase();
-
             Intent intent = new Intent(this, DatabaseIntentService.class);
             intent.putExtra(DatabaseIntentService.ACTION, DatabaseIntentService.GET_EVENTS_FROM_USER_CITY);
             intent.putExtra(DatabaseIntentService.CITY, city);
@@ -266,9 +262,6 @@ public class TimelineActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
                 }
                 else{
-                    //Intent intent = new Intent(getApplicationContext(), DisplayListView.class);
-                    //intent.putExtra("json_data", DisplayEvents.json_string);
-                    //startActivity(intent);
 
                     json_string=DisplayEvents.json_string;
                     // json_string=getIntent().getExtras().getString("json_data");
@@ -342,13 +335,6 @@ public class TimelineActivity extends AppCompatActivity {
         listView = (ListView)findViewById(R.id.timelineListView);
         eventAdapter=new EventAdapter(this, R.layout.content_event_list);
         listView.setAdapter(eventAdapter);
-
-//        String[] fromColumns = {DatabaseHelper.KEY_EVENT_NAME, DatabaseHelper.KEY_DSCRP};
-//        int[] toViews = {R.id.title, R.id.description};
-//        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.content_event_list, cursor, fromColumns, toViews, 0);
-//        ListView listView = (ListView) findViewById( R.id.timelineListView );
-//        listView.setAdapter(adapter);
-
         String name, description, city,id,category_id;
 
         while (cursor.moveToNext()) {
@@ -358,19 +344,6 @@ public class TimelineActivity extends AppCompatActivity {
             city=cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_CITY));
             category_id=cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_CATEGORY_ID));
             Integer image=cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_IMAGE));
-//            if(category_id.equals("2"))
-//            {
-//                image=R.drawable.blue_stone;
-//            }
-//            else if(category_id.equals("3")){
-//                image=R.drawable.green_stone;
-//            }
-//            else if(category_id.equals("4")){
-//                image=R.drawable.yellow_stone;
-//            }
-//            else{
-//                image=R.drawable.red_stone;
-//            }
             Events events=new Events(id,name, description,city,image);
             eventAdapter.add(events);
             eventsList.add(events);

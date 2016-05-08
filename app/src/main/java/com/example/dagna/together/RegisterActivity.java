@@ -35,8 +35,6 @@ public class RegisterActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         setContentView(R.layout.activity_register);
-       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // setSupportActionBar(toolbar);
 
         Login=(EditText) findViewById(R.id.register_login);
         Password=(EditText) findViewById(R.id.register_password);

@@ -55,9 +55,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_results);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //wziac cursor z bazki
-      //  Cursor c = DatabaseIntentService.getCursor();
-      //  updateList(c);
 
         eventsList.clear();
         listView = (ListView)findViewById(R.id.resultsListView);
@@ -145,9 +142,9 @@ public class SearchResultsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         if (id == R.id.logout) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -194,29 +191,6 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-  /*  private void updateList(Cursor cursor)
-    {
-        String[] fromColumns = {DatabaseHelper.KEY_EVENT_NAME, DatabaseHelper.KEY_DSCRP};
-        int[] toViews = {R.id.title, R.id.description};
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.content_event_list, cursor, fromColumns, toViews, 0);
-
-        ListView listView = (ListView) findViewById( R.id.resultsListView );
-        listView.setAdapter(adapter);
-
-        listView.setClickable(true);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parentView, View childView,
-                                    int position, long id) {
-                displayEvent(position);
-
-            }
-
-            public void onNothingSelected(AdapterView parentView) {
-
-            }
-        });
-    } */
 
     private void displayEvent(final String eventId)
     {

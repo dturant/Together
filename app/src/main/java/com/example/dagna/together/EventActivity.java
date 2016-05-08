@@ -71,7 +71,6 @@ public class EventActivity extends AppCompatActivity {
         return usersList;
     }
 
-    //trzymac tu gdzies id, ma przyjsc w intencie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,13 +85,10 @@ public class EventActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-
-        //Get neede values to display events
         json_string_event=getIntent().getExtras().getString("json_data");
         event_id=getIntent().getExtras().getString("event_id");
         context = this;
         getUsers();
-        //done
     }
 
     @Override
@@ -104,15 +100,12 @@ public class EventActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         if (id == R.id.logout) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -167,18 +160,13 @@ public class EventActivity extends AppCompatActivity {
 
             @Override
             public void processFinish(String output) {
-                Log.d("USERS ID OUTPUT", output);
                 if (GetUserByLogin.json_string.length() < 30) {
-                    Log.d("fail!!!!", "fail :(");
 
                 } else {
-                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
                     json_string = GetUserByLogin.json_string;
 
                     Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                     intent.putExtra("json_data", json_string);
-                    //intent.putExtra("user_id", userId);
-                    //Log.d("event_id from timeline", userId);
                     startActivity(intent);
 
 
@@ -214,10 +202,8 @@ public class EventActivity extends AppCompatActivity {
                             id=JO.getString("id");
                             login=JO.getString("login");
 
-                            //Events events=new Events(id,name, description,city);
-                            //eventAdapter.add(events);
+
                             Users users = new Users(id, login);
-//                            userAdapter.add(users);
                             usersList.add(users);
                             idList.add(id);
                             count++;
@@ -239,6 +225,7 @@ public class EventActivity extends AppCompatActivity {
             }
         }).execute(event_id);
     }
+
     private void getUsers(){
        usersList.clear();
         final Context context = this;
@@ -266,10 +253,7 @@ public class EventActivity extends AppCompatActivity {
                             id=JO.getString("id");
                            login=JO.getString("login");
 
-                            //Events events=new Events(id,name, description,city);
-                            //eventAdapter.add(events);
                             Users users = new Users(id, login);
-//                            userAdapter.add(users);
                             usersList.add(users);
                             idList.add(id);
                             count++;
@@ -282,8 +266,8 @@ public class EventActivity extends AppCompatActivity {
                         final TabLayout.Tab information = tabLayout.newTab();
                         final TabLayout.Tab participants = tabLayout.newTab();
 
-                        information.setText("Information");
-                        participants.setText("Participants");
+                        information.setText(R.string.information);
+                        participants.setText(R.string.participants);
 
                         tabLayout.addTab(information, 0);
                         tabLayout.addTab(participants, 1);
@@ -294,8 +278,6 @@ public class EventActivity extends AppCompatActivity {
                         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
                         tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-
-                        //
 
 
                     } catch (JSONException e) {
@@ -322,16 +304,10 @@ public class EventActivity extends AppCompatActivity {
                     Log.d("OUTPUT", output);
                     if (output.equals("error")) {
                         Log.d("ERROR", "ERROR");
-                        //Error.setVisibility(View.VISIBLE);
-                        //Error.setText("This login is already taken. Try another one.");
 
                     } else {
-                        //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        //startActivity(intent);
-                        //getUsers();
                         InformationTabFragment.changeButton(true);
                         updateUsers();
-                       // ParticipantsTabFragment.updateList(true);
                         Toast.makeText(context, R.string.signed, Toast.LENGTH_LONG).show();
                     }
                 }

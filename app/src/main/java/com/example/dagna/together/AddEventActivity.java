@@ -74,9 +74,9 @@ public class AddEventActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         if (id == R.id.logout) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -122,13 +122,10 @@ public class AddEventActivity extends AppCompatActivity {
                     Log.d("fail!!!!", "fail :(");
 
                 } else {
-                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
                     json_string = GetUserByLogin.json_string;
 
                     Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                     intent.putExtra("json_data", json_string);
-                    //intent.putExtra("user_id", userId);
-                    //Log.d("event_id from timeline", userId);
                     startActivity(intent);
 
 
