@@ -379,6 +379,7 @@ public class TimelineActivity extends AppCompatActivity {
 
                 if (GetEventById.json_string.length() < 30) {
                     Log.d("fail!!!!", "fail :(");
+                    Log.d("fail", GetEventById.json_string);
 
                 } else {
                     //Log.d("data!!!!!!!", GetUserByLogin.json_string);

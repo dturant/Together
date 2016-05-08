@@ -43,6 +43,8 @@ public class MapActivity extends Activity {
         String address = getIntent().getExtras().getString("address");
         final String name = getIntent().getExtras().getString("name");
 
+        Log.d("address", address);
+
 
         getCoordinates(address, new OnGeocoderFinishedListener() {
             @Override
@@ -50,7 +52,7 @@ public class MapActivity extends Activity {
                 if (result != null) {
                     Marker city = map.addMarker(new MarkerOptions().position(result)
                             .title(name));
-
+                    Log.e("dsadsadsa", result.toString());
                     // Move the camera instantly to hamburg with a zoom of 15.
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 2));
 
@@ -83,6 +85,7 @@ public class MapActivity extends Activity {
                     // nothing
                     Log.e("PRZEJEBANE",e.toString());
                 }
+                Log.d("addresses", Integer.toString(addresses.size()));
                 if(addresses.size() > 0) {
                     result = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
                     return result;

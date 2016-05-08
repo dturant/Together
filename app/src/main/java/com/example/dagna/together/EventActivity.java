@@ -335,7 +335,7 @@ public class EventActivity extends AppCompatActivity {
             country=JO.getString("country");
 
             Intent intent = new Intent(this, MapActivity.class);
-            intent.putExtra("address", city+ ", " + street_name + " " + street_number);
+            intent.putExtra("address", country + " " +city+ ", " + street_name + " " + street_number);
             intent.putExtra("name", name);
             startActivity(intent);
         } catch (JSONException e) {

@@ -36,7 +36,7 @@ public class InformationTabFragment extends Fragment {
     public static Context context;
     public static String json_string;
     public static ConnectivityManager connMan;
-    String user_id;
+    String user_id, user_login;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class InformationTabFragment extends Fragment {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         user_id = preferences.getString("id", "");
+        user_login = preferences.getString("login", "");
 
         Name = (TextView)view.findViewById(R.id.event_nameTextView);
         Category = (TextView)view.findViewById(R.id.event_categoryTextView);
@@ -90,7 +91,13 @@ public class InformationTabFragment extends Fragment {
             Street.append(" " + db_street_name);
             User.append(" " + db_user);
 
-            Join.setVisibility(View.VISIBLE);
+            Log.d("user_login", user_login);
+            Log.d("user", db_user);
+            if(user_login.equals(db_user)){
+                Join.setVisibility(View.INVISIBLE);
+            }
+
+            //Join.setVisibility(View.VISIBLE);
 
             Log.d("userslist", Integer.toString(EventActivity.usersList.size()));
             for(int i = 0; i < EventActivity.usersList.size(); i++){

@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dagna.together.helpers.GeneralHelpers;
@@ -37,6 +38,7 @@ import java.util.List;
 public class AddEventActivity extends AppCompatActivity {
 
     EditText Name, Description, Country, City, Street;
+    TextView Error;
     Spinner Category;
     String json_string;
     JSONObject jsonObject;
@@ -55,6 +57,8 @@ public class AddEventActivity extends AppCompatActivity {
         Description = (EditText) findViewById(R.id.add_event_description);
         City = (EditText) findViewById(R.id.add_event_city);
         Street = (EditText) findViewById(R.id.add_event_street);
+
+        Error=(TextView) findViewById(R.id.add_event_error);
 
         this.getCategories();
     }
@@ -143,7 +147,7 @@ public class AddEventActivity extends AppCompatActivity {
             name = Name.getText().toString();
             city = City.getText().toString();
             country = Country.getText().toString();
-            street = Country.getText().toString();
+            street = Street.getText().toString();
             description = Description.getText().toString();
             category = Category.getSelectedItem().toString();
             user=preferences.getString("login", "");
@@ -158,8 +162,8 @@ public class AddEventActivity extends AppCompatActivity {
                     Log.d("OUTPUT", output);
                     if (output.equals("error")) {
                         Log.d("ERROR", "ERROR");
-                        //Error.setVisibility(View.VISIBLE);
-                        //Error.setText("This login is already taken. Try another one.");
+                        Error.setVisibility(View.VISIBLE);
+                        Error.setText(R.string.fill_all_fields);
 
                     } else {
                         Intent intent = new Intent(getApplicationContext(), TimelineActivity.class);

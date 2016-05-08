@@ -69,4 +69,6 @@
     <string name="net_error_title">Brak Internetu</string>
     <string name="information">informacje</string>
     <string name="participants">uczestnicy</string>
+    <string name="fill_all_fields">Wypełnij wszystkie pola!</string>
+
 </resources>

@@ -69,5 +69,7 @@
     <string name="net_error_title">Unable to connect</string>
     <string name="information">information</string>
     <string name="participants">participants</string>
+    <string name="fill_all_fields">Fill all the fields!</string>
+
 
 </resources>
