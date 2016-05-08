@@ -50,7 +50,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/users_profile_note"
+            android:id="@+id/profile_note"
             android:textColor="#fff"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"

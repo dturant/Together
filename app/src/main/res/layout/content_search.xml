@@ -80,7 +80,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:prompt="@string/category_prompt"
-        android:layout_below="@id/search_event_categoryTextView"/>
+        android:layout_below="@id/search_event_categoryTextView"
+        android:layout_marginBottom="16dp"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -126,7 +127,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/search_user_login"
-        android:layout_below="@+id/search_user_loginTextView" />
+        android:layout_below="@+id/search_user_loginTextView"
+        android:layout_marginBottom="16dp"/>
 
     <Button
         android:layout_width="wrap_content"

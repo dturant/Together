@@ -63,11 +63,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView Login = (TextView) findViewById(R.id.profile_login);
         TextView City = (TextView) findViewById(R.id.profile_city);
-        TextView Rate = (TextView) findViewById(R.id.profile_rate);
+        TextView Rate = (TextView) findViewById(R.id.profile_note);
 
         Login.append(loginFromPref);
-        City.append(city);
-        Rate.append(grade);
+        City.append(" " +city);
+        Rate.setText(grade);
     }
 
     private static int logout_menu_id;

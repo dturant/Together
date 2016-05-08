@@ -68,7 +68,7 @@ public class UsersProfileActivity extends AppCompatActivity {
 
             getSupportActionBar().setTitle(db_login + "'s profile");
 
-            City.append(db_city);
+            City.append(" " + db_city);
             Note.setText(db_note);
             Login.setText(db_login);
             note = Integer.parseInt(Note.getText().toString());
