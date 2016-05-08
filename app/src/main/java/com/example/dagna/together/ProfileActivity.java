@@ -23,7 +23,14 @@ import android.widget.Toast;
 import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.services.DatabaseService;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ProfileActivity extends AppCompatActivity {
+    String city, grade;
+    JSONObject jsonObject;
+    JSONArray jsonArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +47,27 @@ public class ProfileActivity extends AppCompatActivity {
         //TODO profile ze stringow
         getSupportActionBar().setTitle("My profile");
 
-        TextView login = (TextView) findViewById(R.id.profile_login);
-        TextView city = (TextView) findViewById(R.id.profile_city);
-        TextView rate = (TextView) findViewById(R.id.profile_rate);
+        String data = getIntent().getExtras().getString("json_data");
 
-        login.append(loginFromPref);
+        try {
+            jsonObject = new JSONObject(data);
+            jsonArray = jsonObject.getJSONArray("server_response");
+            JSONObject JO = jsonArray.getJSONObject(0);
+
+            city=JO.getString("city");
+            grade=JO.getString("grade");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        TextView Login = (TextView) findViewById(R.id.profile_login);
+        TextView City = (TextView) findViewById(R.id.profile_city);
+        TextView Rate = (TextView) findViewById(R.id.profile_rate);
+
+        Login.append(loginFromPref);
+        City.append(city);
+        Rate.append(grade);
     }
 
     private static int logout_menu_id;

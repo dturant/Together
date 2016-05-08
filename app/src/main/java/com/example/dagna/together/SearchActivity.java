@@ -215,6 +215,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         {
             if (radioCity.getCheckedRadioButtonId() == R.id.radioLocation && GeneralHelpers.isLocationAvailable((LocationManager) getSystemService(LOCATION_SERVICE)))
             {
+                Log.e("O KURWA LOKACJA", "JA JEBIE");
                 Location loc = getLastKnownLocation();
                 Toast.makeText(this, String.valueOf(loc.getLatitude()) + "/" + String.valueOf(loc.getLongitude()),
                         Toast.LENGTH_LONG).show();
@@ -222,11 +223,13 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                 getCityName(loc, new OnGeocoderFinishedListener() {
                     @Override
                     public void onFinished(List<Address> results) {
+                        Log.e("O KURAAAAAA", "O JA JEBIE");
                         if (results.get(0) != null) {
                             String city = results.get(0).getLocality().toString();
                             searchEvents(city);
                         } else {
                             //maybe do sth?
+                            Log.e("NIE MA CHUJA", "DSADSA");
                         }
 
 //                        displayCity(results);
@@ -341,6 +344,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
     public void getCityName(final Location location, final OnGeocoderFinishedListener listener) {
         final Context con = getApplicationContext();
+        Log.e("PIES TO JEBAL", "LALA");
         new AsyncTask<Void, Integer, List<Address>>() {
             @Override
             protected List<Address> doInBackground(Void... arg0) {
@@ -350,6 +354,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                     results = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 } catch (IOException e) {
                     // nothing
+                    Log.e("PRZEJEBANE",e.toString());
                 }
                 return results;
             }

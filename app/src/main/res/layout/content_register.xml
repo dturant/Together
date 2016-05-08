@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.dagna.together.RegisterActivity"
+    tools:showIn="@layout/activity_register">
 
     <ScrollView
         android:id="@+id/scroll_view"
@@ -25,16 +30,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="100dp"
+                android:textSize="60dp"
                 android:gravity="center"
-
-                android:fontFamily="sans-serif-condensed"
+                android:fontFamily="sans-serif"
                 android:paddingTop="80dp"
                 android:paddingBottom="20dp"
-
+                android:textColor="#323232"
                 android:text="Together"
-
                 android:id="@+id/together"/>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -43,14 +47,15 @@
                 android:text="@string/login"
                 android:layout_below="@id/main_image"
                 android:paddingTop="15dp"
-                android:paddingLeft="15dp"/>
+                android:paddingLeft="16dp"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/register_login"
                 android:layout_below="@id/register_loginTextView"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:inputType="text"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,15 +63,16 @@
                 android:id="@+id/register_passwordTextView"
                 android:layout_below="@id/register_login"
                 android:text="@string/password"
-                android:paddingLeft="15dp"/>
+                android:paddingLeft="16dp"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/register_password"
                 android:layout_below="@id/register_passwordTextView"
                 android:inputType = "textPassword"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -74,7 +80,7 @@
                 android:id="@+id/register_passwordConfirmationTextView"
                 android:layout_below="@id/register_password"
                 android:text="@string/password_confirmation"
-                android:paddingLeft="15dp"
+                android:paddingLeft="16dp"
                 />
             <EditText
                 android:layout_width="match_parent"
@@ -82,8 +88,9 @@
                 android:id="@+id/register_passwordConfirmation"
                 android:layout_below="@id/register_passwordConfirmationTextView"
                 android:inputType = "textPassword"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -91,7 +98,7 @@
                 android:id="@+id/register_cityTextView"
                 android:layout_below="@id/register_passwordConfirmation"
                 android:text="@string/event_city"
-                android:paddingLeft="15dp"
+                android:paddingLeft="16dp"
                 />
             <EditText
                 android:inputType="textCapSentences"
@@ -99,8 +106,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/register_city"
                 android:layout_below="@id/register_cityTextView"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                />
 
             <Button
                 android:layout_width="wrap_content"
@@ -110,7 +118,8 @@
                 android:id="@+id/register_registerButton"
                 android:layout_below="@id/register_city"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp" />
+                android:layout_marginRight="16dp"
+                android:textColor="#fff"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -118,8 +127,8 @@
                 android:id="@+id/register_error"
                 android:layout_below="@id/register_city"
                 android:textColor="#ff0000"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="abcsddddddddddddddddddddddddddddddddddddddddddddddd"
                 android:layout_toLeftOf="@+id/register_registerButton"
                 android:layout_marginTop="12dp"

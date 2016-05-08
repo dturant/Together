@@ -5,13 +5,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.dagna.together.ProfileActivity;
 import com.example.dagna.together.R;
+import com.example.dagna.together.onlineDatabase.GetUserByLogin;
 
 /**
  * Created by gapsa on 25.04.2016.
@@ -101,5 +106,7 @@ public class GeneralHelpers {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+
 
 }

@@ -70,7 +70,7 @@
             android:textSize="20dp"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
-            android:paddingLeft="20dp"
+            android:paddingLeft="16dp"
             android:layout_below="@id/users_profile_rate"/>
 
         <TextView
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/users_profile_city"
             android:text="@string/users_profile_city"
-            android:paddingLeft="20dp"
+            android:paddingLeft="16dp"
             android:layout_below="@id/personal_information"/>
 
     </RelativeLayout>

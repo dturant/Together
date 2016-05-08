@@ -58,7 +58,8 @@
         android:text="@string/edit_button"
         android:onClick="edit"
         android:id="@+id/edit_editButton"
-        android:layout_below="@id/edit_user_description"/>
+        android:layout_below="@id/edit_user_description"
+        android:textColor="#fff"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -27,11 +27,11 @@
     <string name="event_add_button">Add!</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
-    <string name="login_button">Login!</string>
+    <string name="login_button">Login</string>
     <string name="profile_city">From</string>
     <string name="note">User score</string>
     <string name="password_confirmation">Password confirmation</string>
-    <string name="register_button">Register!</string>
+    <string name="register_button">Register</string>
     <string name="search_button">Search!</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
     <string name="edit_button">Edit!</string>
@@ -57,7 +57,10 @@
     <string name="users_profile_note">Rating: </string>
     <string name="have_account">Already have an account? Login! </string>
     <string name="dont_have_account">No account yet? Register! </string>
-
+    <string name="or">or </string>
+    <string name="show_on_map">Show on map </string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_test">test</string>
 
 
 </resources>

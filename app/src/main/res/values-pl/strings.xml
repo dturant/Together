@@ -27,11 +27,11 @@
     <string name="event_add_button">Dodaj!</string>
     <string name="login">Login</string>
     <string name="password">Hasło</string>
-    <string name="login_button">Zaloguj!</string>
+    <string name="login_button">Zaloguj</string>
     <string name="profile_city">Z</string>
     <string name="note">Wynik</string>
     <string name="password_confirmation">Potwierdzenie hasła</string>
-    <string name="register_button">Rejestracja!</string>
+    <string name="register_button">Rejestracja</string>
     <string name="search_button">Szukaj!</string>
     <string name="title_activity_edit_profile">Edytuj Profil</string>
     <string name="edit_button">Edytuj!</string>
@@ -39,7 +39,7 @@
     <string name="user_description_hint">Napisz coś o sobie :)</string>
     <string name="take_part_in_event_button">Weź udział!</string>
     <string name="signed">Zapisałeś się do tego wydarzenia!</string>
-    <string name="rate">oceń</string>
+    <string name="rate">Ocena:</string>
     <string name="gps_off">GPS wyłączony</string>
     <string name="radio_location">Użyj mojej obecnej lokalizacji</string>
     <string name="radio_text">Wpisz miasto</string>
@@ -53,6 +53,9 @@
     <string name="users_profile_note">Ocena: </string>
     <string name="have_account">Masz już konto? Zaloguj się! </string>
     <string name="dont_have_account">Nie masz jeszcze konta? Zarejestruj się! </string>
+    <string name="or">lub </string>
+    <string name="show_on_map">Pokaż na mapie </string>
+
 
 
 

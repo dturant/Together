@@ -32,6 +32,7 @@ import com.example.dagna.together.helpers.Events;
 import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.onlineDatabase.DisplayEvents;
 import com.example.dagna.together.onlineDatabase.GetEventById;
+import com.example.dagna.together.onlineDatabase.GetUserByLogin;
 import com.example.dagna.together.services.DatabaseIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -114,8 +115,7 @@ public class TimelineActivity extends AppCompatActivity {
         }
 
         if (id == R.id.profile) {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
+            getUsersData();
             return true;
         }
 
@@ -146,6 +146,34 @@ public class TimelineActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getUsersData(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String loginFromPref = preferences.getString("login", "");
+        final String login = loginFromPref;
+        GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                Log.d("USERS ID OUTPUT", output);
+                if (GetUserByLogin.json_string.length() < 30) {
+                    Log.d("fail!!!!", "fail :(");
+
+                } else {
+                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
+                    json_string = GetUserByLogin.json_string;
+
+                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        intent.putExtra("json_data", json_string);
+                        //intent.putExtra("user_id", userId);
+                        //Log.d("event_id from timeline", userId);
+                        startActivity(intent);
+
+
+                }
+            }
+        }).execute(login);
     }
 
     @Override

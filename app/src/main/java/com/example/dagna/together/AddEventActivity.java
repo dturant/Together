@@ -25,6 +25,7 @@ import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.onlineDatabase.AddEvent;
 import com.example.dagna.together.onlineDatabase.AddUser;
 import com.example.dagna.together.onlineDatabase.GetCategories;
+import com.example.dagna.together.onlineDatabase.GetUserByLogin;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,8 +90,7 @@ public class AddEventActivity extends AppCompatActivity {
         }
 
         if (id == R.id.profile) {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
+            getUsersData();
             return true;
         }
         if (id == R.id.search) {
@@ -107,6 +107,34 @@ public class AddEventActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getUsersData(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String loginFromPref = preferences.getString("login", "");
+        final String login = loginFromPref;
+        GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
+
+            @Override
+            public void processFinish(String output) {
+                Log.d("USERS ID OUTPUT", output);
+                if (GetUserByLogin.json_string.length() < 30) {
+                    Log.d("fail!!!!", "fail :(");
+
+                } else {
+                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
+                    json_string = GetUserByLogin.json_string;
+
+                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    intent.putExtra("json_data", json_string);
+                    //intent.putExtra("user_id", userId);
+                    //Log.d("event_id from timeline", userId);
+                    startActivity(intent);
+
+
+                }
+            }
+        }).execute(login);
     }
 
     public void addEvent(View view)

@@ -92,7 +92,7 @@ public class InformationTabFragment extends Fragment {
             User.append(db_user);
 
             Join.setVisibility(View.VISIBLE);
-            UserSigned.setVisibility(View.GONE);
+           // UserSigned.setVisibility(View.GONE);
             Log.d("spierdolone", "GOWNO");
 
             Log.d("userslist", Integer.toString(EventActivity.usersList.size()));
@@ -100,8 +100,8 @@ public class InformationTabFragment extends Fragment {
                 Log.d("ids", EventActivity.usersList.get(i).getId() + " " + user_id);
                 if(EventActivity.usersList.get(i).getId().equals(user_id)){
                     Join.setVisibility(View.INVISIBLE);
-                    UserSigned.setVisibility(View.VISIBLE);
-                    UserSigned.setEnabled(false);
+                    //UserSigned.setVisibility(View.VISIBLE);
+                    //UserSigned.setEnabled(false);
                 }
             }
 
@@ -113,8 +113,8 @@ public class InformationTabFragment extends Fragment {
     public static void changeButton(boolean isSigned){
         if(isSigned){
             Join.setVisibility(View.INVISIBLE);
-            UserSigned.setVisibility(View.VISIBLE);
-            UserSigned.setEnabled(false);
+            //UserSigned.setVisibility(View.VISIBLE);
+            //UserSigned.setEnabled(false);
         }
     }
 
