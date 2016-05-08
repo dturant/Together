@@ -32,6 +32,7 @@ import com.example.dagna.together.helpers.Events;
 import com.example.dagna.together.helpers.GeneralHelpers;
 import com.example.dagna.together.onlineDatabase.DisplayEvents;
 import com.example.dagna.together.onlineDatabase.GetEventById;
+import com.example.dagna.together.onlineDatabase.GetSignedEvents;
 import com.example.dagna.together.onlineDatabase.GetUserByLogin;
 import com.example.dagna.together.services.DatabaseIntentService;
 import com.google.android.gms.common.ConnectionResult;
@@ -201,7 +202,8 @@ public class TimelineActivity extends AppCompatActivity {
         {
             if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
             {
-                getEventsFromOnlineDB("Dornbirn");
+                String user_id = preferences.getString("id", "");
+                getEventsFromOnlineDB(user_id);
             }
             else
             {
@@ -245,7 +247,7 @@ public class TimelineActivity extends AppCompatActivity {
         startService(intent);
     }
 
-    private void getEventsFromOnlineDB(String city)
+    private void getEventsFromOnlineDB(String user_id)
     {
         eventsList.clear();
         listView = (ListView)findViewById(R.id.timelineListView);
@@ -253,17 +255,17 @@ public class TimelineActivity extends AppCompatActivity {
         listView.setAdapter(eventAdapter);
         final Context context = this;
 
-        DisplayEvents displayEvents = (DisplayEvents) new DisplayEvents(new DisplayEvents.AsyncResponse() {
+        GetSignedEvents signedEvents = (GetSignedEvents) new GetSignedEvents(new GetSignedEvents.AsyncResponse() {
 
             @Override
             public void processFinish(String output) {
                 Log.d("output",output);
-                if(DisplayEvents.json_string==null){
+                if(GetSignedEvents.json_string==null){
                     Toast.makeText(getApplicationContext(), "first get json", Toast.LENGTH_LONG).show();
                 }
                 else{
 
-                    json_string=DisplayEvents.json_string;
+                    json_string=GetSignedEvents.json_string;
                     // json_string=getIntent().getExtras().getString("json_data");
                     try {
                         jsonObject=new JSONObject(json_string);
@@ -326,7 +328,7 @@ public class TimelineActivity extends AppCompatActivity {
                     }
                 }
             }
-        }).execute();
+        }).execute(user_id);
     }
 
     private void updateList(Cursor cursor)
