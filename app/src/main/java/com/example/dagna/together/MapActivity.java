@@ -52,15 +52,12 @@ public class MapActivity extends Activity {
                 if (result != null) {
                     Marker city = map.addMarker(new MarkerOptions().position(result)
                             .title(name));
-                    Log.e("dsadsadsa", result.toString());
                     // Move the camera instantly to hamburg with a zoom of 15.
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 2));
 
                     // Zoom in, animating the camera.
                     map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
                 } else {
-                    //maybe do sth?
-                    Log.e("NIE MA CHUJA", "DSADSA");
                 }
             }
         });
@@ -72,7 +69,6 @@ public class MapActivity extends Activity {
 
     public void getCoordinates(final String address, final OnGeocoderFinishedListener listener) {
         final Context con = getApplicationContext();
-        Log.e("PIES TO JEBAL", "LALA");
         new AsyncTask<Void, Integer, LatLng>() {
             @Override
             protected LatLng doInBackground(Void... arg0) {
@@ -82,8 +78,6 @@ public class MapActivity extends Activity {
                 try {
                     addresses = coder.getFromLocationName(address, 1);
                 } catch (IOException e) {
-                    // nothing
-                    Log.e("PRZEJEBANE",e.toString());
                 }
                 Log.d("addresses", Integer.toString(addresses.size()));
                 if(addresses.size() > 0) {
