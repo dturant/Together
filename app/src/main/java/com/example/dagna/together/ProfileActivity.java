@@ -130,19 +130,19 @@ public class ProfileActivity extends AppCompatActivity {
                 GeneralHelpers.createNetErrorDialog(this);
             }
         }
-        if(id == R.id.edit)
-        {
-            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
-            {
-                Intent intent = new Intent(this, EditProfileActivity.class);
-                startActivity(intent);
-                return true;
-            }
-            else
-            {
-                GeneralHelpers.createNetErrorDialog(this);
-            }
-        }
+//        if(id == R.id.edit)
+//        {
+//            if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+//            {
+//                Intent intent = new Intent(this, EditProfileActivity.class);
+//                startActivity(intent);
+//                return true;
+//            }
+//            else
+//            {
+//                GeneralHelpers.createNetErrorDialog(this);
+//            }
+//        }
 
         return super.onOptionsItemSelected(item);
     }

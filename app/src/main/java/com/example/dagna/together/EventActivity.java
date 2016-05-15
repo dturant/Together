@@ -153,26 +153,34 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void getUsersData(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String loginFromPref = preferences.getString("login", "");
-        final String login = loginFromPref;
-        GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+        {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String loginFromPref = preferences.getString("login", "");
+            final String login = loginFromPref;
+            GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
 
-            @Override
-            public void processFinish(String output) {
-                if (GetUserByLogin.json_string.length() < 30) {
+                @Override
+                public void processFinish(String output) {
+                    if (GetUserByLogin.json_string.length() < 30) {
 
-                } else {
-                    json_string = GetUserByLogin.json_string;
+                    } else {
+                        json_string = GetUserByLogin.json_string;
 
-                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                    intent.putExtra("json_data", json_string);
-                    startActivity(intent);
+                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        intent.putExtra("json_data", json_string);
+                        startActivity(intent);
 
 
+                    }
                 }
-            }
-        }).execute(login);
+            }).execute(login);
+        }
+        else
+        {
+            GeneralHelpers.createNetErrorDialog(this);
+        }
+
     }
 
     private void updateUsers(){
@@ -320,26 +328,31 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void showOnMap(View view){
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))) {
+            try {
+                jsonObject = new JSONObject(json_string_event);
+                jsonArray = jsonObject.getJSONArray("server_response");
+                JSONObject JO = jsonArray.getJSONObject(0);
 
-        try {
-            jsonObject = new JSONObject(json_string_event);
-            jsonArray = jsonObject.getJSONArray("server_response");
-            JSONObject JO = jsonArray.getJSONObject(0);
+                String name, street_name, street_number, city, country;
 
-            String name, street_name, street_number, city, country;
+                name = JO.getString("name");
+                street_name = JO.getString("street_name");
+                street_number = JO.getString("street_number");
+                city = JO.getString("city");
+                country = JO.getString("country");
 
-            name = JO.getString("name");
-            street_name=JO.getString("street_name");
-            street_number=JO.getString("street_number");
-            city=JO.getString("city");
-            country=JO.getString("country");
-
-            Intent intent = new Intent(this, MapActivity.class);
-            intent.putExtra("address", country + " " +city+ ", " + street_name + " " + street_number);
-            intent.putExtra("name", name);
-            startActivity(intent);
-        } catch (JSONException e) {
-            e.printStackTrace();
+                Intent intent = new Intent(this, MapActivity.class);
+                intent.putExtra("address", country + " " + city + ", " + street_name + " " + street_number);
+                intent.putExtra("name", name);
+                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            GeneralHelpers.createNetErrorDialog(context);
         }
 
 

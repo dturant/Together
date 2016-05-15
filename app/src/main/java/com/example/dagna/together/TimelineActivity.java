@@ -150,31 +150,34 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void getUsersData(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String loginFromPref = preferences.getString("login", "");
-        final String login = loginFromPref;
-        GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+        {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String loginFromPref = preferences.getString("login", "");
+            final String login = loginFromPref;
+            GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
 
-            @Override
-            public void processFinish(String output) {
-                Log.d("USERS ID OUTPUT", output);
-                if (GetUserByLogin.json_string.length() < 30) {
-                    Log.d("fail!!!!", "fail :(");
+                @Override
+                public void processFinish(String output) {
+                    if (GetUserByLogin.json_string.length() < 30) {
 
-                } else {
-                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
-                    json_string = GetUserByLogin.json_string;
+                    } else {
+                        json_string = GetUserByLogin.json_string;
 
                         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                         intent.putExtra("json_data", json_string);
-                        //intent.putExtra("user_id", userId);
-                        //Log.d("event_id from timeline", userId);
                         startActivity(intent);
 
 
+                    }
                 }
-            }
-        }).execute(login);
+            }).execute(login);
+        }
+        else
+        {
+            GeneralHelpers.createNetErrorDialog(this);
+        }
+
     }
 
     @Override

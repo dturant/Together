@@ -114,28 +114,34 @@ public class AddEventActivity extends AppCompatActivity {
     }
 
     private void getUsersData(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String loginFromPref = preferences.getString("login", "");
-        final String login = loginFromPref;
-        GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)))
+        {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String loginFromPref = preferences.getString("login", "");
+            final String login = loginFromPref;
+            GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
 
-            @Override
-            public void processFinish(String output) {
-                Log.d("USERS ID OUTPUT", output);
-                if (GetUserByLogin.json_string.length() < 30) {
-                    Log.d("fail!!!!", "fail :(");
+                @Override
+                public void processFinish(String output) {
+                    if (GetUserByLogin.json_string.length() < 30) {
 
-                } else {
-                    json_string = GetUserByLogin.json_string;
+                    } else {
+                        json_string = GetUserByLogin.json_string;
 
-                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                    intent.putExtra("json_data", json_string);
-                    startActivity(intent);
+                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                        intent.putExtra("json_data", json_string);
+                        startActivity(intent);
 
 
+                    }
                 }
-            }
-        }).execute(login);
+            }).execute(login);
+        }
+        else
+        {
+            GeneralHelpers.createNetErrorDialog(this);
+        }
+
     }
 
     public void addEvent(View view)
@@ -158,10 +164,7 @@ public class AddEventActivity extends AppCompatActivity {
 
                 @Override
                 public void processFinish(String output) {
-
-                    Log.d("OUTPUT", output);
                     if (output.equals("error")) {
-                        Log.d("ERROR", "ERROR");
                         Error.setVisibility(View.VISIBLE);
                         Error.setText(R.string.fill_all_fields);
 

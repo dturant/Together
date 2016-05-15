@@ -5,12 +5,14 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import com.example.dagna.together.helpers.GeneralHelpers;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -36,31 +38,36 @@ public class MapActivity extends Activity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
+
         setContentView(R.layout.activity_map);
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-                .getMap();
 
-        String address = getIntent().getExtras().getString("address");
-        final String name = getIntent().getExtras().getString("name");
+            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+                    .getMap();
 
-        Log.d("address", address);
+            String address = getIntent().getExtras().getString("address");
+            final String name = getIntent().getExtras().getString("name");
+
+            Log.d("address", address);
 
 
-        getCoordinates(address, new OnGeocoderFinishedListener() {
-            @Override
-            public void onFinished(LatLng result) {
-                if (result != null) {
-                    Marker city = map.addMarker(new MarkerOptions().position(result)
-                            .title(name));
-                    // Move the camera instantly to hamburg with a zoom of 15.
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 2));
+            getCoordinates(address, new OnGeocoderFinishedListener() {
+                @Override
+                public void onFinished(LatLng result) {
+                    if (result != null) {
+                        Marker city = map.addMarker(new MarkerOptions().position(result)
+                                .title(name));
+                        // Move the camera instantly to hamburg with a zoom of 15.
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(result, 2));
 
-                    // Zoom in, animating the camera.
-                    map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-                } else {
+                        // Zoom in, animating the camera.
+                        map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+                    } else {
+                    }
                 }
-            }
-        });
+            });
+
+
+
     }
 
     public abstract class OnGeocoderFinishedListener {

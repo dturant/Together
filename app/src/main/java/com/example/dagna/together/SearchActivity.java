@@ -214,8 +214,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             if (radioCity.getCheckedRadioButtonId() == R.id.radioLocation && GeneralHelpers.isLocationAvailable((LocationManager) getSystemService(LOCATION_SERVICE)))
             {
                 Location loc = getLastKnownLocation();
-                Toast.makeText(this, String.valueOf(loc.getLatitude()) + "/" + String.valueOf(loc.getLongitude()),
-                        Toast.LENGTH_LONG).show();
+               // Toast.makeText(this, String.valueOf(loc.getLatitude()) + "/" + String.valueOf(loc.getLongitude()),
+                 //       Toast.LENGTH_LONG).show();
 
                 getCityName(loc, new OnGeocoderFinishedListener() {
                     @Override
@@ -267,45 +267,50 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     public void searchUsers(View view){
-        final String login = Login.getText().toString();
+        if(GeneralHelpers.isNetworkAvailable((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))) {
+            final String login = Login.getText().toString();
 
-        GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
+            GetUserByLogin getUserByLogin = (GetUserByLogin) new GetUserByLogin(new GetUserByLogin.AsyncResponse() {
 
-            @Override
-            public void processFinish(String output) {
-                Log.d("USERS ID OUTPUT", output);
-                if (GetUserByLogin.json_string.length() < 30) {
-                    Log.d("fail!!!!", "fail :(");
-                    //dodac text view
-                    Error.setVisibility(View.VISIBLE);
+                @Override
+                public void processFinish(String output) {
+                    Log.d("USERS ID OUTPUT", output);
+                    if (GetUserByLogin.json_string.length() < 30) {
+                        Log.d("fail!!!!", "fail :(");
+                        //dodac text view
+                        Error.setVisibility(View.VISIBLE);
 
 
-                } else {
-                    //Log.d("data!!!!!!!", GetUserByLogin.json_string);
-                    json_string = GetUserByLogin.json_string;
+                    } else {
+                        //Log.d("data!!!!!!!", GetUserByLogin.json_string);
+                        json_string = GetUserByLogin.json_string;
 
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                    currentUser = preferences.getString("login", "");
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                        currentUser = preferences.getString("login", "");
 
-                    if(!currentUser.equals(login)) {
+                        if (!currentUser.equals(login)) {
 
-                        Intent intent = new Intent(getApplicationContext(), UsersProfileActivity.class);
-                        intent.putExtra("json_data", json_string);
-                        //intent.putExtra("user_id", userId);
-                        //Log.d("event_id from timeline", userId);
-                        startActivity(intent);
+                            Intent intent = new Intent(getApplicationContext(), UsersProfileActivity.class);
+                            intent.putExtra("json_data", json_string);
+                            //intent.putExtra("user_id", userId);
+                            //Log.d("event_id from timeline", userId);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                            intent.putExtra("json_data", json_string);
+                            //intent.putExtra("user_id", userId);
+                            //Log.d("event_id from timeline", userId);
+                            startActivity(intent);
+                        }
+
                     }
-                    else{
-                        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                        intent.putExtra("json_data", json_string);
-                        //intent.putExtra("user_id", userId);
-                        //Log.d("event_id from timeline", userId);
-                        startActivity(intent);
-                    }
-
                 }
-            }
-        }).execute(login);
+            }).execute(login);
+        }
+        else
+        {
+            GeneralHelpers.createNetErrorDialog(this);
+        }
     }
 
     private Location getLastKnownLocation() {
